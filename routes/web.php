@@ -84,7 +84,13 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
      */
     Route::get('/shortcut/', [DashboardShortcutController::class, 'index']);
 
-    Route::get('/lists/{id?}', [DashboardListController::class, 'index']);
+    /**
+     * Controller for list dashboard page
+     */
+    Route::get('/lists/{title}/{id}', [DashboardListController::class, 'index'])
+        ->whereNumber('id');
+    Route::post('/lists/add', [DashboardListController::class, 'add']);
+
     Route::get('/tags/{id}', [DashboardTagsController::class, 'index']);
     Route::get('/notebooks/{id}', [DashboardNotebookController::class, 'index']);
     Route::get('/today', [DashboardTodayController::class, 'index']);

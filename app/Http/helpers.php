@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Lists;
+use App\Models\Notebook;
+use App\Models\Tag;
+
 /**
  * Get last edited time
  */
@@ -22,4 +26,27 @@ function getLastEdited($timestamp = null)
 
         $time = floor($time / $times[$i][0]);
     }
+}
+
+/**
+ * Return Lists model for blade template that rendered by @include directive
+ */
+function getListsModel()
+{
+    return new Lists();
+}
+/**
+ * Return Tag model for blade template that rendered by @include directive
+ */
+function getTagModel()
+{
+    return new Tag();
+}
+
+/**
+ * Return Notebook model for blade template that rendered by @include directive
+ */
+function getNotebookModel()
+{
+    return new Notebook();
 }

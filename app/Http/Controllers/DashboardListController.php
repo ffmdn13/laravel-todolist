@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lists;
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardListController extends Controller
 {
@@ -23,5 +26,19 @@ class DashboardListController extends Controller
     private function getPageTitle($index = 1)
     {
         return ucfirst(explode('/', request()->getRequestUri())[$index]);
+    }
+
+    /**
+     * Add new list
+     */
+    public function add(Request $request)
+    {
+        $validatedData = $request->validate(['title' => ['required', 'present', 'string', 'max:255']]);
+        $validatedData['user_id'] = Auth::user()->id;
+
+        Lists::create($validatedData);
+
+        return redirect('/dashboard', 302)
+            ->with('message', 'Successfully added list "' . $validatedData['title'] . '"');
     }
 }

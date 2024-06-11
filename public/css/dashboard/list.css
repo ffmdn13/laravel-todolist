@@ -12,8 +12,13 @@
 }
 
 .dropdown-plus-icon,
-.dropdown-sliders-icon {
+.dropdown-sliders-icon,
+.delete-list-icon {
     width: 19px;
+}
+
+.pointer-trash {
+    cursor: pointer;
 }
 
 .dropdown-plus-trigger,

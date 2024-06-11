@@ -19,6 +19,8 @@
             <header class="d-flex align-items-center justify-content-between">
                 <h1 class="list-title">🚀 Workout</h1>
                 <div class="d-flex align-items-center gap-2">
+                    <i class="icon-aspect-ratio delete-list-icon pointer-trash text-danger"
+                        onclick="window.location.href='/dashboard/lists/delete'" data-feather="trash"></i>
                     <div>
                         <a href="" class="dropdown-plus-trigger" data-bs-toggle="modal" data-bs-target="#createTask">
                             <i data-feather="plus-square" class="icon-aspect-ratio dropdown-plus-icon"></i>

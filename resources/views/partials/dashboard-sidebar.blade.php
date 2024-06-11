@@ -1,3 +1,9 @@
+@php
+    $lists = getListsModel()
+        ->whereBelongsTo(auth()->user(), 'user')
+        ->get(['id', 'title']);
+@endphp
+
 <aside class="border-end bg-light-subtle p-3">
     {{-- aside quick search and add new task start --}}
     <ul class="navbar-nav">
@@ -78,25 +84,27 @@
                     <div class="modal-content">
                         <div class="modal-body">
                             <h1 class="add-new-list-heading mb-3">📋 Add new list</h1>
-                            <form action="/dashboard/list" method="POST">
+                            <form action="/dashboard/lists/add" method="POST">
                                 @csrf
                                 <div class="mb-3">
                                     <input type="text" class="form-control border-0 border-bottom"
-                                        id="exampleFormControlInput1" placeholder="List title">
+                                        id="exampleFormControlInput1" name="title" placeholder="Title">
                                 </div>
-                                <button class="add-new-list-btn mt-2">Create</button>
+                                <button class="add-new-list-btn mt-2">Add</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </li>
-        <div class="collapse my-2 ps-4" id="listCollapse">
-            <div onclick="window.location.href='/dashboard/lists/1'"
-                class="list-card p-1 d-flex align-items-center justify-content-between">
-                🚀 Workout
-                <span class="item-count ms-auto">2</span>
-            </div>
+        <div class="collapse" id="listCollapse">
+            @foreach ($lists as $list)
+                <div onclick="window.location.href='/dashboard/lists/{{ $list->title }}/{{ $list->id }}'"
+                    class="list-card p-2 d-flex align-items-center justify-content-between">
+                    {{ $list->title }}
+                    <span class="item-count ms-auto">{{ $list->taskNotes->count() }}</span>
+                </div>
+            @endforeach
         </div>
         <li class="nav-item px-2 d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-1 flex-fill" data-bs-toggle="collapse"

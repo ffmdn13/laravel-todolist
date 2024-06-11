@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,20 +10,30 @@ class Lists extends Model
 {
     use HasFactory;
 
+    protected $table = 'lists';
+
     protected $fillable = [
-        'user_id',
-        'name',
-        'color',
-        'task_count'
+        'title',
+        'user_id'
     ];
 
-    public function users()
+    protected $with = ['taskNotes'];
+
+    /**
+     * Filter query by userId and id
+     */
+    public function scopeByUserAndId(Builder $query, $id, $userId)
     {
-        return $this->belongsTo('users', 'user_id', 'id');
+        $query->where('id', $id)->where('user_id', $userId);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function taskNotes()
     {
-        return $this->hasMany('task_notes', 'list_id', 'id');
+        return $this->hasMany(TaskNote::class, 'list_id', 'id');
     }
 }
