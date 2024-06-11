@@ -74,11 +74,16 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     /**
      * Controller for note dashboard page
      */
-    Route::get('/note/{id?}', [DashboardNoteController::class, 'index']);
+    Route::get('/note/{id?}', [DashboardNoteController::class, 'index'])
+        ->whereNumber('id');
     Route::post('note/add', [DashboardNoteController::class, 'add']);
     Route::post('/note/action', [DashboardNoteController::class, 'action']);
 
-    Route::get('/shortcut', [DashboardShortcutController::class, 'index']);
+    /**
+     * Controller for shortcut dashboard page
+     */
+    Route::get('/shortcut/', [DashboardShortcutController::class, 'index']);
+
     Route::get('/lists/{id?}', [DashboardListController::class, 'index']);
     Route::get('/tags/{id}', [DashboardTagsController::class, 'index']);
     Route::get('/notebooks/{id}', [DashboardNotebookController::class, 'index']);

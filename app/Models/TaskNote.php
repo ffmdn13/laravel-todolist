@@ -75,6 +75,14 @@ class TaskNote extends Model
     }
 
     /**
+     * Filter query by if task or note is shortcuted
+     */
+    public function scopeIsShortcuted(Builder $query)
+    {
+        $query->where('is_shortcut', 1);
+    }
+
+    /**
      * Return a specific User record that relaed to specific TaskNote record
      */
     public function user()

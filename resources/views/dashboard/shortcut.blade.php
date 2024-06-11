@@ -14,63 +14,61 @@
             <i data-feather="star" class="shortcut-icon icon-aspect-ratio"></i>
             Shortcut
         </h1>
+
         <div class="border-bottom pb-2 mt-3">
-            <span class="text-black-50 d-block">2 Shortcuts</span>
+            <span class="text-black-50 d-block">
+                @php($count = $shortcuts->count())
+                {{ $count > 1 ? "$count Shortcuts" : "$count Shortcut" }}</span>
         </div>
+
         @if (isset($shortcuts))
             <table class="table table-light table-hover mt-3">
                 <thead>
                     <tr>
                         <th scope="col">Title</th>
                         <th scope="col">Type</th>
-                        <th scope="col">Due date</th>
+                        <th scope="col">Due date / Last edited</th>
                         <th scope="col">Priority</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td onclick="window.location.href='/dashboard/task'">
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="title-container">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quia, perferendis! Obcaecati,
-                                    maxime enim. Error quae officia libero laborum nesciunt rerum ratione, fugiat
-                                    necessitatibus
-                                    quo optio vitae quibusdam harum voluptates repellendus adipisci minus maiores amet
-                                    suscipit.
-                                    Voluptas suscipit maxime nostrum ad deleniti alias adipisci nisi ea sunt. Saepe odit
-                                    expedita nisi?
+                    @foreach ($shortcuts as $shortcut)
+                        <tr>
+                            <td onclick="window.location.href='/dashboard/{{ $shortcut->type }}/{{ $shortcut->id }}'">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="title-container">
+                                        {{ $shortcut->title }}
+                                    </div>
+                                    <i data-feather="eye" class="view-title-icon icon-aspect-ratio"></i>
                                 </div>
-                                <i data-feather="eye" class="view-title-icon icon-aspect-ratio"></i>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <i data-feather="file" class="icon-aspect-ratio shortcut-type-icon"></i>Task
-                            </div>
-                        </td>
-                        <td>Today, 5:45 PM</td>
-                        <td class="priority-color-high">
-                            High
-                        </td>
-                    </tr>
-                    <tr>
-                        <td onclick="window.location.href='/dashboard/note'">
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="title-container">
-                                    Note to workout every morning
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i data-feather="{{ $shortcut->type === 'task' ? 'file' : 'file-text' }}"
+                                        class="icon-aspect-ratio shortcut-type-icon"></i>{{ $shortcut->type }}
                                 </div>
-                                <i data-feather="eye" class="view-title-icon icon-aspect-ratio"></i>
-                            </div>
-
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <i data-feather="file-text" class="icon-aspect-ratio shortcut-type-icon"></i>Note
-                            </div>
-                        </td>
-                        <td>-</td>
-                        <td>-</td>
-                    </tr>
+                            </td>
+                            <td>
+                                @if (is_string($shortcut->due_date))
+                                    @if ($shortcut->type === 'task')
+                                        {{ $shortcut->due_date }}
+                                    @else
+                                        {{ getLastEdited($shortcut->due_date) }}
+                                    @endif
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td class="priority-color-high">
+                                @if ($shortcut->type === 'task')
+                                    <i data-feather="flag"
+                                        class="icon-aspect-ratio priority-icon color-{{ $shortcut->priority }}"></i>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         @else

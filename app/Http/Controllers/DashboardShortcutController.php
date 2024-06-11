@@ -3,17 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\TaskNote;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardShortcutController extends Controller
 {
     /** 
      * Render dashboard shortcut page
      */
-    public function index()
+    public function index($id = null)
     {
         return response()->view('dashboard.shortcut', [
             'title' => $this->getPageTitle(2),
-            'shortcuts' => ''
+            'shortcuts' => TaskNote::whereBelongsTo(Auth::user(), 'user')
+                ->notTrashed()
+                ->isShortcuted()
+                ->get(['id', 'title', 'type', 'due_date', 'priority']),
         ]);
     }
 
