@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lists;
 use App\Models\TaskNote;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,13 +16,16 @@ class DashboardTaskController extends Controller
      */
     public function index($id = null)
     {
+        $user = Auth::user();
+
         return response()->view('dashboard.task', [
             'title' => $this->getPageTitle(2),
-            'tasks' => TaskNote::whereBelongsTo(Auth::user(), 'user')
+            'tasks' => TaskNote::whereBelongsTo($user, 'user')
                 ->notCompleted()
                 ->notTrashed()
                 ->mustTask()
                 ->get(['id', 'title', 'priority', 'due_date']),
+            'lists' => Lists::whereBelongsTo($user, 'user')->get(),
             'preview' => $this->getTaskPreview($id)
         ]);
     }
@@ -73,11 +77,12 @@ class DashboardTaskController extends Controller
     {
         $validatedData = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'priority' => ['required', Rule::in(['0', '1', '2', '3'])]
+            'priority' => ['required', Rule::in(['0', '1', '2', '3'])],
+            'list' => ['nullable', 'present', 'string', 'max:255', 'exists:lists,id']
         ]);
 
         $validatedData['user_id'] = Auth::user()->id;
-        $validatedData['list_id'] = null;
+        $validatedData['list_id'] = is_string($validatedData['list']) ? $validatedData['list'] : null;
         $validatedData['tag_id'] = null;
 
         TaskNote::create($validatedData);
