@@ -1,0 +1,59 @@
+.form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-bottom-color: var(--lightColorPrimary) !important;
+}
+
+.custom-input-icon {
+    position: absolute;
+    aspect-ratio: 1/1;
+    width: 22px;
+    transition: color 150ms ease;
+}
+
+.custom-font-size {
+    font-size: 2rem;
+    font-weight: var(--fw-900);
+}
+
+.form-control:focus+.custom-input-icon {
+    color: var(--lightColorPrimary);
+}
+
+.form-control {
+    padding-left: 2rem;
+    transition: border-bottom-color 150ms ease;
+}
+
+.form-control::placeholder,
+.custom-input-icon {
+    color: #C2C2C2;
+}
+
+.custom-btn {
+    border: 1px solid transparent;
+    width: 90px;
+    background-color: var(--lightColorPrimary);
+    transition: all 200ms ease;
+    font-size: .85rem;
+    padding: .4rem;
+    border-radius: 4px;
+    color: var(--whiteColor) !important;
+    font-weight: var(--fw-700);
+}
+
+.custom-btn:hover {
+    background-color: transparent;
+    color: var(--lightColorPrimary) !important;
+    border: 1px solid var(--lightColorPrimary);
+}
+
+.forget-password,
+.register {
+    font-size: .9rem;
+    color: var(--lightColorPrimary);
+}
+
+.register-text {
+    font-size: .9rem;
+}

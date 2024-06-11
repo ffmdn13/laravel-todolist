@@ -1,0 +1,159 @@
+aside::-webkit-scrollbar {
+    display: none;
+    width: 4px;
+}
+
+aside {
+    height: 100vh;
+    overflow: auto;
+}
+
+.icon-aspect-ratio {
+    aspect-ratio: 1/1;
+}
+
+/* aside quick search and new task start */
+.new-task-btn {
+    background-color: var(--lightColorPrimary);
+    color: var(--whiteColor);
+    border: 1px solid transparent;
+    text-decoration: none;
+    font-size: .9rem;
+    border-radius: 4px;
+    font-weight: var(--fw-700);
+    transition: all 150ms ease;
+}
+
+.new-task-btn:hover {
+    border: 1px solid var(--lightColorPrimary);
+    background-color: transparent;
+    color: var(--lightColorPrimary);
+}
+
+.new-task-btn .new-task-btn-icon,
+.search-bar .search-bar-icon-link {
+    aspect-ratio: 1/1;
+    width: 18px;
+}
+
+.search-bar {
+    background-color: #EDEDED;
+    cursor: text;
+    border-radius: 4px;
+    font-size: .9rem;
+    color: #AAAAAA;
+}
+
+/* aside quick search and add new task end */
+
+/* aside common menu items start */
+
+.nav-item {
+    border-radius: 4px;
+    padding-block: 1px;
+}
+
+.nav-item:hover {
+    cursor: pointer;
+    background-color: rgba(232, 138, 152, 0.15);
+}
+
+.nav-item:hover .nav-item-icon-link {
+    opacity: 1;
+}
+
+.nav-item-icon {
+    aspect-ratio: 1/1;
+    width: 17px;
+}
+
+.font-link-size {
+    font-size: .8rem;
+}
+
+.item-count {
+    font-size: .8rem;
+    color: rgba(19, 8, 33, 0.5);
+}
+
+.collapse-icon {
+    aspect-ratio: 1/1;
+    width: 15px;
+}
+
+.shortcut-card {
+    background-color: var(--lightColorSecondary);
+    color: var(--whiteColor);
+    border-radius: 5px;
+    font-size: .8rem;
+}
+
+.shortcut-icon {
+    aspect-ratio: 1/1;
+    width: 16px;
+}
+
+/* aside common menu items end */
+
+.list-card {
+    color: var(--lightColorText);
+    font-size: .9rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.list-card:hover {
+    background-color: rgba(232, 138, 152, 0.15);
+}
+
+.nav-item-icon-link {
+    color: var(--lightColorText);
+    opacity: 0;
+}
+
+.add-new-list-heading {
+    font-size: 1.25rem;
+    font-weight: var(--fw-700);
+}
+
+.form-control:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.add-new-list-btn {
+    border: 0;
+    background-color: var(--lightColorPrimary);
+    color: var(--whiteColor) !important;
+    border-radius: 4px;
+    font-weight: var(--fw-700);
+    padding: .6rem 1rem;
+}
+
+.collapse-tag-icon {
+    width: 16px;
+}
+
+.tag-blue {
+    color: #0D48A5 !important;
+}
+
+.tag-green {
+    color: #08C117 !important;
+}
+
+.tag-red {
+    color: #E50606 !important;
+}
+
+.tag-cyan {
+    color: #05D0AB !important;
+}
+
+.tag-purple {
+    color: #8315E4 !important;
+}
+
+.tag-orange {
+    color: #F36706 !important;
+}

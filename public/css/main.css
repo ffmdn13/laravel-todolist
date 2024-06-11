@@ -1,0 +1,128 @@
+* {
+    --lightColorText: #120720;
+    --lightColorBackground: #f4effc;
+    --lightColorPrimary: #7234d5;
+    --lightColorSecondary: #e78997;
+    --lightColorAccent: #df8063;
+
+    --darkColorText: #e9def8;
+    --darkColorBackground: #090311;
+    --darkColorPrimary: #682acb;
+    --darkColorSecondary: #771826;
+    --darkColorAccent: #9d3d20;
+
+    --whiteColor: #F8F8F8;
+    --priorityColorHigh: #EC0C0C;
+    --priorityColorMedium: #0958D5;
+    --priorityColorLow: #16CA0D;
+
+    --fw-400: 400;
+    --fw-700: 700;
+    --fw-900: 900;
+
+    font-family: "Lato", sans-serif !important;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--lightColorBackground);
+}
+
+p,
+span,
+small,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--lightColorText) !important;
+    margin: 0;
+}
+
+button,
+input,
+textarea,
+select,
+option {
+    font: inherit;
+    color: var(--lightColorText) !important;
+}
+
+.priority-icon {
+    width: 15px;
+}
+
+.color-3 {
+    fill: var(--priorityColorHigh);
+    stroke: var(--priorityColorHigh);
+}
+
+.color-2 {
+    fill: var(--priorityColorMedium);
+    stroke: var(--priorityColorMedium);
+}
+
+.color-1 {
+    fill: var(--priorityColorLow);
+    stroke: var(--priorityColorLow);
+}
+
+.compleated {
+    color: var(--priorityColorLow) !important;
+}
+
+.uncompleated {
+    color: var(--priorityColorHigh) !important;
+}
+
+
+.not-read {
+    aspect-ratio: 1/1;
+    width: 15px;
+    background-color: var(--lightColorPrimary);
+    border-radius: 50%;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+}
+
+.dashboard-layout::-webkit-scrollbar {
+    display: none;
+}
+
+.dashboard-layout {
+    height: 100vh;
+    overflow: auto;
+}
+
+.grid-for-task-note-layout {
+    display: grid;
+    grid-template-columns: 1fr 450px;
+}
+
+.empty-preview-icon {
+    transform: scale(1.8);
+    color: var(--lightColorText);
+}
+
+.empty-preview-title {
+    font-weight: var(--fw-700);
+    font-size: 1.2rem;
+}
+
+.empty-preview-desc {
+    font-size: .95rem;
+}
+
+.empty-due-date {
+    padding: 6px 8px;
+    background-color: rgba(231, 137, 151, 0.35);
+}
+
+.border-focus {
+    border: 1px solid var(--lightColorPrimary) !important;
+}

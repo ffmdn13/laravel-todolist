@@ -1,0 +1,156 @@
+/* top dashboard section start */
+.top-dashboard-section .hero-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.top-dashboard-section .profile .welcome-text h4 {
+    margin: 0;
+    font-weight: var(--fw-700);
+}
+
+.top-dashboard-section .profile .welcome-text span {
+    margin: 0;
+    font-size: .95rem;
+    opacity: 0.8;
+}
+
+.top-dashboard-section .profile .profile-setting img {
+    aspect-ratio: 1/1;
+    width: 50px;
+    cursor: pointer;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.top-dashboard-section .profile .profile-setting .dropdown-item:hover {
+    background-color: rgba(114, 52, 213, 0.1);
+}
+
+.top-dashboard-section .profile .profile-setting a,
+.today-task ul li a {
+    font-size: .9rem;
+}
+
+.top-dashboard-section .profile .profile-setting .profile-dropdown-icon,
+.today-task .today-task-dropdown-icon {
+    aspect-ratio: 1/1;
+    width: .9rem;
+}
+
+.top-dashboard-section .profile .profile-setting .notification-icon {
+    aspect-ratio: 1/1;
+    color: var(--lightColorText);
+    width: 22px;
+}
+
+.top-dashboard-section .profile .profile-setting .notification-clock-icon {
+    aspect-ratio: 1/1;
+    color: var(--lightColorText);
+    width: 15px;
+}
+
+.top-dashboard-section .profile .profile-setting .notification-date {
+    font-size: .85rem;
+}
+
+.top-dashboard-section .profile .profile-setting .notification-link {
+    color: var(--lightColorText);
+    text-decoration: none;
+}
+
+.custom-height {
+    height: 500px !important;
+}
+
+/* top dashboard section end */
+
+/* recent and pinned task section start */
+.today-task .today-task-title .title,
+.recent-note .recent-note-title .title {
+    font-weight: var(--fw-700);
+}
+
+.today-task .today-task-title .today-task-icon,
+.recent-note .recent-note-title .recent-note-icon {
+    aspect-ratio: 1/1;
+    width: 20px;
+    color: var(--lightColorText);
+}
+
+.task-grid-layout {
+    display: grid;
+    grid-template-columns: 800px 1fr;
+}
+
+.today-task .today-task-items,
+.recent-note .recent-note-items {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.today-task .today-task-items .today-task-item .content .title {
+    font-weight: var(--fw-700);
+    font-size: 1.2rem;
+}
+
+.today-task .today-task-items .today-task-item .task-address {
+    opacity: 0.8;
+    color: var(--lightColorText);
+    font-size: .8rem;
+}
+
+.today-task .today-task-items .today-task-item .due-date {
+    font-size: .85rem;
+}
+
+.today-task .today-task-items .today-task-item .due-date-icon {
+    aspect-ratio: 1/1;
+    width: 15px;
+}
+
+.recent-note .recent-note-item .recent-note-address {
+    font-size: .75rem;
+    opacity: 0.8;
+}
+
+.recent-note .recent-note-item .content .title {
+    font-weight: var(--fw-700);
+    font-size: 1rem;
+}
+
+.recent-note .recent-note-item .content .description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: .8rem;
+}
+
+.today-task .today-task-items .today-task-item .due-date-icon {
+    aspect-ratio: 1/1;
+    width: 15px;
+}
+
+.recent-note .recent-note-item .due-date {
+    font-size: .75rem;
+}
+
+.recent-note .recent-note-item .due-date .due-date-icon {
+    aspect-ratio: 1/1;
+    width: 13px;
+}
+
+.recent-note .recent-note-item .recent-edit-icon,
+.recent-note .recent-note-item .recent-delete-icon,
+.today-task .today-task-item .today-task-edit-icon,
+.today-task .today-task-item .today-task-delete-icon {
+    aspect-ratio: 1/1;
+    width: 15px;
+    color: var(--lightColorText);
+}
+
+/* recent and pinned task sectione end */
