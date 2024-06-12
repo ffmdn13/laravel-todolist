@@ -2,6 +2,10 @@
     aspect-ratio: 1/1;
 }
 
+.task-items-due-date-icon {
+    width: 15px;
+}
+
 .no-text-decoration {
     text-decoration: none;
 }

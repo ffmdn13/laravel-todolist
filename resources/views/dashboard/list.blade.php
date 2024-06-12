@@ -21,10 +21,10 @@
                 <div class="d-flex align-items-center gap-2">
                     <form action="/dashboard/lists/delete" method="POST">
                         @csrf
-                        <input type="hidden" name="id" value="{{ $list->id }}">
+                        <input type="hidden" name="id" value="{{ $listId }}">
                         <button class="border-0 bg-transparent p-0" type="submit">
                             <i class="icon-aspect-ratio delete-list-icon pointer-trash text-danger"
-                                onclick="window.location.href='/dashboard/lists/delete'" data-feather="trash"></i>
+                                data-feather="trash"></i>
                         </button>
                     </form>
                     <div>
@@ -78,24 +78,31 @@
                 </div>
             </header>
             <div class="border-bottom pb-2">
-                <span class="text-black-50 d-block mt-2">1 Task</span>
+                <span class="text-black-50 d-block mt-2">
+                    @php($count = $tasks->count())
+                    {{ $count > 1 ? "$count Tasks" : "$count Task" }}
+                </span>
             </div>
-            @if (isset($tasks))
+
+            @if ($tasks->isNotEmpty())
                 <ul class="list-items mt-4">
-                    <li class="border rounded py-1 px-3 mb-2" onclick="window.location.href=''">
-                        <div class="d-flex align-items-center justify-content-between">
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between">
-                            <h1 class="list-items-title my-1">Drink coffee every morning</h1>
-                            <div class="mt-2 d-flex align-items-center gap-2">
+                    @foreach ($tasks as $task)
+                        <li class="border rounded py-2 px-3 mb-2" onclick="window.location.href=''">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h1 class="list-items-title my-1">{{ $task->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
-                                    <i data-feather="clock" class="list-items-due-date-icon icon-aspect-ratio"></i>
-                                    <span class="list-items-due-date">Today, 5:45 PM</span>
+                                    @if (isset($task->due_date))
+                                        <i data-feather="calendar" class="task-items-due-date-icon icon-aspect-ratio"></i>
+                                    @endif
+                                    @if (isset($task->reminder))
+                                        <i data-feather="bell" class="task-items-due-date-icon icon-aspect-ratio"></i>
+                                    @endif
+                                    <i data-feather="flag"
+                                        class="icon-aspect-ratio priority-icon color-{{ $task->priority }}"></i>
                                 </div>
-                                <span class="priority color-blue d-block rounded-circle ms-auto"></span>
                             </div>
-                        </div>
-                    </li>
+                        </li>
+                    @endforeach
                 </ul>
             @else
                 <div class="empty-list-height mt-4 d-flex flex-column justify-content-center align-items-center">
@@ -108,87 +115,113 @@
                     </span>
                 </div>
             @endif
+
         </section>
         {{-- list items section end --}}
 
         {{-- list items preview start --}}
         <section>
-            <form action="" method="POST" class="p-4">
-                @csrf
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <div>
-                        <label class="list-preview-due-date d-flex align-items-center gap-1" for="date"
-                            data-bs-toggle="modal" data-bs-target="#dueDateModal">
-                            <i data-feather="clock" class="list-preview-due-date-icon icon-aspect-ratio"></i>
-                            Today, 5:45 PM
-                        </label>
-                        <div class="modal fade" id="dueDateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <div class="row g-2">
-                                            <div class="col">
-                                                <label for="date" class="form-label">Date</label>
-                                                <input type="date" name="date" id="date" class="form-control"
-                                                    aria-label="Date">
-                                            </div>
-                                            <div class="col">
-                                                <label for="time" class="form-label">Time</label>
-                                                <input type="time" name="time" class="form-control"
-                                                    aria-label="Time">
-                                            </div>
-                                            <div class="col">
-                                                <label for="reminder" class="form-label">Reminder</label>
-                                                <input type="time" name="reminder" class="form-control"
-                                                    aria-label="Reminder">
+            @if (isset($preview))
+                <form action="" method="POST" class="p-4">
+                    @csrf
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div>
+                            <label class="list-preview-due-date d-flex align-items-center gap-1" for="date"
+                                data-bs-toggle="modal" data-bs-target="#dueDateModal">
+                                <i data-feather="clock" class="list-preview-due-date-icon icon-aspect-ratio"></i>
+                                Today, 5:45 PM
+                            </label>
+                            <div class="modal fade" id="dueDateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <div class="row g-2">
+                                                <div class="col">
+                                                    <label for="date" class="form-label">Date</label>
+                                                    <input type="date" name="date" id="date"
+                                                        class="form-control" aria-label="Date">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="time" class="form-label">Time</label>
+                                                    <input type="time" name="time" class="form-control"
+                                                        aria-label="Time">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="reminder" class="form-label">Reminder</label>
+                                                    <input type="time" name="reminder" class="form-control"
+                                                        aria-label="Reminder">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <span class="priority color-red d-block rounded-circle"></span>
                     </div>
-                    <span class="priority color-red d-block rounded-circle"></span>
-                </div>
 
-                <div class="d-flex align-items-center justify-content-between">
-                    <input type="text" name="title" class="list-preview-title mb-2"
-                        value="Drink coffee every morning">
-                    <input class="list-preview-compleate-btn icon-aspect-ratio" type="checkbox" name="compleate"
-                        value="1">
-                </div>
-                <div>
-                    <input type="hidden" id="x" placeholder="Description" name="description">
-                    <div class="d-flex flex-column-reverse">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>
-                            <div>
-                                <a href=""
-                                    class="list-preview-save-btn text-decoration-none d-flex align-items-center gap-1"
-                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i data-feather="chevron-up" class="icon-aspect-ratio action-icon order-1"></i>
-                                    Action
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="dropdown-item">
-                                        <button class="border-0 bg-transparent" value="save">Save</button>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <button class="border-0 bg-transparent" value="delete">Delete</button>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <button class="border-0 bg-transparent" value="shortcut">Add to shortcut</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <trix-editor toolbar="trix-toolbar-1" input="x" class="custom-trix"
-                            placeholder="Description"></trix-editor>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <input type="text" name="title" class="list-preview-title mb-2"
+                            value="Drink coffee every morning">
+                        <input class="list-preview-compleate-btn icon-aspect-ratio" type="checkbox" name="compleate"
+                            value="1">
                     </div>
+                    <div>
+                        <input type="hidden" id="x" placeholder="Description" name="description">
+                        <div class="d-flex flex-column-reverse">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>
+                                <div>
+                                    <a href=""
+                                        class="list-preview-save-btn text-decoration-none d-flex align-items-center gap-1"
+                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i data-feather="chevron-up" class="icon-aspect-ratio action-icon order-1"></i>
+                                        Action
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-item">
+                                            <button class="border-0 bg-transparent" value="save">Save</button>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <button class="border-0 bg-transparent" value="delete">Delete</button>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <button class="border-0 bg-transparent" value="shortcut">Add to
+                                                shortcut</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <trix-editor toolbar="trix-toolbar-1" input="x" class="custom-trix"
+                                placeholder="Description"></trix-editor>
+                        </div>
+                    </div>
+                </form>
+            @else
+                <div style="opacity: 0.8"
+                    class="p-4 d-flex flex-column align-items-center justify-content-center min-vh-100">
+                    <div class="mb-1">
+                        <i data-feather="book-open" class="empty-preview-icon icon-aspect-ratio mx-auto mb-2 d-block"></i>
+                        <h6 class="empty-preview-title">There's no task to view here</h6>
+                    </div>
+                    <span class="empty-preview-desc">
+                        Click one to view here.
+                    </span>
                 </div>
-            </form>
+            @endif
         </section>
         {{-- list items preview end --}}
+
+        @if (session()->has('message'))
+            <div class="position-fixed top-0 end-0 p-3">
+                <div class="alert alert-info alert-dismissible fade show m-0 z-3" role="alert">
+                    <span class="d-flex gap-1">
+                        <i data-feather="info" class="icon-aspect-ratio info-icon"></i>{{ session()->get('message') }}
+                    </span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        @endif
     </div>
 @endsection

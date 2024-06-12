@@ -13,17 +13,25 @@ class DashboardListController extends Controller
     /**
      * Render dashboard list page with given id parameter
      */
-    public function index($title, $id)
+    public function index($id, $title)
     {
         return response()->view('dashboard.list', [
             'title' => $this->getPageTitle(2),
+            'listId' => $id,
             'listTitle' => $title,
-            'list' => Lists::select(['id'])
-                ->byUserAndId($id, Auth::user()->id)
-                ->where('title', $title)
-                ->firstOrFail(),
-            'tasks' => ''
+            'tasks' => $this->getTaskNotes($id, Auth::user()->id),
+            'preview' => null
         ]);
+    }
+
+    /**
+     * Get user related list task
+     */
+    private function getTaskNotes($id, $userId)
+    {
+        return TaskNote::select(['id', 'title', 'priority', 'due_date', 'reminder'])
+            ->byListAndUser($id, $userId)
+            ->get();
     }
 
     /**
@@ -39,7 +47,7 @@ class DashboardListController extends Controller
      */
     public function add(Request $request)
     {
-        $validatedData = $request->validate(['title' => ['required', 'present', 'string', 'max:255']]);
+        $validatedData = $request->validate(['title' => ['required', 'present', 'string', 'max:255', 'unique:lists,title']]);
         $validatedData['user_id'] = Auth::user()->id;
 
         Lists::create($validatedData);

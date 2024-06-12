@@ -1,7 +1,9 @@
 @php
     $lists = getListsModel()
-        ->whereBelongsTo(auth()->user(), 'user')
-        ->get(['id', 'title']);
+        ->with('taskNotes')
+        ->select(['id', 'title'])
+        ->where('user_id', auth()->user()->id)
+        ->get();
 @endphp
 
 <aside class="border-end bg-light-subtle p-3">
@@ -99,7 +101,7 @@
         </li>
         <div class="collapse" id="listCollapse">
             @foreach ($lists as $list)
-                <div onclick="window.location.href='/dashboard/lists/{{ $list->title }}/{{ $list->id }}'"
+                <div onclick="window.location.href='/dashboard/lists/{{ $list->id }}/{{ $list->title }}'"
                     class="list-card p-2 d-flex align-items-center justify-content-between">
                     {{ $list->title }}
                     <span class="item-count ms-auto">{{ $list->taskNotes->count() }}</span>

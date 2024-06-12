@@ -17,8 +17,6 @@ class Lists extends Model
         'user_id'
     ];
 
-    protected $with = ['taskNotes'];
-
     /**
      * Filter query by userId and id
      */

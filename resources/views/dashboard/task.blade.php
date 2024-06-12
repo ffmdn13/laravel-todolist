@@ -94,9 +94,7 @@
                             <li class="border rounded py-2 px-3 mb-2"
                                 onclick="window.location.href='/dashboard/task/{{ $task->id }}'">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center gap-1">
-                                        <h1 class="task-items-title my-1 max-title-width">{{ $task->title }}</h1>
-                                    </div>
+                                    <h1 class="task-items-title my-1 max-title-width">{{ $task->title }}</h1>
                                     <div class="d-flex align-items-center gap-1">
                                         @if (isset($task->due_date))
                                             <i data-feather="calendar"

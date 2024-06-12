@@ -87,7 +87,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     /**
      * Controller for list dashboard page
      */
-    Route::get('/lists/{title}/{id}', [DashboardListController::class, 'index'])
+    Route::get('/lists/{id}/{title}', [DashboardListController::class, 'index'])
         ->whereNumber('id');
     Route::post('/lists/add', [DashboardListController::class, 'add']);
     Route::post('/lists/delete', [DashboardListController::class, 'delete']);

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TaskNote extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     /**
      * Table nem used for model reference
@@ -80,6 +80,14 @@ class TaskNote extends Model
     public function scopeIsShortcuted(Builder $query)
     {
         $query->where('is_shortcut', 1);
+    }
+
+    /**
+     * Filter query by list id and user id
+     */
+    public function scopeByListAndUser(Builder $query, $id, $userId)
+    {
+        $query->where('list_id', $id)->where('user_id', $userId);
     }
 
     /**
