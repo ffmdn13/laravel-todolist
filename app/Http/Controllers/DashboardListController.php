@@ -7,21 +7,52 @@ use App\Models\TaskNote;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class DashboardListController extends Controller
 {
     /**
      * Render dashboard list page with given id parameter
      */
-    public function index($id, $title)
+    public function index(Request $request, $id, $title)
     {
         return response()->view('dashboard.list', [
             'title' => $this->getPageTitle(2),
             'listId' => $id,
             'listTitle' => $title,
             'tasks' => $this->getTaskNotes($id, Auth::user()->id),
-            'preview' => null
+            'preview' => $this->preview($request->query('preview', null), $id)
         ]);
+    }
+
+    private function preview($preview, $listId)
+    {
+        $validator = Validator::make(['preview' => $preview], [
+            'preview' => ['numeric', 'exists:task_notes,id']
+        ]);
+
+        if ($validator->fails()) {
+            return null;
+        }
+
+        $previews['preview'] = TaskNote::select(['id', 'title', 'description', 'priority', 'due_date', 'reminder'])
+            ->where('id', $validator->getData()['preview'])
+            ->byListAndUser($listId, Auth::user()->id)
+            ->notTrashed()
+            ->notCompleted()
+            ->mustTask()
+            ->firstOrFail();
+
+        $previews['inputDateValue'] = '';
+        $previews['inputTimeValue'] = '';
+
+        if (isset($previews['preview']['due_date'])) {
+            $timestamp = strtotime($previews['preview']['due_date']);
+            $previews['inputDateValue'] = date('Y-m-d', $timestamp);
+            $previews['inputTimeValue'] = preg_match('/:/', $previews['preview']['due_date']) ? date('h:i', $timestamp) : '';
+        }
+
+        return $previews;
     }
 
     /**

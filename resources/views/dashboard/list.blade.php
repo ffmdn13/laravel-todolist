@@ -12,6 +12,8 @@
     <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
 @endsection
 
+{{-- @dd($preview) --}}
+
 @section('dashboard-content')
     <div class="grid-for-task-note-layout">
         {{-- list items section start --}}
@@ -87,7 +89,8 @@
             @if ($tasks->isNotEmpty())
                 <ul class="list-items mt-4">
                     @foreach ($tasks as $task)
-                        <li class="border rounded py-2 px-3 mb-2" onclick="window.location.href=''">
+                        <li class="border rounded py-2 px-3 mb-2"
+                            onclick="window.location.href='/dashboard/lists/{{ $listId }}/{{ $listTitle }}?preview={{ $task->id }}'">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="list-items-title my-1">{{ $task->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
@@ -122,14 +125,19 @@
         {{-- list items preview start --}}
         <section>
             @if (isset($preview))
-                <form action="" method="POST" class="p-4">
+                <form action="/dashboard/list/something" method="POST" class="p-4">
                     @csrf
+                    <input type="hidden" name="id" value="{{ $preview['preview']->id }}">
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <div>
                             <label class="list-preview-due-date d-flex align-items-center gap-1" for="date"
                                 data-bs-toggle="modal" data-bs-target="#dueDateModal">
-                                <i data-feather="clock" class="list-preview-due-date-icon icon-aspect-ratio"></i>
-                                Today, 5:45 PM
+                                @if ($preview['preview']->due_date)
+                                    <i data-feather="calendar" class="task-preview-due-date-icon icon-aspect-ratio"></i>
+                                    {{ $preview['preview']->due_date }}
+                                @else
+                                    <span class="empty-due-date d-block rounded">Set due date</span>
+                                @endif
                             </label>
                             <div class="modal fade" id="dueDateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                 aria-hidden="true">
@@ -140,12 +148,13 @@
                                                 <div class="col">
                                                     <label for="date" class="form-label">Date</label>
                                                     <input type="date" name="date" id="date"
-                                                        class="form-control" aria-label="Date">
+                                                        class="form-control" aria-label="Date"
+                                                        value="{{ $preview['inputDateValue'] }}">
                                                 </div>
                                                 <div class="col">
                                                     <label for="time" class="form-label">Time</label>
                                                     <input type="time" name="time" class="form-control"
-                                                        aria-label="Time">
+                                                        aria-label="Time" value="{{ $preview['inputTimeValue'] }}">
                                                 </div>
                                                 <div class="col">
                                                     <label for="reminder" class="form-label">Reminder</label>
@@ -158,17 +167,19 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="priority color-red d-block rounded-circle"></span>
+                        <i data-feather="flag"
+                            class="icon-aspect-ratio priority-icon color-{{ $preview['preview']->priority }}"></i>
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between">
-                        <input type="text" name="title" class="list-preview-title mb-2"
-                            value="Drink coffee every morning">
-                        <input class="list-preview-compleate-btn icon-aspect-ratio" type="checkbox" name="compleate"
-                            value="1">
+                        <input type="text" name="title" class="task-preview-title mb-2"
+                            value="{{ $preview['preview']->title }}">
+                        <input class="task-preview-compleate-btn icon-aspect-ratio" type="checkbox" name="is_complete"
+                            value="1" @if ($preview['preview']->is_complete == 1) checked @endif>
                     </div>
                     <div>
-                        <input type="hidden" id="x" placeholder="Description" name="description">
+                        <input type="hidden" id="x" value="{{ $preview['preview']->description }}"
+                            placeholder="Description" name="description">
                         <div class="d-flex flex-column-reverse">
                             <div class="d-flex align-items-center justify-content-between">
                                 <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>
@@ -187,8 +198,9 @@
                                             <button class="border-0 bg-transparent" value="delete">Delete</button>
                                         </li>
                                         <li class="dropdown-item">
-                                            <button class="border-0 bg-transparent" value="shortcut">Add to
-                                                shortcut</button>
+                                            <button class="border-0 bg-transparent" name="action" value="shortcut">
+                                                {{ $preview['preview']->is_shortcut == 0 ? 'Add to shortcut' : 'Remove from shortcut' }}
+                                            </button>
                                         </li>
                                     </ul>
                                 </div>

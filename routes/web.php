@@ -92,6 +92,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::post('/lists/add', [DashboardListController::class, 'add']);
     Route::post('/lists/delete', [DashboardListController::class, 'delete']);
 
+
     Route::get('/tags/{id}', [DashboardTagsController::class, 'index']);
     Route::get('/notebooks/{id}', [DashboardNotebookController::class, 'index']);
     Route::get('/today', [DashboardTodayController::class, 'index']);
