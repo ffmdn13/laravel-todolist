@@ -82,7 +82,7 @@ class DashboardTaskController extends Controller
         ]);
 
         $validatedData['user_id'] = Auth::user()->id;
-        $validatedData['list_id'] = is_string($validatedData['list']) ? $validatedData['list'] : null;
+        $validatedData['list_id'] = $validatedData['list'];
         $validatedData['tag_id'] = null;
 
         TaskNote::create($validatedData);

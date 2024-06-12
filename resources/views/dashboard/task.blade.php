@@ -42,9 +42,8 @@
                                             @if ($lists->isNotEmpty())
                                                 <select class="input-outline-off border-0 border-bottom form-select mb-2"
                                                     aria-label="Default select example" name="list">
-                                                    <option value="{{ $lists[0]->id }}" selected>{{ $lists[0]->title }}
-                                                    </option>
-                                                    @foreach ($lists->skip(1) as $list)
+                                                    <option value="" selected>None</option>
+                                                    @foreach ($lists as $list)
                                                         <option value="{{ $list->id }}">{{ $list->title }}</option>
                                                     @endforeach
                                                 </select>
