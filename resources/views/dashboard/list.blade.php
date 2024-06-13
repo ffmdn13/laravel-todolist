@@ -6,6 +6,7 @@
 
 @section('additional-dashboard-head')
     <link rel="stylesheet" href="/css/dashboard/list.css">
+    <link rel="stylesheet" href="/css/dashboard/preview.css">
 
     {{-- trix editor cdn link --}}
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
@@ -125,20 +126,22 @@
         {{-- list items preview start --}}
         <section>
             @if (isset($preview))
-                <form action="/dashboard/list/something" method="POST" class="p-4">
+                <form action="/dashboard/list/something" method="POST" class="p-4 h-100">
                     @csrf
                     <input type="hidden" name="id" value="{{ $preview['preview']->id }}">
+
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <div>
-                            <label class="list-preview-due-date d-flex align-items-center gap-1" for="date"
+                            <label class="preview-due-date d-flex align-items-center gap-1" for="date"
                                 data-bs-toggle="modal" data-bs-target="#dueDateModal">
                                 @if ($preview['preview']->due_date)
-                                    <i data-feather="calendar" class="task-preview-due-date-icon icon-aspect-ratio"></i>
+                                    <i data-feather="calendar" class="preview-due-date-icon aspect-ratio"></i>
                                     {{ $preview['preview']->due_date }}
                                 @else
                                     <span class="empty-due-date d-block rounded">Set due date</span>
                                 @endif
                             </label>
+
                             <div class="modal fade" id="dueDateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                 aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
@@ -168,15 +171,16 @@
                             </div>
                         </div>
                         <i data-feather="flag"
-                            class="icon-aspect-ratio priority-icon color-{{ $preview['preview']->priority }}"></i>
+                            class="aspect-ratio priority-icon color-{{ $preview['preview']->priority }}"></i>
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between">
-                        <input type="text" name="title" class="task-preview-title mb-2"
+                        <input type="text" name="title" class="preview-title mb-2 border-0 bg-transparent w-100 p-0"
                             value="{{ $preview['preview']->title }}">
-                        <input class="task-preview-compleate-btn icon-aspect-ratio" type="checkbox" name="is_complete"
+                        <input class="preview-complete-btn aspect-ratio" type="checkbox" name="is_complete"
                             value="1" @if ($preview['preview']->is_complete == 1) checked @endif>
                     </div>
+
                     <div>
                         <input type="hidden" id="x" value="{{ $preview['preview']->description }}"
                             placeholder="Description" name="description">
@@ -185,9 +189,9 @@
                                 <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>
                                 <div>
                                     <a href=""
-                                        class="list-preview-save-btn text-decoration-none d-flex align-items-center gap-1"
+                                        class="preview-save-btn text-decoration-none border-0 d-flex align-items-center gap-1"
                                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i data-feather="chevron-up" class="icon-aspect-ratio action-icon order-1"></i>
+                                        <i data-feather="chevron-up" class="aspect-ratio action-icon order-1"></i>
                                         Action
                                     </a>
                                     <ul class="dropdown-menu">
@@ -205,16 +209,15 @@
                                     </ul>
                                 </div>
                             </div>
-                            <trix-editor toolbar="trix-toolbar-1" input="x" class="custom-trix"
-                                placeholder="Description"></trix-editor>
+                            <trix-editor toolbar="trix-toolbar-1" input="x"
+                                class="custom-trix p-0 border-0 overflow-auto" placeholder="Description"></trix-editor>
                         </div>
                     </div>
                 </form>
             @else
-                <div style="opacity: 0.8"
-                    class="p-4 d-flex flex-column align-items-center justify-content-center min-vh-100">
+                <div class="empty-preview p-4 d-flex flex-column align-items-center justify-content-center min-vh-100">
                     <div class="mb-1">
-                        <i data-feather="book-open" class="empty-preview-icon icon-aspect-ratio mx-auto mb-2 d-block"></i>
+                        <i data-feather="book-open" class="empty-preview-icon aspect-ratio mx-auto mb-2 d-block"></i>
                         <h6 class="empty-preview-title">There's no task to view here</h6>
                     </div>
                     <span class="empty-preview-desc">
@@ -229,7 +232,7 @@
             <div class="position-fixed top-0 end-0 p-3">
                 <div class="alert alert-info alert-dismissible fade show m-0 z-3" role="alert">
                     <span class="d-flex gap-1">
-                        <i data-feather="info" class="icon-aspect-ratio info-icon"></i>{{ session()->get('message') }}
+                        <i data-feather="info" class="aspect-ratio info-icon"></i>{{ session()->get('message') }}
                     </span>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>

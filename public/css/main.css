@@ -50,25 +50,6 @@ option {
     color: var(--lightColorText) !important;
 }
 
-.priority-icon {
-    width: 15px;
-}
-
-.color-3 {
-    fill: var(--priorityColorHigh);
-    stroke: var(--priorityColorHigh);
-}
-
-.color-2 {
-    fill: var(--priorityColorMedium);
-    stroke: var(--priorityColorMedium);
-}
-
-.color-1 {
-    fill: var(--priorityColorLow);
-    stroke: var(--priorityColorLow);
-}
-
 .compleated {
     color: var(--priorityColorLow) !important;
 }
@@ -102,20 +83,6 @@ option {
 .grid-for-task-note-layout {
     display: grid;
     grid-template-columns: 1fr 450px;
-}
-
-.empty-preview-icon {
-    transform: scale(1.8);
-    color: var(--lightColorText);
-}
-
-.empty-preview-title {
-    font-weight: var(--fw-700);
-    font-size: 1.2rem;
-}
-
-.empty-preview-desc {
-    font-size: .95rem;
 }
 
 .empty-due-date {

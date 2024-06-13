@@ -122,29 +122,6 @@
     border-left: none !important;
 }
 
-.list-preview-save-btn {
-    border: none;
-    background-color: var(--lightColorPrimary);
-    border-radius: 4px;
-    padding: .4rem 1rem;
-    color: var(--whiteColor) !important;
-}
-
-.list-preview-compleate-btn {
-    width: 15px;
-    cursor: pointer;
-}
-
-.list-preview-due-date {
-    color: var(--lightColorText);
-    font-size: .85rem;
-    cursor: pointer;
-}
-
-.list-preview-due-date-icon {
-    width: 15px;
-}
-
 .input-outline-off:focus {
     outline: none !important;
     box-shadow: none !important;

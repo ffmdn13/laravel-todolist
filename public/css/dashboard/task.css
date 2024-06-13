@@ -62,24 +62,6 @@
     font-size: .8rem;
 }
 
-.task-preview-title {
-    border: none;
-    background-color: transparent;
-    width: 100%;
-    padding: 0;
-    outline: none;
-    font-weight: var(--fw-700);
-    font-size: 1.1rem;
-}
-
-.custom-trix {
-    height: 435px;
-    padding: 0;
-    border: none;
-    font-size: .95rem;
-    overflow: auto;
-}
-
 /* .trix-button--icon-bold,
 .trix-button--icon-italic,
 .trix-button--icon-strike,
@@ -102,34 +84,6 @@
 .trix-button-group {
     border-right: none !important;
     border-left: none !important;
-}
-
-.task-preview-save-btn {
-    border: none;
-    background-color: var(--lightColorPrimary);
-    border-radius: 4px;
-    padding: .4rem 1rem;
-    color: var(--whiteColor) !important;
-}
-
-.task-preview-compleate-btn {
-    width: 15px;
-    cursor: pointer;
-}
-
-.task-preview-due-date {
-    color: var(--lightColorText);
-    font-size: .85rem;
-    cursor: pointer;
-}
-
-.task-preview-due-date-icon {
-    width: 15px;
-}
-
-.input-outline-off:focus {
-    outline: none !important;
-    box-shadow: none !important;
 }
 
 .custom-col {
@@ -179,17 +133,9 @@
     color: var(--lightColorPrimary);
 }
 
-.action-icon {
-    width: 15px;
-}
-
 .max-title-width {
     white-space: nowrap;
     max-width: 470px;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.info-icon {
-    width: 15px;
 }
