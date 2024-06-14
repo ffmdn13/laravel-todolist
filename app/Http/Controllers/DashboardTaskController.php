@@ -16,18 +16,24 @@ class DashboardTaskController extends Controller
      */
     public function index($id = null)
     {
-        $user = Auth::user();
-
         return response()->view('dashboard.task', [
             'title' => $this->getPageTitle(2),
-            'tasks' => TaskNote::whereBelongsTo($user, 'user')
-                ->notCompleted()
-                ->notTrashed()
-                ->mustTask()
-                ->get(['id', 'title', 'priority', 'due_date']),
-            'lists' => Lists::whereBelongsTo($user, 'user')->get(),
+            'tasks' => $this->getTaskNotes(Auth::user()),
             'preview' => $this->getTaskPreview($id)
         ]);
+    }
+
+    /**
+     * Get user related list task
+     */
+    private function getTaskNotes($user)
+    {
+        return TaskNote::select(['id', 'title', 'priority', 'due_date', 'reminder'])
+            ->whereBelongsTo($user, 'user')
+            ->notCompleted()
+            ->notTrashed()
+            ->mustTask()
+            ->get();
     }
 
     /**
@@ -43,8 +49,8 @@ class DashboardTaskController extends Controller
             ->byUserAndId($id, Auth::user()->id)
             ->notTrashed()
             ->notCompleted()
-            ->where('type', 'task')
-            ->first();
+            ->mustTask()
+            ->firstOrFail();
 
         if (is_null($preview['preview'])) {
             return null;
@@ -78,12 +84,12 @@ class DashboardTaskController extends Controller
         $validatedData = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'priority' => ['required', Rule::in(['0', '1', '2', '3'])],
-            'list' => ['nullable', 'present', 'string', 'max:255', 'exists:lists,id']
         ]);
 
         $validatedData['user_id'] = Auth::user()->id;
-        $validatedData['list_id'] = $validatedData['list'];
+        $validatedData['list_id'] = null;
         $validatedData['tag_id'] = null;
+        $validatedData['notebook_id'] = null;
 
         TaskNote::create($validatedData);
 
@@ -101,8 +107,8 @@ class DashboardTaskController extends Controller
         ]);
         $message = call_user_func([__CLASS__, $action['action']], $request);
 
-        return redirect($request->session()->previousUrl(), 302)
-            ->with('message', $message);
+        return redirect($message['previous-url'], 302)
+            ->with('message', $message['message']);
     }
 
     /**
@@ -139,9 +145,7 @@ class DashboardTaskController extends Controller
             );
         }
 
-        // dd($validatedFormData['due_date']);
-
-        return TaskNote::byUserAndId($id, $userId)
+        $message = TaskNote::byUserAndId($id, $userId)
             ->update([
                 'due_date' => $validatedFormData['due_date'],
                 'reminder' => $validatedFormData['reminder'],
@@ -149,6 +153,8 @@ class DashboardTaskController extends Controller
                 'description' => $validatedFormData['description'],
                 'is_complete' => $validatedFormData['is_complete'] ?? 0
             ]) === 1 ? 'Successfully updated task "' . $validatedFormData['title'] . '"' : 'Task not found!';
+
+        return ['message' => $message, 'previous-url' => $request->session()->previousUrl()];
     }
 
     /**
@@ -161,8 +167,11 @@ class DashboardTaskController extends Controller
         $currentDeletedTask = $reqeust->input('title', null);
 
         // delete task using soft delete method
-        return TaskNote::byUserAndId($id, $userId)
+        $message = TaskNote::byUserAndId($id, $userId)
             ->delete() === 1 ? "Successfully deleted task \"$currentDeletedTask\"." : "Task not found!";
+        $previousUrl = explode("/$id", $reqeust->session()->previousUrl())[0];
+
+        return ['message' => $message, 'previous-url' => $previousUrl];
     }
 
     /**
@@ -172,7 +181,7 @@ class DashboardTaskController extends Controller
     {
         $task = TaskNote::select(['id', 'is_shortcut', 'title'])
             ->byUserAndId($request->input('id'), Auth::user()->id)
-            ->first();
+            ->firstOrFail();
 
         if ($task->is_shortcut === 0) {
             $task->is_shortcut = 1;
@@ -184,7 +193,7 @@ class DashboardTaskController extends Controller
 
         $task->save();
 
-        return $message;
+        return ['message' => $message, 'previous-url' => $request->session()->previousUrl()];
     }
 
     /**
