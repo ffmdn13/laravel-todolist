@@ -92,7 +92,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::post('/lists/add', [DashboardListController::class, 'add']);
     Route::post('/lists/add/task', [DashboardListController::class, 'addTask']);
     Route::post('/lists/delete', [DashboardListController::class, 'delete']);
-
+    Route::post('/lists/action', [DashboardListController::class, 'action']);
 
     Route::get('/tags/{id}', [DashboardTagsController::class, 'index']);
     Route::get('/notebooks/{id}', [DashboardNotebookController::class, 'index']);

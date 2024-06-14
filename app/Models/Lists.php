@@ -25,6 +25,14 @@ class Lists extends Model
         $query->where('id', $id)->where('user_id', $userId);
     }
 
+    /**
+     * Filter query by list id and user id
+     */
+    public function scopeByListAndUser(Builder $query, $id, $userId)
+    {
+        $query->where('list_id', $id)->where('user_id', $userId);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

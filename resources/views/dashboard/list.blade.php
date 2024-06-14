@@ -125,7 +125,7 @@
         {{-- list items preview start --}}
         <section>
             @if (isset($preview))
-                <form action="/dashboard/list/something" method="POST" class="p-4 h-100">
+                <form action="/dashboard/lists/action" method="POST" class="p-4 h-100">
                     @csrf
                     <input type="hidden" name="id" value="{{ $preview['preview']->id }}">
 
@@ -195,10 +195,12 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li class="dropdown-item">
-                                            <button class="border-0 bg-transparent" value="save">Save</button>
+                                            <button class="border-0 bg-transparent" name="action"
+                                                value="saveTask">Save</button>
                                         </li>
                                         <li class="dropdown-item">
-                                            <button class="border-0 bg-transparent" value="delete">Delete</button>
+                                            <button class="border-0 bg-transparent" name="action"
+                                                value="deleteTask">Delete</button>
                                         </li>
                                         <li class="dropdown-item">
                                             <button class="border-0 bg-transparent" name="action" value="shortcut">
@@ -226,16 +228,5 @@
             @endif
         </section>
         {{-- list items preview end --}}
-
-        @if (session()->has('message'))
-            <div class="position-fixed top-0 end-0 p-3">
-                <div class="alert alert-info alert-dismissible fade show m-0 z-3" role="alert">
-                    <span class="d-flex gap-1">
-                        <i data-feather="info" class="aspect-ratio icon-w-15"></i>{{ session()->get('message') }}
-                    </span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-        @endif
     </div>
 @endsection

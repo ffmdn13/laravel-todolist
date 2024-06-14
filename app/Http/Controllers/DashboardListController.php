@@ -119,10 +119,38 @@ class DashboardListController extends Controller
         Lists::byUserAndId($validatedData['id'], $userId)
             ->delete();
 
-        TaskNote::where('user_id', $userId)
-            ->where('list_id', $validatedData['id'])
+        TaskNote::byListAndUser($validatedData['id'], $userId)
             ->forceDelete();
 
-        return redirect('/dashboard', 302);
+        return redirect('/dashboard', 302)
+            ->with('message', 'Successfully delete list');
+    }
+
+    /**
+     * Determine the action value for the appropriate function name
+     */
+    public function action(Request $request)
+    {
+        $action = $request->validate([
+            'action' => ['required', 'present', Rule::in(['saveTask', 'deleteTask', 'shortcut'])]
+        ]);
+        $message = call_user_func([__CLASS__, $action['action']], $request);
+
+        return redirect($request->session()->previousUrl(), 302)
+            ->with('message', $message);
+    }
+
+    /**
+     * Delete task in current list
+     */
+    private function deleteTask(Request $request)
+    {
+        $id = $request->input('id', null);
+        $userId = Auth::user()->id;
+        $currentDeletedTask = $request->input('title', null);
+
+        // delete task using soft delete method
+        return TaskNote::byUserAndId($id, $userId)
+            ->delete() === 1 ? "Successfully delete task \"$currentDeletedTask\"." : "Task not found!";
     }
 }
