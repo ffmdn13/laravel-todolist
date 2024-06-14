@@ -35,7 +35,7 @@ class DashboardListController extends Controller
             return null;
         }
 
-        $previews['preview'] = TaskNote::select(['id', 'title', 'description', 'priority', 'due_date', 'reminder'])
+        $previews['preview'] = TaskNote::select(['id', 'title', 'description', 'priority', 'due_date', 'reminder', 'is_complete', 'is_shortcut'])
             ->where('id', $validator->getData()['preview'])
             ->byListAndUser($listId, Auth::user()->id)
             ->notTrashed()
@@ -152,5 +152,27 @@ class DashboardListController extends Controller
         // delete task using soft delete method
         return TaskNote::byUserAndId($id, $userId)
             ->delete() === 1 ? "Successfully delete task \"$currentDeletedTask\"." : "Task not found!";
+    }
+
+    /**
+     * Add or remove task to shortcut list
+     */
+    private function shortcut(Request $request)
+    {
+        $task = TaskNote::select(['id', 'is_shortcut', 'title'])
+            ->byUserAndId($request->input('id'), Auth::user()->id)
+            ->first();
+
+        if ($task->is_shortcut === 0) {
+            $task->is_shortcut = 1;
+            $message = 'Task "' . $task->title . '" added to shortcut';
+        } else {
+            $task->is_shortcut = 0;
+            $message = 'Task "' . $task->title . '" removed from shortcut';
+        }
+
+        $task->save();
+
+        return $message;
     }
 }
