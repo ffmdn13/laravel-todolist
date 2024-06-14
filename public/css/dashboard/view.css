@@ -1,0 +1,209 @@
+/* customization style section start */
+
+.input-outline-off:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.max-width-470 {
+    white-space: nowrap;
+    max-width: 470px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.asepct-ratio {
+    aspect-ratio: 1/1;
+}
+
+/* customizetion style section end */
+
+/* icon style section start */
+
+.icon-w-21 {
+    width: 21px;
+}
+
+.icon-w-19 {
+    width: 19px;
+}
+
+.icon-w-15 {
+    width: 15px;
+}
+
+/* icon style section end */
+
+/* priority color style section start */
+.color-3 {
+    fill: var(--priorityColorHigh);
+    stroke: var(--priorityColorHigh);
+}
+
+.color-2 {
+    fill: var(--priorityColorMedium);
+    stroke: var(--priorityColorMedium);
+}
+
+.color-1 {
+    fill: var(--priorityColorLow);
+    stroke: var(--priorityColorLow);
+}
+
+/* priority color style section end */
+
+/* overview style section start */
+
+.overview-title {
+    font-weight: var(--fw-700);
+    font-size: 1.25rem;
+}
+
+.overview-items>li:hover {
+    border: 1px solid var(--lightColorSecondary) !important;
+}
+
+.overview-items {
+    list-style: none;
+}
+
+.overview-item-title {
+    font-size: 1rem;
+    font-weight: var(--fw-400);
+}
+
+.overview-dropdown-clr-black {
+    color: var(--lightColorText);
+}
+
+.overview-dropdown-sliders {
+    color: var(--lightColorText);
+    opacity: 0.8;
+    font-size: .95rem;
+}
+
+.overview-add-task-title {
+    font-size: 1.25rem;
+    font-weight: var(--fw-700);
+}
+
+.overview-add-task-btn {
+    background-color: var(--lightColorPrimary);
+    color: var(--whiteColor) !important;
+    border-radius: 4px;
+    font-weight: var(--fw-700);
+    padding: .6rem 1rem;
+}
+
+/* overview style section end */
+
+/* empty overview style section start */
+
+.overview-empty {
+    height: 400px;
+}
+
+.overview-empty-icon {
+    transform: scale(2.3);
+}
+
+.overview-empty-title {
+    font-weight: var(--fw-700);
+}
+
+.overview-empty-description {
+    font-size: .9rem;
+    opacity: .9;
+}
+
+.overview-empty-link {
+    color: var(--lightColorPrimary);
+}
+
+/* empty overview style section end */
+
+/* preview style section start */
+.preview-due-date {
+    color: var(--lightColorText);
+    font-size: .85rem;
+    cursor: pointer;
+}
+
+.preview-title {
+    outline: none;
+    font-weight: var(--fw-700);
+    font-size: 1.1rem;
+}
+
+.preview-complete-btn {
+    width: 15px;
+    cursor: pointer;
+}
+
+.preview-save-btn {
+    background-color: var(--lightColorPrimary);
+    border-radius: 4px;
+    padding: .4rem 1rem;
+    color: var(--whiteColor) !important;
+}
+
+.custom-trix {
+    height: 435px;
+    font-size: .95rem;
+}
+
+/* .trix-button--icon-bold,
+.trix-button--icon-italic,
+.trix-button--icon-strike,
+.trix-button--icon-link, */
+/* .trix-button--icon-bullet-list,
+.trix-button--icon-number-list, */
+.trix-button--icon-heading-1,
+.trix-button--icon-heading-2,
+.trix-button--icon-quote,
+.trix-button--icon-code,
+.trix-button--icon-decrease-nesting-level,
+.trix-button--icon-increase-nesting-level,
+.trix-button--icon-undo,
+.trix-button--icon-redo,
+.trix-button--icon-attach {
+    display: none !important;
+    border: none !important;
+}
+
+.trix-button-group {
+    border-right: none !important;
+    border-left: none !important;
+}
+
+/* preview style section end */
+
+/* no preview selected style section start */
+.empty-due-date {
+    padding: 6px 8px;
+    background-color: rgba(231, 137, 151, 0.35);
+}
+
+.empty-preview {
+    opacity: 0.8;
+}
+
+.empty-preview-icon {
+    transform: scale(1.8);
+    color: var(--lightColorText);
+}
+
+.empty-preview-title {
+    font-weight: var(--fw-700);
+    font-size: 1.2rem;
+}
+
+.empty-preview-desc {
+    font-size: .95rem;
+}
+
+/* no preview selected style section end */

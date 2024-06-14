@@ -34,6 +34,17 @@
         @include('partials.dashboard-sidebar')
 
         @include('partials.dashboard-layout')
+
+        @if (session()->has('message'))
+            <div class="position-fixed top-0 end-0 p-3">
+                <div class="alert alert-info alert-dismissible fade show m-0 z-3" role="alert">
+                    <span class="d-flex gap-1">
+                        <i data-feather="info" class="aspect-ratio info-icon"></i>{{ session()->get('message') }}
+                    </span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        @endif
     </main>
 
     {{-- bootstrap js link --}}

@@ -6,10 +6,6 @@
     text-decoration: none;
 }
 
-.task-container-icon {
-    width: 21px;
-}
-
 .task-container-title {
     font-weight: var(--fw-700);
     font-size: 1.25rem;
@@ -30,11 +26,6 @@
 .dropdown-sliders-menu-text {
     font-size: .85rem;
     cursor: pointer;
-}
-
-.dropdown-sliders-icon,
-.dropdown-plus-icon {
-    width: 19px;
 }
 
 .task-items {
@@ -131,11 +122,4 @@
 
 .empty-task-link {
     color: var(--lightColorPrimary);
-}
-
-.max-title-width {
-    white-space: nowrap;
-    max-width: 470px;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
