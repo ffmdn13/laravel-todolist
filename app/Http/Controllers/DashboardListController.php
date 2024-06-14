@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Lists;
 use App\Models\TaskNote;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -62,6 +63,9 @@ class DashboardListController extends Controller
     {
         return TaskNote::select(['id', 'title', 'priority', 'due_date', 'reminder'])
             ->byListAndUser($id, $userId)
+            ->notCompleted()
+            ->notTrashed()
+            ->mustTask()
             ->get();
     }
 
@@ -136,8 +140,54 @@ class DashboardListController extends Controller
         ]);
         $message = call_user_func([__CLASS__, $action['action']], $request);
 
-        return redirect($request->session()->previousUrl(), 302)
-            ->with('message', $message);
+        return redirect($message['previous-uri'], 302)
+            ->with('message', $message['message']);
+    }
+
+    /**
+     * Update the given task
+     */
+    private function saveTask(Request $request)
+    {
+        $rules = [
+            'id' => ['required', 'present', 'numeric', 'exists:task_notes,id'],
+            'due_date' => ['nullable', 'present', 'date', 'date_format:Y-m-d'],
+            'time' => ['nullable', 'present', 'date_format:H:i'],
+            'reminder' => ['nullable', 'present', 'date_format:H:i'],
+            'title' => ['required', 'present', 'max:255', 'string'],
+            'description' => ['nullable', 'present', 'string'],
+        ];
+
+        if ($request->has('is_complete') === true) {
+            $rules['is_complete'] = ['required', 'present', 'boolean'];
+        }
+
+        $validatedFormData = $request->validate($rules);
+        $id = $validatedFormData['id'];
+        $userId = Auth::user()->id;
+
+        /**
+         * Time format to use :
+         * 1. 24hr : l, M j Y H:i
+         * 2. 12hr : l, M j Y h:i A
+         */
+        if ($validatedFormData['due_date'] == true || $validatedFormData['time'] == true) {
+            $validatedFormData['due_date'] = $this->getDueDate(
+                $validatedFormData['due_date'],
+                $validatedFormData['time']
+            );
+        }
+
+        $message = TaskNote::byUserAndId($id, $userId)
+            ->update([
+                'due_date' => $validatedFormData['due_date'],
+                'reminder' => $validatedFormData['reminder'],
+                'title' => $validatedFormData['title'],
+                'description' => $validatedFormData['description'],
+                'is_complete' => $validatedFormData['is_complete'] ?? 0
+            ]) === 1 ? 'Successfully updated task "' . $validatedFormData['title'] . '"' : 'Task not found!';
+
+        return ['message' => $message, 'previous-uri' => $request->session()->previousUrl()];
     }
 
     /**
@@ -149,9 +199,11 @@ class DashboardListController extends Controller
         $userId = Auth::user()->id;
         $currentDeletedTask = $request->input('title', null);
 
-        // delete task using soft delete method
-        return TaskNote::byUserAndId($id, $userId)
+        $message = TaskNote::byUserAndId($id, $userId)
             ->delete() === 1 ? "Successfully delete task \"$currentDeletedTask\"." : "Task not found!";
+        $previousUri = explode('?', $request->session()->previousUrl())[0];
+
+        return ['message' => $message, 'previous-uri' => $previousUri];
     }
 
     /**
@@ -173,6 +225,25 @@ class DashboardListController extends Controller
 
         $task->save();
 
-        return $message;
+        return ['message' => $message, 'previous-uri' => $request->session()->previousUrl()];
+    }
+
+    /**
+     * Set and return task due date
+     */
+    private function getDueDate(?string $dueDate, ?string $time)
+    {
+        $userTimeFormat = null;
+
+        if ($time == true) {
+            $timeFormat = ['24hr' => ' H:i', '12hr' => ' h:i A'];
+            $userTimeFormat = $timeFormat[json_decode(Auth::user()->personalization, true)['time-format']];
+        }
+
+        $timestamp = is_null($dueDate) ?
+            strtotime(date('M j Y') . "$time") :
+            strtotime("$dueDate $time");
+
+        return Carbon::now()->setTimestamp($timestamp)->format('l, M j Y' . $userTimeFormat);
     }
 }

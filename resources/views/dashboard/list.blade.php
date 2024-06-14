@@ -149,7 +149,7 @@
                                             <div class="row g-2">
                                                 <div class="col">
                                                     <label for="date" class="form-label">Date</label>
-                                                    <input type="date" name="date" id="date"
+                                                    <input type="date" name="due_date" id="date"
                                                         class="form-control" aria-label="Date"
                                                         value="{{ $preview['inputDateValue'] }}">
                                                 </div>

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TaskNote extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * Table nem used for model reference
