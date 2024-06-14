@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Lists;
 use App\Models\TaskNote;
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class DashboardListController extends Controller
 {
@@ -84,6 +84,28 @@ class DashboardListController extends Controller
         Lists::create($validatedData);
 
         return redirect('/dashboard', 302);
+    }
+
+    /**
+     * Add new task to current list
+     */
+    public function addTask(Request $request)
+    {
+        $validatedData = $request->validate([
+            'id' => ['required', 'present', 'numeric', 'exists:lists,id'],
+            'title' => ['required', 'present', 'string', 'max:255'],
+            'priority' => ['required', 'present', Rule::in(['0', '1', '2', '3'])],
+        ]);
+
+        $validatedData['user_id'] = Auth::user()->id;
+        $validatedData['list_id'] = $validatedData['id'];
+        $validatedData['tag_id'] = null;
+        $validatedData['notebook_id'] = null;
+
+        TaskNote::create($validatedData);
+
+        return redirect($request->session()->previousUrl(), 302)
+            ->with('message', 'Successfully added task "' . $validatedData['title'] . '"');
     }
 
     /**

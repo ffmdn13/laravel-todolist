@@ -41,12 +41,13 @@
                                 <div class="modal-content">
                                     <div class="modal-body">
                                         <h1 class="overview-add-task-title mb-3">📜 Add new task</h1>
-                                        <form action="" method="POST">
+                                        <form action="/dashboard/lists/add/task" method="POST">
+                                            <input type="hidden" name="id" value="{{ $listId }}">
                                             <input type="text" name="title"
                                                 class="input-outline-off form-control mb-2 border-0 border-bottom"
                                                 placeholder="Title" aria-label="Title">
                                             <select class="input-outline-off border-0 border-bottom form-select mb-2"
-                                                aria-label="Default select example">
+                                                aria-label="Default select example" name="priority">
                                                 <option value="0" selected>⚪ None</option>
                                                 <option value="1">🟢 Low</option>
                                                 <option value="2">🔵 Medium</option>

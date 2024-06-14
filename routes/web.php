@@ -90,6 +90,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::get('/lists/{id}/{title}', [DashboardListController::class, 'index'])
         ->whereNumber('id');
     Route::post('/lists/add', [DashboardListController::class, 'add']);
+    Route::post('/lists/add/task', [DashboardListController::class, 'addTask']);
     Route::post('/lists/delete', [DashboardListController::class, 'delete']);
 
 
