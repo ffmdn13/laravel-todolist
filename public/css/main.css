@@ -94,6 +94,26 @@ option {
     border: 1px solid var(--lightColorPrimary) !important;
 }
 
+.color-blue {
+    color: var(--priorityColorMedium) !important;
+}
+
+.color-green {
+    color: var(--priorityColorLow) !important;
+}
+
+.color-red {
+    color: var(--priorityColorHigh) !important;
+}
+
+.color-cyan {
+    color: #09DFE7 !important;
+}
+
+.color-purple {
+    color: #7B05E8 !important;
+}
+
 .color-orange {
     color: #F4860B !important;
 }
