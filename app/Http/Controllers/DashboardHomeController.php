@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lists;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -13,10 +15,12 @@ class DashboardHomeController extends Controller
      */
     public function index()
     {
+        $userObj = Auth::user();
+
         return response()->view('dashboard.index', [
             'title' => $this->getPageTitle(),
             'welcomeText' => $this->getWelcomeText(),
-            'parseTimeToGreeting' => $this->parseTimeToGreeting() . ', ' . Auth::user()->nickname . '👋',
+            'parseTimeToGreeting' => $this->parseTimeToGreeting() . ', ' . $userObj->nickname . '👋',
             'priorityColor' => $this->getPriorityColor(),
             'notifications' => null,
             'heroImage' => $this->getHeroImage()

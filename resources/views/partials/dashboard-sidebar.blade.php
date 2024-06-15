@@ -1,9 +1,8 @@
 @php
-    $lists = getListsModel()
-        ->with('taskNotes')
-        ->select(['id', 'title'])
-        ->where('user_id', auth()->user()->id)
-        ->get();
+    $userId = auth()->user()->id;
+
+    $lists = getLists($userId);
+    $tags = getTags($userId);
 @endphp
 
 <aside class="border-end bg-light-subtle p-3">
@@ -104,7 +103,6 @@
                 <div onclick="window.location.href='/dashboard/lists/{{ $list->id }}/{{ $list->title }}'"
                     class="list-card p-2 d-flex align-items-center justify-content-between">
                     {{ $list->title }}
-                    <span class="item-count ms-auto">{{ $list->taskNotes->count() }}</span>
                 </div>
             @endforeach
         </div>
@@ -129,10 +127,10 @@
                                 @csrf
                                 <div class="mb-3">
                                     <input type="text" class="form-control border-0 border-bottom"
-                                        id="exampleFormControlInput1" placeholder="Tag title">
+                                        id="exampleFormControlInput1" placeholder="Tag title" name="title">
                                 </div>
                                 <select class="input-outline-off border-0 border-bottom form-select mb-2"
-                                    aria-label="Default select example">
+                                    aria-label="Default select example" name="color">
                                     <option value="" selected>⚪ None</option>
                                     <option value="blue">🔵 Blue</option>
                                     <option value="green">🟢 Green</option>

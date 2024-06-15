@@ -15,9 +15,8 @@ return new class extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
+            $table->string('title', 255);
             $table->string('color', 255);
-            $table->integer('task_count', false, false);
             $table->timestamps();
 
             $table->foreignId('user_id');

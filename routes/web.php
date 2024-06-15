@@ -32,13 +32,6 @@ use Illuminate\Support\Facades\Session;
  * If use try navigate to / route, it will redirect to /dashboard route
  */
 Route::redirect('/', '/dashboard', 302);
-Route::get('/test', function () {
-    $strtotime = strtotime('2023-12-1 03:23');
-    $time = now()->setTimestamp($strtotime)->format('l, M j Y H:i');
-    $time = ['24hr' => 'H:i', '12hr' => 'h:i A']['24hr'];
-
-    return response()->view('test', ['time' => $time]);
-});
 
 /**
  * Login route
@@ -94,11 +87,34 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::post('/lists/delete', [DashboardListController::class, 'delete']);
     Route::post('/lists/action', [DashboardListController::class, 'action']);
 
+    /**
+     * Controller for tag dashboard page
+     */
     Route::get('/tags/{id}', [DashboardTagsController::class, 'index']);
+
+    /**
+     * Controller for notebook dashboard page
+     */
     Route::get('/notebooks/{id}', [DashboardNotebookController::class, 'index']);
+
+    /**
+     * Controller fot today dashboard page
+     */
     Route::get('/today', [DashboardTodayController::class, 'index']);
+
+    /**
+     * Controller next7days dashboard page
+     */
     Route::get('/next7days', [DashboardNext7DaysController::class, 'index']);
+
+    /**
+     * Controller for trash dashboard page
+     */
     Route::get('/trash', [DashboardTrashController::class, 'index']);
+
+    /**
+     * Controller for complete dsahboard page
+     */
     Route::get('/complete', [DashboardCompleteController::class, 'index']);
 });
 

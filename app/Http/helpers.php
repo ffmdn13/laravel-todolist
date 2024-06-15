@@ -31,22 +31,26 @@ function getLastEdited($timestamp = null)
 /**
  * Return Lists model for blade template that rendered by @include directive
  */
-function getListsModel()
+function getLists($userId)
 {
-    return new Lists();
+    return Lists::select(['id', 'title'])
+        ->where('user_id', $userId)
+        ->get();
 }
 /**
  * Return Tag model for blade template that rendered by @include directive
  */
-function getTagModel()
+function getTags($userId)
 {
-    return new Tag();
+    return Tag::select(['id', 'title'])
+        ->where('user_id', $userId)
+        ->get();
 }
 
 /**
  * Return Notebook model for blade template that rendered by @include directive
  */
-function getNotebookModel()
+function getNotebooks($userId)
 {
-    return new Notebook();
+    return null;
 }

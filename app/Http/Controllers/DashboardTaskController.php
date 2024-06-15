@@ -19,7 +19,8 @@ class DashboardTaskController extends Controller
         return response()->view('dashboard.task', [
             'title' => $this->getPageTitle(2),
             'tasks' => $this->getTaskNotes(Auth::user()),
-            'preview' => $this->getTaskPreview($id)
+            'preview' => $this->getTaskPreview($id),
+            'makanbang' => 'MAKANBANG'
         ]);
     }
 

@@ -10,18 +10,17 @@ class Tag extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'title',
         'color',
-        'task_count'
     ];
 
-    public function users()
+    public function user()
     {
-        return $this->belongsTo('users', 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function taskNotes()
+    public function taskNote()
     {
-        return $this->hasMany('task_notes', 'tag_id', 'id');
+        return $this->hasMany(TaskNote::class, 'tag_id', 'id');
     }
 }
