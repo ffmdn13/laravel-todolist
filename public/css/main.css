@@ -93,3 +93,7 @@ option {
 .border-focus {
     border: 1px solid var(--lightColorPrimary) !important;
 }
+
+.color-orange {
+    color: #F4860B !important;
+}

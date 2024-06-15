@@ -42,7 +42,7 @@ function getLists($userId)
  */
 function getTags($userId)
 {
-    return Tag::select(['id', 'title'])
+    return Tag::select(['id', 'title', 'color'])
         ->where('user_id', $userId)
         ->get();
 }

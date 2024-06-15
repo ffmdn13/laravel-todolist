@@ -123,7 +123,7 @@
                     <div class="modal-content">
                         <div class="modal-body">
                             <h1 class="add-new-list-heading mb-3">#️⃣ Add new tag</h1>
-                            <form action="/dashboard/list" method="POST">
+                            <form action="/dashboard/tag/add" method="POST">
                                 @csrf
                                 <div class="mb-3">
                                     <input type="text" class="form-control border-0 border-bottom"
@@ -131,7 +131,7 @@
                                 </div>
                                 <select class="input-outline-off border-0 border-bottom form-select mb-2"
                                     aria-label="Default select example" name="color">
-                                    <option value="" selected>⚪ None</option>
+                                    <option value="black" selected>⚪ None</option>
                                     <option value="blue">🔵 Blue</option>
                                     <option value="green">🟢 Green</option>
                                     <option value="red">🔴 Red</option>
@@ -146,13 +146,14 @@
                 </div>
             </div>
         </li>
-        <div class="collapse my-2 ps-4" id="tagsCollapse">
-            <div onclick="window.location.href='/dashboard/tags/1'"
-                class="list-card tag-orange p-1 d-flex align-items-center justify-content-between gap-1">
-                <i data-feather="hash" class="icon-aspect-ratio collapse-tag-icon"></i>
-                Programming
-                <span class="item-count ms-auto">2</span>
-            </div>
+        <div class="collapse" id="tagsCollapse">
+            @foreach ($tags as $tag)
+                <div onclick="window.location.href='/dashboard/tag/{{ $tag->id }}/{{ $tag->title }}'"
+                    class="list-card color-{{ $tag->color }} p-2 d-flex align-items-center justify-content gap-1">
+                    <i data-feather="hash" class="icon-aspect-ratio collapse-tag-icon"></i>
+                    {{ $tag->title }}
+                </div>
+            @endforeach
         </div>
         <li class="nav-item px-2 d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-1 flex-fill" data-bs-toggle="collapse"

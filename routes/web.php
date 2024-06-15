@@ -90,7 +90,9 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     /**
      * Controller for tag dashboard page
      */
-    Route::get('/tags/{id}', [DashboardTagsController::class, 'index']);
+    Route::get('/tag/{id}/{title}', [DashboardTagsController::class, 'index'])
+        ->whereAlphaNumeric('id');
+    Route::post('/tag/add', [DashboardTagsController::class, 'add']);
 
     /**
      * Controller for notebook dashboard page
