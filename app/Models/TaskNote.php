@@ -35,14 +35,6 @@ class TaskNote extends Model
     ];
 
     /**
-     * Filter query by id and user_id column
-     */
-    public function scopeByUserAndId(Builder $query, $id, $userId)
-    {
-        $query->where('id', $id)->where('user_id', $userId);
-    }
-
-    /**
      * Filter query by is_trash column with 0 value
      */
     public function scopeNotTrashed(Builder $query)
@@ -83,11 +75,30 @@ class TaskNote extends Model
     }
 
     /**
+     * Filter query by id and user_id column
+     */
+    public function scopeByUserAndId(Builder $query, $id, $userId)
+    {
+        $query->where('id', $id)
+            ->where('user_id', $userId);
+    }
+
+    /**
      * Filter query by list id and user id
      */
     public function scopeByListAndUser(Builder $query, $id, $userId)
     {
-        $query->where('list_id', $id)->where('user_id', $userId);
+        $query->where('list_id', $id)
+            ->where('user_id', $userId);
+    }
+
+    /**
+     * Filter query by tag and user id
+     */
+    public function scopeByTagAndUser(Builder $query, $id, $userId)
+    {
+        $query->where('tag_id', $id)
+            ->where('user_id', $userId);
     }
 
     /**

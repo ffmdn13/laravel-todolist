@@ -93,6 +93,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::get('/tag/{id}/{title}', [DashboardTagsController::class, 'index'])
         ->whereAlphaNumeric('id');
     Route::post('/tag/add', [DashboardTagsController::class, 'add']);
+    Route::post('/tag/add/task', [DashboardTagsController::class, 'addTask']);
 
     /**
      * Controller for notebook dashboard page

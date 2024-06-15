@@ -41,21 +41,20 @@
                                 <div class="modal-content">
                                     <div class="modal-body">
                                         <h1 class="add-new-tags-heading mb-3">📜 Add new task</h1>
-
-                                        {{-- Add this to sidebar new task button --}}
-                                        <form action="" method="POST">
-                                            <input type="text" name="title"
-                                                class="input-outline-off form-control mb-2 border-0 border-bottom"placeholder="Title"
-                                                aria-label="Title">
+                                        <form action="/dashboard/tag/add/task" method="POST">
+                                            <input type="hidden" name="id" value="{{ $tagId }}">
+                                            <input type="text"
+                                                class="input-outline-off form-control mb-2 border-0 border-bottom"
+                                                placeholder="Title" aria-label="Title" name="title">
                                             <select class="input-outline-off border-0 border-bottom form-select mb-2"
-                                                aria-label="Default select example">
+                                                aria-label="Default select example" name="priority">
                                                 <option value="0" selected>⚪ None</option>
                                                 <option value="1">🟢 Low</option>
                                                 <option value="2">🔵 Medium</option>
                                                 <option value="3">🔴 High</option>
                                             </select>
                                             @csrf
-                                            <button class="add-new-tags-btn mt-2" type="submit">Create</button>
+                                            <button class="add-new-tags-btn mt-2" type="submit">Add</button>
                                         </form>
                                     </div>
                                 </div>
@@ -91,7 +90,7 @@
             @if ($tasks->isNotEmpty())
                 <ul class="tags-items mt-4">
                     @foreach ($tasks as $task)
-                        <li class="border rounded py-1 px-3 mb-2" onclick="window.location.href=''">
+                        <li class="border rounded py-2 px-3 mb-2" onclick="window.location.href=''">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="tags-items-title my-1">{{ $task->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
