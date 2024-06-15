@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +15,15 @@ class Tag extends Model
         'color',
         'user_id'
     ];
+
+    /**
+     * Filter query by tag and user id
+     */
+    public function scopeByUserAndId(Builder $query, $id, $userId)
+    {
+        $query->where('id', $id)
+            ->where('user_id', $userId);
+    }
 
     public function user()
     {

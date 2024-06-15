@@ -74,6 +74,24 @@ class DashboardTagsController extends Controller
     }
 
     /**
+     * Delete given list
+     */
+    public function delete(Request $request)
+    {
+        $validatedData = $request->validate(['id' => ['required', 'present', 'numeric', 'exists:tags,id']]);
+        $userId = Auth::user()->id;
+
+        Tag::byUserAndId($validatedData['id'], $userId)
+            ->delete();
+
+        TaskNote::byTagAndUser($validatedData['id'], $userId)
+            ->forceDelete();
+
+        return redirect('/dashboard', 302)
+            ->with('message', 'Successfully delete tag');
+    }
+
+    /**
      * Add new task to current tag
      */
     public function addTask(Request $request)
