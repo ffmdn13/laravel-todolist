@@ -21,7 +21,7 @@ class DashboardListController extends Controller
             'title' => $this->getPageTitle(2),
             'listId' => $id,
             'listTitle' => $title,
-            'tasks' => $this->getTaskNotes($id, Auth::user()->id),
+            'tasks' => $this->getTasks($id, Auth::user()->id),
             'preview' => $this->preview($request->query('preview', null), $id)
         ]);
     }
@@ -59,7 +59,7 @@ class DashboardListController extends Controller
     /**
      * Get user related list task
      */
-    private function getTaskNotes($id, $userId)
+    private function getTasks($id, $userId)
     {
         return TaskNote::select(['id', 'title', 'priority', 'due_date', 'reminder'])
             ->byListAndUser($id, $userId)

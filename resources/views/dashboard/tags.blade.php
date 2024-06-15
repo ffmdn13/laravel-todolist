@@ -6,6 +6,7 @@
 
 @section('additional-dashboard-head')
     <link rel="stylesheet" href="/css/dashboard/tags.css">
+    <link rel="stylesheet" href="/css/dashboard/view.css">
 
     {{-- trix editor cdn link --}}
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
@@ -18,10 +19,17 @@
         <section class="p-4 border-end min-vh-100">
             <header class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-1">
-                    <i data-feather="hash" class="icon-aspect-ratio title-tags-icon tag-orange"></i>
-                    <h1 class="tags-title tag-orange">Programming</h1>
+                    <i data-feather="hash" class="aspect-ratio icon-w-21 tag-{{ $color }}"></i>
+                    <h1 class="overview-title tag-{{ $color }}">{{ $tagTitle }}</h1>
                 </div>
                 <div class="d-flex align-items-center gap-2">
+                    <form action="/dashboard/tag/delete" method="POST">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $tagId }}">
+                        <button class="border-0 bg-transparent p-0" type="submit">
+                            <i class="aspect-ratio icon-w-19 cursor-pointer text-danger" data-feather="trash"></i>
+                        </button>
+                    </form>
                     <div>
                         <a href="" class="dropdown-plus-trigger" data-bs-toggle="modal" data-bs-target="#createTask">
                             <i data-feather="plus-square" class="icon-aspect-ratio dropdown-plus-icon"></i>
@@ -72,25 +80,32 @@
                     </div>
                 </div>
             </header>
+
             <div class="border-bottom pb-2">
-                <span class="text-black-50 d-block mt-2">1 Task</span>
+                <span class="text-black-50 d-block mt-2">
+                    @php($count = $tasks->count())
+                    {{ $count > 1 ? "$count Tasks" : "$count Task" }}
+                </span>
             </div>
-            @if (isset($tasks))
+
+            @if ($tasks->isNotEmpty())
                 <ul class="tags-items mt-4">
-                    <li class="border rounded py-1 px-3 mb-2" onclick="window.location.href=''">
-                        <div class="d-flex align-items-center justify-content-between">
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between">
-                            <h1 class="tags-items-title my-1">Drink coffee every morning</h1>
-                            <div class="mt-2 d-flex align-items-center gap-2">
+                    @foreach ($tasks as $task)
+                        <li class="border rounded py-1 px-3 mb-2" onclick="window.location.href=''">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h1 class="tags-items-title my-1">{{ $task->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
-                                    <i data-feather="clock" class="tags-items-due-date-icon icon-aspect-ratio"></i>
-                                    <span class="tags-items-due-date">Today, 5:45 PM</span>
+                                    @if (isset($task->due_date))
+                                        <i data-feather="calendar" class="icon-w-15 aspect-ratio"></i>
+                                    @endif
+                                    @if (isset($task->reminder))
+                                        <i data-feather="bell" class="icon-w-15 aspect-ratio"></i>
+                                    @endif
+                                    <i data-feather="flag" class="aspect-ratio icon-w-15 color-{{ $task->priority }}"></i>
                                 </div>
-                                <span class="priority color-blue d-block rounded-circle ms-auto"></span>
                             </div>
-                        </div>
-                    </li>
+                        </li>
+                    @endforeach
                 </ul>
             @else
                 <div class="empty-tags-height mt-4 d-flex flex-column justify-content-center align-items-center">

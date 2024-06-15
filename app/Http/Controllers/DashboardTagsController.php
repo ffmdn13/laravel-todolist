@@ -12,14 +12,15 @@ class DashboardTagsController extends Controller
     /**
      * Render dashboard task page
      */
-    public function index(Request $request, $id, $title)
+    public function index(Request $request, Tag $tag, $id, $title)
     {
         return response()->view('dashboard.tags', [
             'title' => $this->getPageTitle(2),
             'tagId' => $id,
             'tagTitle' => $title,
-            'tasks' => $this->getTasks(),
-            'preview' => $this->preview()
+            'tasks' => $this->getTasks($tag),
+            'preview' => $this->preview(),
+            'color' => $request->query('clr', null)
         ]);
     }
 
@@ -34,9 +35,11 @@ class DashboardTagsController extends Controller
     /**
      * Return tasks related to current tag
      */
-    private function getTasks()
+    private function getTasks(Tag $tag)
     {
-        return null;
+        return $tag->taskNotes()
+            ->select(['id', 'title', 'priority', 'due_date', 'reminder'])
+            ->get();
     }
 
     /**

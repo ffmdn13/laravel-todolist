@@ -20,7 +20,7 @@ class Tag extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function taskNote()
+    public function taskNotes()
     {
         return $this->hasMany(TaskNote::class, 'tag_id', 'id');
     }

@@ -148,7 +148,7 @@
         </li>
         <div class="collapse" id="tagsCollapse">
             @foreach ($tags as $tag)
-                <div onclick="window.location.href='/dashboard/tag/{{ $tag->id }}/{{ $tag->title }}'"
+                <div onclick="window.location.href='/dashboard/tag/{{ $tag->id }}/{{ $tag->title }}?clr={{ $tag->color }}'"
                     class="list-card color-{{ $tag->color }} p-2 d-flex align-items-center justify-content gap-1">
                     <i data-feather="hash" class="icon-aspect-ratio collapse-tag-icon"></i>
                     {{ $tag->title }}
