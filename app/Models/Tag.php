@@ -19,7 +19,7 @@ class Tag extends Model
     /**
      * Filter query by tag and user id
      */
-    public function scopeByUserAndId(Builder $query, $id, $userId)
+    public function scopeByUserAndId(Builder  $query, $id, $userId)
     {
         $query->where('id', $id)
             ->where('user_id', $userId);

@@ -91,6 +91,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
      * Controller for tag dashboard page
      */
     Route::get('/tag/{id}/{title}', [DashboardTagsController::class, 'index'])
+        ->middleware('ensure:tags')
         ->whereAlphaNumeric('id');
     Route::post('/tag/add', [DashboardTagsController::class, 'add']);
     Route::post('/tag/add/task', [DashboardTagsController::class, 'addTask']);
