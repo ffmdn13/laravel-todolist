@@ -12,6 +12,20 @@ class Notebook extends Model
 
     protected $table = 'notebooks';
 
+    protected $fillable = [
+        'title',
+        'user_id'
+    ];
+
+    /**
+     * Filter query by tag and user id
+     */
+    public function scopeByUserAndId(Builder  $query, $id, $userId)
+    {
+        $query->where('id', $id)
+            ->where('user_id', $userId);
+    }
+
     public function taskNotes()
     {
         return $this->hasMany(TaskNote::class, 'notebook_id', 'id');

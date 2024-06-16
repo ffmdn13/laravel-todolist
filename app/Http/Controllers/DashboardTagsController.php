@@ -18,9 +18,6 @@ class DashboardTagsController extends Controller
      */
     public function index(Request $request, $id, $title)
     {
-
-        // make method validation to validate request id
-
         return response()->view('dashboard.tags', [
             'title' => $this->getPageTitle(2),
             'tagId' => $id,
@@ -152,46 +149,45 @@ class DashboardTagsController extends Controller
      * Update or save task related to current tag
      */
     private function saveTask(Request $request)
-    { {
-            $rules = [
-                'id' => ['required', 'present', 'numeric', 'exists:task_notes,id'],
-                'due_date' => ['nullable', 'present', 'date', 'date_format:Y-m-d'],
-                'time' => ['nullable', 'present', 'date_format:H:i'],
-                'reminder' => ['nullable', 'present', 'date_format:H:i'],
-                'title' => ['required', 'present', 'max:255', 'string'],
-                'description' => ['nullable', 'present', 'string'],
-            ];
+    {
+        $rules = [
+            'id' => ['required', 'present', 'numeric', 'exists:task_notes,id'],
+            'due_date' => ['nullable', 'present', 'date', 'date_format:Y-m-d'],
+            'time' => ['nullable', 'present', 'date_format:H:i'],
+            'reminder' => ['nullable', 'present', 'date_format:H:i'],
+            'title' => ['required', 'present', 'max:255', 'string'],
+            'description' => ['nullable', 'present', 'string'],
+        ];
 
-            if ($request->has('is_complete') === true) {
-                $rules['is_complete'] = ['required', 'present', 'boolean'];
-            }
-
-            $validatedFormData = $request->validate($rules);
-            $id = $validatedFormData['id'];
-            $userId = Auth::user()->id;
-            /**
-             * Time format to use :
-             * 1. 24hr : l, M j Y H:i
-             * 2. 12hr : l, M j Y h:i A
-             */
-            if ($validatedFormData['due_date'] == true || $validatedFormData['time'] == true) {
-                $validatedFormData['due_date'] = $this->getDueDate(
-                    $validatedFormData['due_date'],
-                    $validatedFormData['time']
-                );
-            }
-
-            $message = TaskNote::byUserAndId($id, $userId)
-                ->update([
-                    'due_date' => $validatedFormData['due_date'],
-                    'reminder' => $validatedFormData['reminder'],
-                    'title' => $validatedFormData['title'],
-                    'description' => $validatedFormData['description'],
-                    'is_complete' => $validatedFormData['is_complete'] ?? 0
-                ]) === 1 ? 'Successfully updated task "' . $validatedFormData['title'] . '"' : 'Task not found!';
-
-            return ['message' => $message, 'previous-uri' => $request->session()->previousUrl()];
+        if ($request->has('is_complete') === true) {
+            $rules['is_complete'] = ['required', 'present', 'boolean'];
         }
+
+        $validatedFormData = $request->validate($rules);
+        $id = $validatedFormData['id'];
+        $userId = Auth::user()->id;
+        /**
+         * Time format to use :
+         * 1. 24hr : l, M j Y H:i
+         * 2. 12hr : l, M j Y h:i A
+         */
+        if ($validatedFormData['due_date'] == true || $validatedFormData['time'] == true) {
+            $validatedFormData['due_date'] = $this->getDueDate(
+                $validatedFormData['due_date'],
+                $validatedFormData['time']
+            );
+        }
+
+        $message = TaskNote::byUserAndId($id, $userId)
+            ->update([
+                'due_date' => $validatedFormData['due_date'],
+                'reminder' => $validatedFormData['reminder'],
+                'title' => $validatedFormData['title'],
+                'description' => $validatedFormData['description'],
+                'is_complete' => $validatedFormData['is_complete'] ?? 0
+            ]) === 1 ? 'Successfully updated task "' . $validatedFormData['title'] . '"' : 'Task not found!';
+
+        return ['message' => $message, 'previous-uri' => $request->session()->previousUrl()];
     }
 
     /**

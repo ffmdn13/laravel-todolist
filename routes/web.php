@@ -101,7 +101,14 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     /**
      * Controller for notebook dashboard page
      */
-    Route::get('/notebooks/{id}', [DashboardNotebookController::class, 'index']);
+    Route::get('/notebook/{id}/{title}', [DashboardNotebookController::class, 'index'])
+        ->middleware('ensure:notebooks')
+        ->whereAlphaNumeric('id');
+    Route::post('/notebook/add', [DashboardNotebookController::class, 'add']);
+    Route::post('/notebook/add/note', [DashboardNotebookController::class, 'addNote']);
+    Route::post('/notebook/delete', [DashboardNotebookController::class, 'delete']);
+    Route::post('/notebook/action', [DashboardNotebookController::class, 'action']);
+
 
     /**
      * Controller fot today dashboard page

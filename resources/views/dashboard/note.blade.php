@@ -75,9 +75,6 @@
                     @foreach ($notes as $note)
                         <li class="border rounded py-2 px-3 mb-2 {{ request()->getRequestUri() === '/dashboard/note/' . $note->id ? 'border-focus' : '' }}"
                             onclick="window.location.href='/dashboard/note/{{ $note->id }}'">
-                            @if (isset($note->notebook_id))
-                                <small class="note-items-task-address">{{ $note->notebook->name }}</small>
-                            @endif
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="note-items-title my-1">{{ $note->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">

@@ -168,3 +168,12 @@
 .action-icon {
     width: 15px;
 }
+
+.note-items-due-date-icon {
+    width: 14px;
+}
+
+.note-items-due-date {
+    opacity: .8;
+    font-size: .8rem;
+}

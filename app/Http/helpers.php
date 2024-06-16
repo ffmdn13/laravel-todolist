@@ -53,5 +53,7 @@ function getTags($userId)
  */
 function getNotebooks($userId)
 {
-    return null;
+    return Notebook::select(['id', 'title'])
+        ->where('user_id', $userId)
+        ->get();
 }

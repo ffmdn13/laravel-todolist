@@ -3,6 +3,7 @@
 
     $lists = getLists($userId);
     $tags = getTags($userId);
+    $notebooks = getNotebooks($userId);
 @endphp
 
 <aside class="border-end bg-light-subtle p-3">
@@ -172,11 +173,11 @@
                     <div class="modal-content">
                         <div class="modal-body">
                             <h1 class="add-new-list-heading mb-3">📔 Add new notebook</h1>
-                            <form action="/dashboard/list" method="POST">
+                            <form action="/dashboard/notebook/add" method="POST">
                                 @csrf
                                 <div class="mb-3">
                                     <input type="text" class="form-control border-0 border-bottom"
-                                        id="exampleFormControlInput1" placeholder="Notebook title">
+                                        id="exampleFormControlInput1" placeholder="Title" name="title">
                                 </div>
                                 <button class="add-new-list-btn mt-2">Add</button>
                             </form>
@@ -185,12 +186,13 @@
                 </div>
             </div>
         </li>
-        <div class="collapse my-2 ps-4" id="notebooksCollapse">
-            <div onclick="window.location.href='/dashboard/notebooks/1'"
-                class="list-card p-1 d-flex align-items-center justify-cotent-between">
-                🌐 Web Roadmap
-                <span class="item-count ms-auto">2</span>
-            </div>
+        <div class="collapse" id="notebooksCollapse">
+            @foreach ($notebooks as $notebook)
+                <div onclick="window.location.href='/dashboard/notebooks/{{ $notebook->id }}/{{ $notebook->title }}'"
+                    class="list-card p-2 d-flex align-items-center justify-cotent-between">
+                    {{ $notebook->title }}
+                </div>
+            @endforeach
         </div>
     </ul>
     {{-- aside tags, list and notebooks end --}}

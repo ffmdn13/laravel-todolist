@@ -102,6 +102,15 @@ class TaskNote extends Model
     }
 
     /**
+     * Filter queyr by note and user id
+     */
+    public function scopeByNotebookAndUser(Builder $query, $id, $userId)
+    {
+        $query->where('notebook_id', $id)
+            ->where('user_id', $userId);
+    }
+
+    /**
      * Return a specific User record that relaed to specific TaskNote record
      */
     public function user()
