@@ -90,7 +90,8 @@
             @if ($tasks->isNotEmpty())
                 <ul class="tags-items mt-4">
                     @foreach ($tasks as $task)
-                        <li class="border rounded py-2 px-3 mb-2" onclick="window.location.href=''">
+                        <li class="border rounded py-2 px-3 mb-2"
+                            onclick="window.location.href='/dashboard/tag/{{ $tagId }}/{{ $tagTitle }}/?preview={{ $tagId }}'">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="tags-items-title my-1">{{ $task->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
@@ -122,81 +123,109 @@
 
         {{-- tags items preview start --}}
         <section>
-            <form action="" method="POST" class="p-4">
-                @csrf
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <div>
-                        <label class="tags-preview-due-date d-flex align-items-center gap-1" for="date"
-                            data-bs-toggle="modal" data-bs-target="#dueDateModal">
-                            <i data-feather="clock" class="tags-preview-due-date-icon icon-aspect-ratio"></i>
-                            Today, 5:45 PM
-                        </label>
-                        <div class="modal fade" id="dueDateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <div class="row g-2">
-                                            <div class="col">
-                                                <label for="date" class="form-label">Date</label>
-                                                <input type="date" name="date" id="date" class="form-control"
-                                                    aria-label="Date">
-                                            </div>
-                                            <div class="col">
-                                                <label for="time" class="form-label">Time</label>
-                                                <input type="time" name="time" class="form-control"
-                                                    aria-label="Time">
-                                            </div>
-                                            <div class="col">
-                                                <label for="reminder" class="form-label">Reminder</label>
-                                                <input type="time" name="reminder" class="form-control"
-                                                    aria-label="Reminder">
+            @if (isset($preview))
+                <form action="/dashboard/tag/action" method="POST" class="p-4">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $preview['preview']->id }}">
+
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div>
+                            <label class="preview-due-date d-flex align-items-center gap-1" for="date"
+                                data-bs-toggle="modal" data-bs-target="#dueDateModal">
+                                @if ($preview['preview']->due_date)
+                                    <i data-feather="calendar" class="icon-w-15 aspect-ratio"></i>
+                                    {{ $preview['preview']->due_date }}
+                                @else
+                                    <span class="empty-due-date d-block rounded">Set due date</span>
+                                @endif
+                            </label>
+
+                            <div class="modal fade" id="dueDateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <div class="row g-2">
+                                                <div class="col">
+                                                    <label for="date" class="form-label">Date</label>
+                                                    <input type="date" name="due_date" id="date"
+                                                        class="form-control" aria-label="Date"
+                                                        value="{{ $preview['inputDateValue'] }}">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="time" class="form-label">Time</label>
+                                                    <input type="time" name="time" class="form-control"
+                                                        aria-label="Time" value="{{ $preview['inputTimeValue'] }}">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="reminder" class="form-label">Reminder</label>
+                                                    <input type="time" name="reminder" class="form-control"
+                                                        aria-label="Reminder">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <span class="priority color-red d-block rounded-circle"></span>
-                </div>
 
-                <div class="d-flex align-items-center justify-content-between">
-                    <input type="text" name="title" class="tags-preview-title mb-2"
-                        value="Drink coffee every morning">
-                    <input class="tags-preview-compleate-btn icon-aspect-ratio" type="checkbox" name="compleate"
-                        value="1">
-                </div>
-                <div>
-                    <input type="hidden" id="x" placeholder="Description" name="description">
-                    <div class="d-flex flex-column-reverse">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>
-                            <div>
-                                <a href=""
-                                    class="tags-preview-save-btn text-decoration-none d-flex align-items-center gap-1"
-                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i data-feather="chevron-up" class="icon-aspect-ratio action-icon order-1"></i>
-                                    Action
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="dropdown-item">
-                                        <button class="border-0 bg-transparent" value="save">Save</button>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <button class="border-0 bg-transparent" value="delete">Delete</button>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <button class="border-0 bg-transparent" value="shortcut">Add to shortcut</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <trix-editor toolbar="trix-toolbar-1" input="x" class="custom-trix"
-                            placeholder="Description"></trix-editor>
+                        <i data-feather="flag"
+                            class="aspect-ratio icon-w-15 color-{{ $preview['preview']->priority }}"></i>
                     </div>
+
+                    <div class="d-flex align-items-center justify-content-between">
+                        <input type="text" name="title" class="preview-title mb-2 border-0 bg-transparent w-100 p-0"
+                            value="{{ $preview['preview']->title }}">
+                        <input class="preview-complete-btn aspect-ratio" type="checkbox" name="is_complete"
+                            value="1" @if ($preview['preview']->is_complete == 1) checked @endif>
+                    </div>
+
+                    <div>
+                        <input type="hidden" id="x" placeholder="Description" name="description"
+                            value="{{ $preview['preview']->description }}">
+                        <div class="d-flex flex-column-reverse">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>
+                                <div>
+                                    <a href=""
+                                        class="tags-preview-save-btn text-decoration-none d-flex align-items-center gap-1"
+                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i data-feather="chevron-up" class="icon-aspect-ratio action-icon order-1"></i>
+                                        Action
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-item">
+                                            <button class="border-0 bg-transparent" name="action"
+                                                value="saveTask">Save</button>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <button class="border-0 bg-transparent" name="action"
+                                                value="deleteTask">Delete</button>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <button class="border-0 bg-transparent" name="action" value="shortcut">
+                                                {{ $preview['preview']->is_shortcut == 0 ? 'Add to shortcut' : 'Remove from shortcut' }}
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <trix-editor toolbar="trix-toolbar-1" input="x" class="custom-trix"
+                                placeholder="Description"></trix-editor>
+                        </div>
+                    </div>
+                </form>
+            @else
+                <div class="empty-preview p-4 d-flex flex-column align-items-center justify-content-center min-vh-100">
+                    <div class="mb-1">
+                        <i data-feather="book-open" class="empty-preview-icon aspect-ratio mx-auto mb-2 d-block"></i>
+                        <h6 class="empty-preview-title">There's no task to view here</h6>
+                    </div>
+                    <span class="empty-preview-desc">
+                        Click one to view here.
+                    </span>
                 </div>
-            </form>
+            @endif
         </section>
         {{-- tags items preview end --}}
     </div>

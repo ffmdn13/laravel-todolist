@@ -95,6 +95,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::post('/tag/add', [DashboardTagsController::class, 'add']);
     Route::post('/tag/add/task', [DashboardTagsController::class, 'addTask']);
     Route::post('/tag/delete', [DashboardTagsController::class, 'delete']);
+    Route::post('/tag/action', [DashboardTagsController::class, 'action']);
 
     /**
      * Controller for notebook dashboard page
