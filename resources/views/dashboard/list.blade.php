@@ -169,6 +169,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <i data-feather="flag"
                             class="aspect-ratio icon-w-15 color-{{ $preview['preview']->priority }}"></i>
                     </div>

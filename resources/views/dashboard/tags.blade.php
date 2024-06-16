@@ -91,7 +91,7 @@
                 <ul class="tags-items mt-4">
                     @foreach ($tasks as $task)
                         <li class="border rounded py-2 px-3 mb-2"
-                            onclick="window.location.href='/dashboard/tag/{{ $tagId }}/{{ $tagTitle }}/?preview={{ $tagId }}'">
+                            onclick="window.location.href='/dashboard/tag/{{ $tagId }}/{{ $tagTitle }}/?clr={{ $color }}&preview={{ $task->id }}'">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="tags-items-title my-1">{{ $task->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
