@@ -166,6 +166,7 @@ class DashboardTagsController extends Controller
         $validatedFormData = $request->validate($rules);
         $id = $validatedFormData['id'];
         $userId = Auth::user()->id;
+
         /**
          * Time format to use :
          * 1. 24hr : l, M j Y H:i

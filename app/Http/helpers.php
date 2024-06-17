@@ -3,7 +3,6 @@
 use App\Models\Lists;
 use App\Models\Notebook;
 use App\Models\Tag;
-use Illuminate\Support\Facades\URL;
 
 /**
  * Get last edited time
@@ -56,4 +55,33 @@ function getNotebooks($userId)
     return Notebook::select(['id', 'title'])
         ->where('user_id', $userId)
         ->get();
+}
+
+function getDueDate($timestampForDate, $timestampForTime, $timeFormat = '24hr')
+{
+    /**
+     * Time format to use :
+     * 1. 24hr : l, M j Y H:i
+     * 2. 12hr : l, M j Y h:i A
+     */
+
+    if (is_null($timestampForTime)) {
+        $currentDate =  [
+            'date' => date('l, M j Y', $timestampForDate),
+            'dateValue' => date('Y-m-d', $timestampForDate),
+        ];
+    } else {
+        $timeFormats = ['24hr' => ' H:i', '12hr' => ' h:i A'];
+        $timeFormat = $timeFormats[$timeFormat];
+        $time = date($timeFormat, $timestampForTime);
+
+        $date = date('l, M j Y', $timestampForDate);
+        $currentDate = [
+            'date' => $date . $time,
+            'dateValue' => date('Y-m-d', $timestampForDate),
+            'timeValue' => date('h:i', $timestampForTime)
+        ];
+    }
+
+    return $currentDate;
 }

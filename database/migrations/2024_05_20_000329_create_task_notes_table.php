@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('title', 255);
             $table->text('description')->nullable();
-            $table->string('due_date')->nullable();
+            $table->integer('due_date')->nullable();
+            $table->integer('time')->nullable();
             $table->string('reminder')->nullable();
             $table->integer('priority', false, false)->default(0);
             $table->string('type')->default('task');

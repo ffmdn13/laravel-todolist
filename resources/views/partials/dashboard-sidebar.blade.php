@@ -188,7 +188,7 @@
         </li>
         <div class="collapse" id="notebooksCollapse">
             @foreach ($notebooks as $notebook)
-                <div onclick="window.location.href='/dashboard/notebooks/{{ $notebook->id }}/{{ $notebook->title }}'"
+                <div onclick="window.location.href='/dashboard/notebook/{{ $notebook->id }}/{{ $notebook->title }}'"
                     class="list-card p-2 d-flex align-items-center justify-cotent-between">
                     {{ $notebook->title }}
                 </div>

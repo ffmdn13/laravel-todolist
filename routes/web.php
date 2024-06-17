@@ -33,6 +33,9 @@ use Illuminate\Support\Facades\Session;
  */
 Route::redirect('/', '/dashboard', 302);
 
+Route::get('/test', function () {
+});
+
 /**
  * Login route
  */
@@ -109,11 +112,12 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::post('/notebook/delete', [DashboardNotebookController::class, 'delete']);
     Route::post('/notebook/action', [DashboardNotebookController::class, 'action']);
 
-
     /**
      * Controller fot today dashboard page
      */
     Route::get('/today', [DashboardTodayController::class, 'index']);
+    Route::post('/today/add', [DashboardTodayController::class, 'add']);
+    Route::post('/today/action', [DashboardTodayController::class, 'action']);
 
     /**
      * Controller next7days dashboard page

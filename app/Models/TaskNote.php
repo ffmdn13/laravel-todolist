@@ -23,6 +23,7 @@ class TaskNote extends Model
         'title',
         'description',
         'due_date',
+        'time',
         'reminder',
         'priority',
         'type',
@@ -108,6 +109,14 @@ class TaskNote extends Model
     {
         $query->where('notebook_id', $id)
             ->where('user_id', $userId);
+    }
+
+    /**
+     * Filter query by time
+     */
+    public function scopebyToday(Builder $query)
+    {
+        $query->whereBetween('due_date', [now()->setTimestamp(time())->subDay(1)->getTimestamp(), time()]);
     }
 
     /**
