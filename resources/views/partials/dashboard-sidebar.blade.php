@@ -51,17 +51,18 @@
         <li onclick="window.location.href='/dashboard/task'" class="nav-item px-2 d-flex align-items-center gap-1">
             <i data-feather="file" class="nav-item-icon"></i>
             <span class="font-link-size nav-link d-block">Task</span>
-            <span class="item-count ms-auto">5</span>
         </li>
         <li onclick="window.location.href='/dashboard/note'" class="nav-item px-2 d-flex align-items-center gap-1">
             <i data-feather="file-text" class="nav-item-icon"></i>
             <span class="font-link-size nav-link d-block">Note</span>
-            <span class="item-count ms-auto">18</span>
         </li>
         <li onclick="window.location.href='/dashboard/shortcut'" class="nav-item px-2 d-flex align-items-center gap-1">
             <i data-feather="star" class="nav-item-icon"></i>
             <span class="font-link-size nav-link">Shortcut</span>
-            <span class="item-count ms-auto">4</span>
+        </li>
+        <li onclick="window.location.href='/dashboard/today'" class="nav-item px-2 d-flex align-items-center gap-1">
+            <i data-feather="sun" class="nav-item-icon"></i>
+            <span class="font-link-size nav-link">Today</span>
         </li>
     </ul>
     {{-- aside common menu items end --}}
@@ -199,38 +200,16 @@
 
     <hr style="opacity: 0.2;">
 
-    {{-- aside task today and 7 days start --}}
-
-    <ul class="navbar-nav">
-        <li onclick="window.location.href='/dashboard/today'" class="nav-item px-2 d-flex align-items-center gap-1">
-            <i data-feather="sun" class="nav-item-icon"></i>
-            <span class="font-link-size nav-link">Today</span>
-            <span class="item-count ms-auto">3</span>
-        </li>
-        <li onclick="window.location.href='/dashboard/next7days'"
-            class="nav-item px-2 d-flex align-items-center gap-1">
-            <i data-feather="calendar" class="nav-item-icon"></i>
-            <span class="font-link-size nav-link">Next 7 days</span>
-            <span class="item-count ms-auto">5</span>
-        </li>
-    </ul>
-
-    {{-- aside task todat and 7 days end --}}
-
-    <hr style="opacity: 0.2;">
-
     <ul class="navbar-nav">
         <li onclick="window.location.href='/dashboard/complete'"
             class="nav-item mb-2 px-2 d-flex align-items-center gap-1">
             <i data-feather="check-circle" class="nav-item-icon"></i>
             <span class="font-link-size nav-link">Complete</span>
-            <span class="item-count ms-auto">3</span>
         </li>
         <li onclick="window.location.href='/dashboard/trash'"
             class="nav-item mb-2 px-2 d-flex align-items-center gap-1">
             <i data-feather="trash" class="nav-item-icon"></i>
             <span class="font-link-size nav-link">Trash</span>
-            <span class="item-count ms-auto">3</span>
         </li>
     </ul>
 </aside>
