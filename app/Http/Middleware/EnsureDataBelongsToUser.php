@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\Lists;
 use App\Models\Notebook;
 use App\Models\Tag;
+use App\Models\TaskNote;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,24 +20,28 @@ class EnsureDataBelongsToUser
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $table)
+    public function handle(Request $request, Closure $next, $type)
     {
         $tables = [
             'lists' => Lists::class,
             'tags' => Tag::class,
-            'notebooks' => Notebook::class
+            'notebooks' => Notebook::class,
+            'task_notes' => TaskNote::class
         ];
 
-        $id = explode('/', $request->getRequestUri())[3];
-        $validator = Validator::make(['id' => $id], [
-            'id' => ['required', 'present', 'numeric']
-        ]);
-        $userIdFromDB = $tables[$table]::select(['user_id'])
-            ->findOrFail($validator->getData()['id'])->user_id;
+        [$table, $index] = explode(';', $type);
 
-        if ($validator->fails() || $userIdFromDB !== Auth::user()->id) {
-            abort(404);
+        $id = explode('/', $request->getRequestUri())[$index];
+        $table = $tables[$table];
+        $validator = Validator::make(['id' => $id], ['id' => 'required|present|numeric']);
+
+        if ($validator->fails()) {
+            return abort(404);
         }
+
+        $table::select(['user_id'])
+            ->byUserAndId($id, Auth::user()->id)
+            ->firstOrFail();
 
         return $next($request);
     }

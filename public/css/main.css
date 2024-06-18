@@ -50,11 +50,11 @@ option {
     color: var(--lightColorText) !important;
 }
 
-.compleated {
+.complete {
     color: var(--priorityColorLow) !important;
 }
 
-.uncompleated {
+.uncomplete {
     color: var(--priorityColorHigh) !important;
 }
 

@@ -1,0 +1,14 @@
+/* priority color style section start */
+.color-3 {
+    color: var(--priorityColorHigh) !important;
+}
+
+.color-2 {
+    color: var(--priorityColorMedium) !important;
+}
+
+.color-1 {
+    color: var(--priorityColorLow) !important;
+}
+
+/* priority color style section end */

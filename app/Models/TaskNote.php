@@ -52,6 +52,14 @@ class TaskNote extends Model
     }
 
     /**
+     * Filter query by is_complete with 1 value 
+     */
+    public function scopeIsCompleted(Builder $query)
+    {
+        $query->where('is_complete', 1);
+    }
+
+    /**
      * Filter query by task column with task value
      */
     public function scopeMustTask(Builder $query)
@@ -146,7 +154,7 @@ class TaskNote extends Model
     /**
      * Return a specific Notebook record that relaed to specific TaskNote record
      */
-    public function notebooke()
+    public function notebook()
     {
         return $this->belongsTo(Notebook::class, 'notebook_id', 'id');
     }

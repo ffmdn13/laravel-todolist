@@ -202,7 +202,7 @@
 
     <ul class="navbar-nav">
         <li onclick="window.location.href='/dashboard/complete'"
-            class="nav-item mb-2 px-2 d-flex align-items-center gap-1">
+            class="nav-item px-2 d-flex align-items-center gap-1">
             <i data-feather="check-circle" class="nav-item-icon"></i>
             <span class="font-link-size nav-link">Complete</span>
         </li>
