@@ -94,8 +94,8 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
      * Controller for tag dashboard page
      */
     Route::get('/tag/{id}/{title}', [DashboardTagsController::class, 'index'])
-        ->middleware('ensure:tags')
-        ->whereAlphaNumeric('id');
+        ->middleware('ensure:tags;3,false')
+        ->whereNumber('id');
     Route::post('/tag/add', [DashboardTagsController::class, 'add']);
     Route::post('/tag/add/task', [DashboardTagsController::class, 'addTask']);
     Route::post('/tag/delete', [DashboardTagsController::class, 'delete']);
@@ -105,8 +105,8 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
      * Controller for notebook dashboard page
      */
     Route::get('/notebook/{id}/{title}', [DashboardNotebookController::class, 'index'])
-        ->middleware('ensure:notebooks;3')
-        ->whereAlphaNumeric('id');
+        ->middleware('ensure:notebooks;3,false')
+        ->whereNumber('id');
     Route::post('/notebook/add', [DashboardNotebookController::class, 'add']);
     Route::post('/notebook/add/note', [DashboardNotebookController::class, 'addNote']);
     Route::post('/notebook/delete', [DashboardNotebookController::class, 'delete']);
@@ -129,19 +129,22 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
      */
     Route::get('/complete', [DashboardCompleteController::class, 'index']);
     Route::get('/complete/reopen/{id}', [DashboardCompleteController::class, 'reopen'])
-        ->middleware('ensure:task_notes;4')
+        ->middleware('ensure:task_notes;4,false')
         ->whereNumber('id');
     Route::get('/complete/delete/{id}', [DashboardCompleteController::class, 'delete'])
         ->middleware('ensure:task_notes;4')
         ->whereNumber('id');
-    // Route::get('/complete/view/{id}', [DashboardCompleteController::class, 'view'])
-    //     ->middleware('ensure:task_notes;4')
-    //     ->whereNumber('id');
 
     /**
      * Controller for trash dashboard page
      */
     Route::get('/trash', [DashboardTrashController::class, 'index']);
+    Route::get('/trash/reopen/{id}', [DashboardTrashController::class, 'reopen'])
+        ->middleware('ensure:task_notes;4,true')
+        ->whereNumber('id');
+    Route::get('/trash/delete/{id}', [DashboardTrashController::class, 'delete'])
+        ->middleware('ensure:task_notes;4,true')
+        ->whereNumber('id');
 });
 
 /**

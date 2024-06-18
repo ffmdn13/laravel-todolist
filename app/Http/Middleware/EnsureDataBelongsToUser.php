@@ -20,7 +20,7 @@ class EnsureDataBelongsToUser
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $type)
+    public function handle(Request $request, Closure $next, $type, $isWithTrash)
     {
         $tables = [
             'lists' => Lists::class,
@@ -39,9 +39,16 @@ class EnsureDataBelongsToUser
             return abort(404);
         }
 
-        $table::select(['user_id'])
-            ->byUserAndId($id, Auth::user()->id)
-            ->firstOrFail();
+        if ($isWithTrash === 'true') {
+            $table::select(['user_id'])
+                ->withTrashed()
+                ->byUserAndId($id, Auth::user()->id)
+                ->firstOrFail();
+        } else {
+            $table::select(['user_id'])
+                ->byUserAndId($id, Auth::user()->id)
+                ->firstOrFail();
+        }
 
         return $next($request);
     }

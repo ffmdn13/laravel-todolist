@@ -28,8 +28,8 @@ class DashboardCompleteController extends Controller
      */
     private function getItems($user)
     {
-        return TaskNote::with(['list', 'tag', 'notebook'])
-            ->select(['id', 'title', 'type', 'due_date', 'time', 'priority', 'list_id', 'tag_id', 'notebook_id'])
+        return TaskNote::with(['list', 'tag'])
+            ->select(['id', 'title', 'type', 'due_date', 'time', 'priority', 'list_id', 'tag_id'])
             ->whereBelongsTo($user, 'user')
             ->isCompleted()
             ->get();;
@@ -70,10 +70,5 @@ class DashboardCompleteController extends Controller
 
         return back(302)
             ->with('message', 'Succesfully deleted task');
-    }
-
-    public function view($id)
-    {
-        //
     }
 }

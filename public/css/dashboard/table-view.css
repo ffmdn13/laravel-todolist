@@ -1,3 +1,11 @@
+/* customization style section start */
+
+.asepct-ratio {
+    aspect-ratio: 1/1;
+}
+
+/* cuszomization style section end */
+
 /* priority color style section start */
 .color-3 {
     color: var(--priorityColorHigh) !important;
@@ -12,3 +20,47 @@
 }
 
 /* priority color style section end */
+
+/* icon style section start */
+
+.icon-w-21 {
+    width: 21px;
+}
+
+.icon-w-19 {
+    width: 19px;
+}
+
+.icon-w-15 {
+    width: 15px;
+}
+
+/* icon style section end */
+
+/* tag color style section start */
+
+.color-blue {
+    color: var(--priorityColorMedium) !important;
+}
+
+.color-green {
+    color: var(--priorityColorLow) !important;
+}
+
+.color-red {
+    color: var(--priorityColorHigh) !important;
+}
+
+.color-cyan {
+    color: #09DFE7 !important;
+}
+
+.color-purple {
+    color: #7B05E8 !important;
+}
+
+.color-orange {
+    color: #F4860B !important;
+}
+
+/* tag color style section end */

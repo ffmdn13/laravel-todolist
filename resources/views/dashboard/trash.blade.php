@@ -6,6 +6,7 @@
 
 @section('additional-dashboard-head')
     <link rel="stylesheet" href="/css/dashboard/trash.css">
+    <link rel="stylesheet" href="/css/dashboard/table-view.css">
 @endsection
 
 @section('dashboard-content')
@@ -18,6 +19,8 @@
             <span class="text-black-50 d-block">1 Item</span>
         </div>
         @if (isset($items))
+            @php($priority = ['0' => '-', '1' => 'Low', '2' => 'Medium', '3' => 'High'])
+
             <table class="table table-light table-hover mt-3">
                 <thead>
                     <tr>
@@ -25,45 +28,55 @@
                         <th scope="col">Title</th>
                         <th scope="col">Type</th>
                         <th scope="col">Due date</th>
+                        <th scope="col">Time</th>
                         <th scope="col">Priority</th>
-                        <th scope="col">List</th>
-                        <th scope="col">Tag</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Address</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <i onclick="window.location.href='/dashboard/trash/1'" data-feather="trash"
-                                    class="text-danger trash-icon"></i>
-                                <i onclick="window.location.href='/dashboard/reopen/1'" data-feather="refresh-ccw"
-                                    class="text-primary reopen-icon"></i>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="title-container" data-bs-toggle="modal" data-bs-target="#itemPreview">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quia, perferendis! Obcaecati,
+                    @foreach ($items as $item)
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i onclick="window.location.href='/dashboard/trash/delete/{{ $item->id }}'"
+                                        data-feather="trash" class="text-danger trash-icon"></i>
+                                    <i onclick="window.location.href='/dashboard/trash/reopen/{{ $item->id }}'"
+                                        data-feather="refresh-ccw" class="text-primary reopen-icon"></i>
                                 </div>
-                                <i data-feather="eye" class="view-title-icon icon-aspect-ratio"></i>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <i data-feather="file" class="icon-aspect-ratio shortcut-type-icon"></i>Task
-                            </div>
-                        </td>
-                        <td>Today, 5:45 PM</td>
-                        <td class="priority-color-high">
-                            High
-                        </td>
-                        <td>🚀 Workout</td>
-                        <td>-</td>
-                        <td class="compleated">
-                            Compleated
-                        </td>
-                    </tr>
+                            </td>
+                            <td>
+                                <div class="title-container" data-bs-toggle="modal" data-bs-target="#itemPreview">
+                                    {{ $item->title }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i data-feather="file" class="icon-aspect-ratio shortcut-type-icon"></i>
+                                    {{ $item->type }}
+                                </div>
+                            </td>
+                            <td>{{ $item->due_date == true ? date('l, M  Y', $item->due_date) : '-' }}</td>
+                            <td>{{ $item->time == true ? date($timeFormat, $item->time) : '-' }}</td>
+                            <td class="color-{{ $item->priority }}">
+                                {{ $priority[$item->priority] }}
+                            </td>
+                            <td>
+                                @if (isset($item->list->title))
+                                    {{ $item->list->title }}
+                                @elseif(isset($item->tag->title))
+                                    <div class="d-flex align-items-center gap-1 color-{{ $item->tag->color }}">
+                                        <i data-feather="hash"
+                                            class="aspect-ratio icon-w-15 tag-{{ $item->tag->color }}"></i>
+                                        {{ $item->tag->title }}
+                                    </div>
+                                @elseif(isset($item->notebook->title))
+                                    {{ $item->notebook->title }}
+                                @else
+                                    -
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         @else

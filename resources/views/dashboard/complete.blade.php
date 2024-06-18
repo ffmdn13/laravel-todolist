@@ -44,12 +44,9 @@
                                         data-feather="refresh-ccw" class="text-primary reopen-icon"></i>
                                 </div>
                             </td>
-                            <td onclick="window.location.href='makan.blade.php'">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="title-container" data-bs-toggle="modal" data-bs-target="#itemPreview">
-                                        {{ $item->title }}
-                                    </div>
-                                    <i data-feather="eye" class="view-title-icon icon-aspect-ratio"></i>
+                            <td>
+                                <div class="title-container" data-bs-toggle="modal" data-bs-target="#itemPreview">
+                                    {{ $item->title }}
                                 </div>
                             </td>
                             <td>
