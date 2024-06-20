@@ -5,7 +5,6 @@
 @endsection
 
 @section('additional-dashboard-head')
-    <link rel="stylesheet" href="/css/dashboard/tags.css">
     <link rel="stylesheet" href="/css/dashboard/view.css">
 
     {{-- trix editor cdn link --}}
@@ -31,8 +30,9 @@
                         </button>
                     </form>
                     <div>
-                        <a href="" class="dropdown-plus-trigger" data-bs-toggle="modal" data-bs-target="#createTask">
-                            <i data-feather="plus-square" class="icon-aspect-ratio dropdown-plus-icon"></i>
+                        <a href="" class="overview-dropdown-clr-black" data-bs-toggle="modal"
+                            data-bs-target="#createTask">
+                            <i data-feather="plus-square" class="aspect-ratio icon-w-19"></i>
                         </a>
 
                         <div class="modal fade" id="createTask" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -40,7 +40,7 @@
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-body">
-                                        <h1 class="add-new-tags-heading mb-3">📜 Add new task</h1>
+                                        <h1 class="overview-add-task-title mb-3">📜 Add new task</h1>
                                         <form action="/dashboard/tag/add/task" method="POST">
                                             <input type="hidden" name="id" value="{{ $tagId }}">
                                             <input type="text"
@@ -54,7 +54,7 @@
                                                 <option value="3">🔴 High</option>
                                             </select>
                                             @csrf
-                                            <button class="add-new-tags-btn mt-2" type="submit">Add</button>
+                                            <button class="overview-add-task-btn border-0 mt-2" type="submit">Add</button>
                                         </form>
                                     </div>
                                 </div>
@@ -62,19 +62,19 @@
                         </div>
                     </div>
                     <div>
-                        <a href="" class="no-text-decoration dropdown-sliders-trigger" data-bs-toggle="dropdown"
+                        <a href="" class="text-decoration-none overview-dropdown-clr-black" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <i data-feather="sliders" class="icon-aspect-ratio dropdown-sliders-icon"></i>
+                            <i data-feather="sliders" class="aspect-ratio icon-w-19"></i>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="dropdown-sliders-menu-title px-3">Sort by</li>
                             <li class="dropdown-item"><a href=""
-                                    class="no-text-decoration dropdown-sliders-menu-text">Title</a></li>
+                                    class="text-decoration-none overview-dropdown-clr-black">Title</a></li>
                             <li class="dropdown-item">
-                                <a href="" class="no-text-decoration dropdown-sliders-menu-text">Due date</a>
+                                <a href="" class="text-decoration-none overview-dropdown-clr-black">Due date</a>
                             </li>
                             <li class="dropdown-item"><a href=""
-                                    class="no-text-decoration dropdown-sliders-menu-text">Priority</a></li>
+                                    class="text-decoration-none overview-dropdown-clr-black">Priority</a></li>
                         </ul>
                     </div>
                 </div>
@@ -88,12 +88,12 @@
             </div>
 
             @if ($tasks->isNotEmpty())
-                <ul class="tags-items mt-4">
+                <ul class="overview-items m-0 p-0 mt-4">
                     @foreach ($tasks as $task)
-                        <li class="border rounded py-2 px-3 mb-2"
+                        <li class="border rounded py-2 px-3 mb-2 cursor-pointer"
                             onclick="window.location.href='/dashboard/tag/{{ $tagId }}/{{ $tagTitle }}/?clr={{ $color }}&preview={{ $task->id }}'">
                             <div class="d-flex align-items-center justify-content-between">
-                                <h1 class="tags-items-title my-1">{{ $task->title }}</h1>
+                                <h1 class="overview-item-title my-1">{{ $task->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
                                     @if (isset($task->due_date))
                                         <i data-feather="calendar" class="icon-w-15 aspect-ratio"></i>
@@ -108,11 +108,11 @@
                     @endforeach
                 </ul>
             @else
-                <div class="empty-tags-height mt-4 d-flex flex-column justify-content-center align-items-center">
-                    <i data-feather="file" class="empty-tags-icon mb-4"></i>
-                    <h6 class="empty-tags-title">Your dashboard is currently empty.</h6>
-                    <span class="empty-tags-desc mt-1">
-                        Start by adding <a href="" class="empty-tags-link" data-bs-toggle="modal"
+                <div class="overview-empty mt-4 d-flex flex-column justify-content-center align-items-center">
+                    <i data-feather="file" class="overview-empty-icon mb-4"></i>
+                    <h6 class="overview-title">Your dashboard is currently empty.</h6>
+                    <span class="overview-empty-description mt-1">
+                        Start by adding <a href="" class="overview-empty-link" data-bs-toggle="modal"
                             data-bs-target="#createTask">A New Task</a> to stay
                         organized and on top of your goals!
                     </span>
@@ -188,9 +188,9 @@
                                 <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>
                                 <div>
                                     <a href=""
-                                        class="tags-preview-save-btn text-decoration-none d-flex align-items-center gap-1"
+                                        class="preview-save-btn text-decoration-none d-flex align-items-center gap-1"
                                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i data-feather="chevron-up" class="icon-aspect-ratio action-icon order-1"></i>
+                                        <i data-feather="chevron-up" class="aspect-ratio icon-w-19 order-1"></i>
                                         Action
                                     </a>
                                     <ul class="dropdown-menu">
@@ -210,8 +210,8 @@
                                     </ul>
                                 </div>
                             </div>
-                            <trix-editor toolbar="trix-toolbar-1" input="x" class="custom-trix"
-                                placeholder="Description"></trix-editor>
+                            <trix-editor toolbar="trix-toolbar-1" input="x"
+                                class="custom-trix p-0 border-0 overflow-auto" placeholder="Description"></trix-editor>
                         </div>
                     </div>
                 </form>

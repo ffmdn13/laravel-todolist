@@ -18,7 +18,7 @@ class DashboardTagsController extends Controller
      */
     public function index(Request $request, $id, $title)
     {
-        return response()->view('dashboard.tags', [
+        return response()->view('dashboard.tag', [
             'title' => $this->getPageTitle(2),
             'tagId' => $id,
             'tagTitle' => $title,

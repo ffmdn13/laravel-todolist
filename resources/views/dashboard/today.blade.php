@@ -19,13 +19,14 @@
         <section class="p-4 border-end min-vh-100">
             <header class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-1">
-                    <i data-feather="sun" class="icon-aspect-ratio today-container-icon"></i>
-                    <h1 class="today-container-title">Today</h1>
+                    <i data-feather="sun" class="aspect-ratio icon-w-21"></i>
+                    <h1 class="overview-title">Today</h1>
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     <div>
-                        <a href="" class="dropdown-plus-trigger" data-bs-toggle="modal" data-bs-target="#createTask">
-                            <i data-feather="plus-square" class="icon-aspect-ratio dropdown-plus-icon"></i>
+                        <a href="" class="overview-dropdown-clr-black" data-bs-toggle="modal"
+                            data-bs-target="#createTask">
+                            <i data-feather="plus-square" class="aspect-ratio icon-w-19"></i>
                         </a>
 
                         <div class="modal fade" id="createTask" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -36,8 +37,8 @@
                                         <h1 class="add-new-today-heading mb-3">📜 Add new task</h1>
                                         <form action="/dashboard/today/add" method="POST">
                                             <input type="text" name="title"
-                                                class="input-outline-off form-control mb-2 border-0 border-bottom"placeholder="Title"
-                                                aria-label="Title">
+                                                class="input-outline-off form-control mb-2 border-0 border-bottom"
+                                                placeholder="Title" aria-label="Title">
                                             <select class="input-outline-off border-0 border-bottom form-select mb-2"
                                                 aria-label="Default select example" name="priority">
                                                 <option value="0" selected>⚪ None</option>
@@ -46,7 +47,7 @@
                                                 <option value="3">🔴 High</option>
                                             </select>
                                             @csrf
-                                            <button class="add-new-today-btn mt-2" type="submit">Add</button>
+                                            <button class="overview-add-task-btn mt-2" type="submit">Add</button>
                                         </form>
                                     </div>
                                 </div>
@@ -54,18 +55,18 @@
                         </div>
                     </div>
                     <div>
-                        <a href="" class="no-text-decoration dropdown-sliders-trigger" data-bs-toggle="dropdown"
+                        <a href="" class="text-decoration-none overview-dropdown-clr-black" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <i data-feather="sliders" class="icon-aspect-ratio dropdown-sliders-icon"></i>
+                            <i data-feather="sliders" class="aspect-ratio icon-w-19"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="dropdown-sliders-menu-title px-3">Sort by</li>
+                            <li class="overview-dropdown-clr-black px-3">Sort by</li>
                             <li class="dropdown-item"><a href=""
-                                    class="no-text-decoration dropdown-sliders-menu-text">Title</a></li>
+                                    class="text-decoration-none overview-dropdown-clr-black">Title</a></li>
                             <li class="dropdown-item"><a href=""
-                                    class="no-text-decoration dropdown-sliders-menu-text">Due date</a></li>
+                                    class="text-decoration-none overview-dropdown-clr-black">Due date</a></li>
                             <li class="dropdown-item"><a href=""
-                                    class="no-text-decoration dropdown-sliders-menu-text">Priority</a></li>
+                                    class="text-decoration-none overview-dropdown-clr-black">Priority</a></li>
                         </ul>
                     </div>
                 </div>
@@ -79,7 +80,7 @@
             </div>
 
             @if ($tasks->isNotEmpty())
-                <ul class="today-items mt-4">
+                <ul class="overview-items m-0 p-0 mt-4">
                     @foreach ($tasks as $task)
                         <li class="border rounded py-2 px-3 mb-2 cursor-pointer"
                             onclick="window.location.href='/dashboard/today?preview={{ $task->id }}'">
@@ -99,11 +100,11 @@
                     @endforeach
                 </ul>
             @else
-                <div class="empty-today-height mt-4 d-flex flex-column justify-content-center align-items-center">
-                    <i data-feather="file" class="empty-today-icon mb-4"></i>
-                    <h6 class="empty-today-title">Your dashboard is currently empty.</h6>
-                    <span class="empty-task-desc mt-1">
-                        Start by adding <a href="" class="empty-today-link" data-bs-toggle="modal"
+                <div class="overview-empty mt-4 d-flex flex-column justify-content-center align-items-center">
+                    <i data-feather="file" class="overview-empty-icon mb-4"></i>
+                    <h6 class="overview-title">Your dashboard is currently empty.</h6>
+                    <span class="overview-empty-description mt-1">
+                        Start by adding <a href="" class="overview-empty-link" data-bs-toggle="modal"
                             data-bs-target="#createTask">A New Task</a> to stay
                         organized and on top of your goals!
                     </span>

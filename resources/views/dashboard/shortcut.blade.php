@@ -32,40 +32,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($shortcuts as $shortcut)
+                    @foreach ($items as $item)
                         <tr>
-                            <td onclick="window.location.href='/dashboard/{{ $shortcut->type }}/{{ $shortcut->id }}'">
+                            <td onclick="window.location.href=''">
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="title-container">
-                                        {{ $shortcut->title }}
+                                        {{ $item->title }}
                                     </div>
                                     <i data-feather="eye" class="view-title-icon icon-aspect-ratio"></i>
                                 </div>
                             </td>
                             <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <i data-feather="{{ $shortcut->type === 'task' ? 'file' : 'file-text' }}"
-                                        class="icon-aspect-ratio shortcut-type-icon"></i>{{ $shortcut->type }}
-                                </div>
+
                             </td>
                             <td>
-                                @if (is_string($shortcut->due_date))
-                                    @if ($shortcut->type === 'task')
-                                        {{ $shortcut->due_date }}
-                                    @else
-                                        {{ getLastEdited($shortcut->due_date) }}
-                                    @endif
-                                @else
-                                    -
-                                @endif
+
                             </td>
-                            <td class="priority-color-high">
-                                @if ($shortcut->type === 'task')
-                                    <i data-feather="flag"
-                                        class="icon-aspect-ratio priority-icon color-{{ $shortcut->priority }}"></i>
-                                @else
-                                    -
-                                @endif
+                            <td class="color-">
                             </td>
                         </tr>
                     @endforeach

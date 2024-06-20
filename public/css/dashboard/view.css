@@ -76,6 +76,11 @@
     font-weight: var(--fw-400);
 }
 
+.overview-due-date {
+    opacity: .8;
+    font-size: .8rem;
+}
+
 .overview-dropdown-clr-black {
     color: var(--lightColorText);
 }
@@ -153,7 +158,12 @@
 
 .custom-trix {
     height: 435px;
+    padding: 0;
     font-size: .95rem;
+}
+
+.trix-height-475 {
+    height: 475px;
 }
 
 /* .trix-button--icon-bold,
