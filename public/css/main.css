@@ -26,6 +26,8 @@
 
 body {
     background-color: var(--lightColorBackground);
+    margin: 0;
+    padding: 0;
 }
 
 p,
@@ -49,15 +51,6 @@ option {
     font: inherit;
     color: var(--lightColorText) !important;
 }
-
-.complete {
-    color: var(--priorityColorLow) !important;
-}
-
-.uncomplete {
-    color: var(--priorityColorHigh) !important;
-}
-
 
 .not-read {
     aspect-ratio: 1/1;

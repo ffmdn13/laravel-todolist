@@ -78,7 +78,11 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     /**
      * Controller for shortcut dashboard page
      */
-    Route::get('/shortcut/', [DashboardShortcutController::class, 'index']);
+    Route::get('/shortcut', [DashboardShortcutController::class, 'index']);
+    Route::get('/shortcut/view/{id}/{title}', [DashboardShortcutController::class, 'view'])
+        ->middleware('ensure:task_notes;4,false')
+        ->whereNumber('id');
+    Route::post('/shortcut/view/action', [DashboardShortcutController::class, 'action']);
 
     /**
      * Controller for list dashboard page

@@ -38,7 +38,7 @@ class DashboardCompleteController extends Controller
     /**
      * Get user tiem format based user personalization
      */
-    private function getTimeFormat($format = '24hr')
+    private function getTimeFormat($format = '12hr')
     {
         return ['24hr' => 'H:i', '12hr' => ' h:i A'][$format];
     }

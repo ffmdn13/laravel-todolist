@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TaskNote;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class DashboardShortcutController extends Controller
 {
@@ -14,19 +16,137 @@ class DashboardShortcutController extends Controller
     public function index($id = null)
     {
         return response()->view('dashboard.shortcut', [
-            'title' => $this->getPageTitle(2),
-            'shortcuts' => TaskNote::whereBelongsTo(Auth::user(), 'user')
-                ->notTrashed()
-                ->isShortcuted()
-                ->get(['id', 'title', 'type', 'due_date', 'priority']),
+            'title' => 'Shortcut',
+            'items' => $this->getItems(Auth::user()),
+            'timeFormat' => $this->getTimeFormat(json_decode(Auth::user()->personalization, true)['time-format']),
         ]);
     }
 
     /**
-     * Get page name that user currently visit
+     * Render given shortcut task or not
      */
-    private function getPageTitle($index = 1)
+    public function view($id, $title)
     {
-        return ucfirst(explode('/', request()->getRequestUri())[$index]);
+        return response()->view('dashboard.table-view', [
+            'title' => $title,
+            'item' => $this->getViewItem($id, Auth::user()),
+            'timeFormat' => $this->getTimeFormat(json_decode(Auth::user()->personalization, true)['time-format'])
+        ]);
+    }
+
+    /**
+     * Return shortcut items that belongs to user
+     */
+    private function getItems($user)
+    {
+        return TaskNote::with('notebook')
+            ->select(['id', 'title', 'due_date', 'description', 'notebook_id'])
+            ->whereBelongsTo($user, 'user')
+            ->notTrashed()
+            ->isShortcuted()
+            ->mustNote()
+            ->get();
+    }
+
+    /**
+     * Return a view shortcut item that belongs to user
+     */
+    private function getViewItem($id, $user)
+    {
+        return TaskNote::select(['id', 'title', 'description', 'priority', 'due_date', 'time', 'type', 'is_complete', 'is_shortcut'])
+            ->byUserAndId($id, $user->id)
+            ->notTrashed()
+            ->isShortcuted()
+            ->mustNote()
+            ->firstOrFail();
+    }
+
+    /**
+     * Get user tiem format based user personalization
+     */
+    private function getTimeFormat($format = '12hr')
+    {
+        return ['24hr' => 'H:i', '12hr' => ' h:i A'][$format];
+    }
+
+    /**
+     * Determine the action value for the appropriate function name
+     */
+    public function action(Request $request)
+    {
+        $action = $request->validate(['action' => ['required', 'present', Rule::in(['save', 'delete', 'shortcut'])]]);
+        $message = call_user_func([__CLASS__, $action['action']], $request);
+
+        return redirect($message['previous-url'], 302)
+            ->with('message', $message['message']);
+    }
+
+    /**
+     * Update the given task
+     */
+    private function save(Request $request)
+    {
+        $validatedFormData = $this->validateData($request);
+
+        $message = TaskNote::byUserAndId($validatedFormData['id'], Auth::user()->id)
+            ->mustNote()
+            ->update([
+                'title' => $validatedFormData['title'],
+                'description' => $validatedFormData['description'],
+                'due_date' => time()
+            ]) === 1 ? 'Successfully updated note "' . $validatedFormData['title'] . '"' : 'Note not found!';
+
+        return ['message' => $message, 'previous-url' => $request->session()->previousUrl()];
+    }
+
+    /**
+     * Mark note as trashed
+     */
+    private function delete(Request $reqeust)
+    {
+        $id = $reqeust->input('id', null);
+        $userId = Auth::user()->id;
+        $currentDeletedNote = $reqeust->input('title', null);
+
+        $message = TaskNote::byUserAndId($id, $userId)
+            ->mustNote()
+            ->delete() === 1 ? "Successfully deleted note \"$currentDeletedNote\"." : "Note not found!";
+
+        return ['message' => $message, 'previous-url' => '/dashboard/shortcut'];
+    }
+
+    /**
+     * Add note to shortcut list
+     */
+    private function shortcut(Request $request)
+    {
+        $note = TaskNote::select(['id', 'is_shortcut', 'title'])
+            ->byUserAndId($request->input('id'), Auth::user()->id)
+            ->mustNote()
+            ->firstOrFail();
+
+        if ($note->is_shortcut === 0) {
+            $note->is_shortcut = 1;
+            $message = 'Note "' . $note->title . '" added to shortcut';
+        } else {
+            $note->is_shortcut = 0;
+            $message = 'Note "' . $note->title . '" removed from shortcut';
+        }
+
+        $note->save();
+
+        return ['message' => $message, 'previous-url' => '/dashboard/shortcut'];
+    }
+
+    /**
+     * Return validated data
+     */
+    private function validateData(Request $request)
+    {
+        return $request->validate([
+            'id' => ['required', 'present', 'numeric', 'exists:task_notes,id'],
+            'title' => ['required', 'present', 'max:255', 'string'],
+            'description' => ['nullable', 'present', 'string'],
+        ]);
     }
 }

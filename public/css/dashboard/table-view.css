@@ -64,3 +64,145 @@
 }
 
 /* tag color style section end */
+
+/* ic omplete color style section start */
+
+.complete-1 {
+    color: var(--priorityColorLow) !important;
+}
+
+.complete-0 {
+    color: var(--priorityColorHigh) !important;
+}
+
+/* is complete color style section end */
+
+/* table view style section start */
+
+thead>tr>th {
+    font-size: .95rem;
+}
+
+tbody>tr>td {
+    font-size: .9rem !important;
+}
+
+tbody>tr>td:nth-child(1) {
+    cursor: pointer;
+    width: 300px;
+}
+
+.table-view-title {
+    font-weight: var(--fw-700);
+    font-size: 1.25rem;
+}
+
+.table-view-td-title {
+    max-width: 200px;
+    text-overflow: ellipsis;
+}
+
+.table-view-td-description {
+    max-width: 350px;
+    text-overflow: ellipsis;
+}
+
+.table-view-td-icon {
+    width: 15px;
+    opacity: 0;
+    transition: opacity 160ms ease;
+}
+
+td:hover:hover .table-view-td-icon {
+    opacity: 1;
+}
+
+/* table view style section end */
+
+/* view item style section start */
+
+.view-item-container {
+    width: 600px;
+}
+
+.view-item-due-date {
+    color: var(--lightColorText);
+    font-size: .85rem;
+    cursor: pointer;
+}
+
+.view-item-title {
+    outline: none;
+    font-weight: var(--fw-700);
+    font-size: 1.1rem;
+}
+
+.view-item-complete-btn {
+    width: 15px;
+    cursor: pointer;
+}
+
+.view-item-save-btn {
+    background-color: var(--lightColorPrimary);
+    border-radius: 4px;
+    padding: .4rem 1rem;
+    color: var(--whiteColor) !important;
+}
+
+.custom-trix {
+    height: 435px;
+    padding: 0;
+    font-size: .95rem;
+}
+
+.trix-height-475 {
+    height: 475px;
+}
+
+/* .trix-button--icon-bold,
+.trix-button--icon-italic,
+.trix-button--icon-strike,
+.trix-button--icon-link, */
+/* .trix-button--icon-bullet-list,
+.trix-button--icon-number-list, */
+.trix-button--icon-heading-1,
+.trix-button--icon-heading-2,
+.trix-button--icon-quote,
+.trix-button--icon-code,
+.trix-button--icon-decrease-nesting-level,
+.trix-button--icon-increase-nesting-level,
+.trix-button--icon-undo,
+.trix-button--icon-redo,
+.trix-button--icon-attach {
+    display: none !important;
+    border: none !important;
+}
+
+.trix-button-group {
+    border-right: none !important;
+    border-left: none !important;
+}
+
+/* view item style section end */
+
+/* empty table view style section start */
+
+.empty-table-view-container {
+    width: 400px;
+}
+
+.empty-table-view-icon {
+    color: var(--lightColorText);
+    transform: scale(2.3);
+}
+
+.empty-table-view-title {
+    font-weight: var(--fw-700);
+}
+
+.empty-table-view-desc {
+    font-size: .9rem;
+    opacity: .9;
+}
+
+/* empty table view style section end */

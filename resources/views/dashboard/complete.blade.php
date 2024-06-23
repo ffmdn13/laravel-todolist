@@ -27,7 +27,7 @@
                         <th></th>
                         <th scope="col">Title</th>
                         <th scope="col">Type</th>
-                        <th scope="col">Due date</th>
+                        <th scope="col">Due date / Last edited</th>
                         <th scope="col">Time</th>
                         <th scope="col">Priority</th>
                         <th scope="col">Address</th>

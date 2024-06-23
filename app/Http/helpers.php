@@ -7,8 +7,12 @@ use App\Models\Tag;
 /**
  * Get last edited time
  */
-function getLastEdited($timestamp = null)
+function getLastEdited(int $timestamp = null)
 {
+    if (is_null($timestamp)) {
+        return '-';
+    }
+
     $time = time() - $timestamp;
     $times = [
         [60, ' second ago'],
@@ -26,6 +30,15 @@ function getLastEdited($timestamp = null)
 
         $time = floor($time / $times[$i][0]);
     }
+}
+
+function formatDateOrTime(?string $format = null, ?int $timestamp = null, string $default = null)
+{
+    if (is_null($format) || is_null($timestamp)) {
+        return $default;
+    }
+
+    return date($format, $timestamp);
 }
 
 /**
