@@ -207,28 +207,6 @@ class DashboardListController extends Controller
     }
 
     /**
-     * Add or remove task to shortcut list
-     */
-    private function shortcut(Request $request)
-    {
-        $task = TaskNote::select(['id', 'is_shortcut', 'title'])
-            ->byUserAndId($request->input('id'), Auth::user()->id)
-            ->first();
-
-        if ($task->is_shortcut === 0) {
-            $task->is_shortcut = 1;
-            $message = 'Task "' . $task->title . '" added to shortcut';
-        } else {
-            $task->is_shortcut = 0;
-            $message = 'Task "' . $task->title . '" removed from shortcut';
-        }
-
-        $task->save();
-
-        return ['message' => $message, 'previous-uri' => $request->session()->previousUrl()];
-    }
-
-    /**
      * Set and return task due date
      */
     private function getDueDate(?string $dueDate, ?string $time)

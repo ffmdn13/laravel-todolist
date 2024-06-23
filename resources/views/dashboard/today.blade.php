@@ -196,11 +196,6 @@
                                             <button class="border-0 bg-transparent" name="action"
                                                 value="delete">Delete</button>
                                         </li>
-                                        <li class="dropdown-item">
-                                            <button class="border-0 bg-transparent" name="action" value="shortcut">
-                                                {{ $preview->is_shortcut == 0 ? 'Add to shortcut' : 'Remove from shortcut' }}
-                                            </button>
-                                        </li>
                                     </ul>
                                 </div>
                             </div>

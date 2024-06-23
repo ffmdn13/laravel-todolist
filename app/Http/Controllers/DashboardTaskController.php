@@ -103,9 +103,7 @@ class DashboardTaskController extends Controller
      */
     public function action(Request $request)
     {
-        $action = $request->validate([
-            'action' => ['required', 'present', Rule::in(['save', 'delete', 'shortcut'])]
-        ]);
+        $action = $request->validate(['action' => ['required', 'present', Rule::in(['save', 'delete'])]]);
         $message = call_user_func([__CLASS__, $action['action']], $request);
 
         return redirect($message['previous-url'], 302)
@@ -173,28 +171,6 @@ class DashboardTaskController extends Controller
         $previousUrl = explode("/$id", $reqeust->session()->previousUrl())[0];
 
         return ['message' => $message, 'previous-url' => $previousUrl];
-    }
-
-    /**
-     * Add or remove task to shortcut list
-     */
-    private function shortcut(Request $request)
-    {
-        $task = TaskNote::select(['id', 'is_shortcut', 'title'])
-            ->byUserAndId($request->input('id'), Auth::user()->id)
-            ->firstOrFail();
-
-        if ($task->is_shortcut === 0) {
-            $task->is_shortcut = 1;
-            $message = 'Task "' . $task->title . '" added to shortcut';
-        } else {
-            $task->is_shortcut = 0;
-            $message = 'Task "' . $task->title . '" removed from shortcut';
-        }
-
-        $task->save();
-
-        return ['message' => $message, 'previous-url' => $request->session()->previousUrl()];
     }
 
     /**
