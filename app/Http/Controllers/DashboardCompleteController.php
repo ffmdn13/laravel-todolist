@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\TaskNote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class DashboardCompleteController extends Controller
@@ -80,6 +79,7 @@ class DashboardCompleteController extends Controller
         $taskNotes = TaskNote::select(['is_complete', 'title'])
             ->byUserAndId($id, Auth::user()->id)
             ->isCompleted()
+            ->notTrashed()
             ->mustTask()
             ->firstOrFail();
 
@@ -97,6 +97,7 @@ class DashboardCompleteController extends Controller
     {
         TaskNote::byUserAndId($id, Auth::user()->id)
             ->mustTask()
+            ->notTrashed()
             ->delete();
 
         return back(302)
