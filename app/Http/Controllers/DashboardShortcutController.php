@@ -42,8 +42,8 @@ class DashboardShortcutController extends Controller
         return TaskNote::with('notebook')
             ->select(['id', 'title', 'due_date', 'description', 'notebook_id'])
             ->whereBelongsTo($user, 'user')
-            ->notTrashed()
             ->isShortcuted()
+            ->notTrashed()
             ->mustNote()
             ->get();
     }
@@ -55,8 +55,8 @@ class DashboardShortcutController extends Controller
     {
         return TaskNote::select(['id', 'title', 'description', 'is_shortcut'])
             ->byUserAndId($id, $user->id)
-            ->notTrashed()
             ->isShortcuted()
+            ->notTrashed()
             ->mustNote()
             ->firstOrFail();
     }
@@ -89,6 +89,8 @@ class DashboardShortcutController extends Controller
         $validatedFormData = $this->validateData($request);
 
         $message = TaskNote::byUserAndId($validatedFormData['id'], Auth::user()->id)
+            ->isShortcuted()
+            ->notTrashed()
             ->mustNote()
             ->update([
                 'title' => $validatedFormData['title'],
@@ -109,6 +111,8 @@ class DashboardShortcutController extends Controller
         $currentDeletedNote = $reqeust->input('title', null);
 
         $message = TaskNote::byUserAndId($id, $userId)
+            ->isShortcuted()
+            ->notTrashed()
             ->mustNote()
             ->delete() === 1 ? "Successfully deleted note \"$currentDeletedNote\"." : "Note not found!";
 
@@ -122,6 +126,7 @@ class DashboardShortcutController extends Controller
     {
         $note = TaskNote::select(['id', 'is_shortcut', 'title'])
             ->byUserAndId($request->input('id'), Auth::user()->id)
+            ->notTrashed()
             ->mustNote()
             ->firstOrFail();
 

@@ -14,9 +14,6 @@
             <i data-feather="check-circle" class="icon-w-21 aspect-ratio"></i>
             Complete
         </h1>
-        <div class="border-bottom pb-2 mt-3">
-            <span class="text-black-50 d-block">1 Item</span>
-        </div>
 
         @if ($items->isNotEmpty())
             <table class="table table-light-subtle table-hover">

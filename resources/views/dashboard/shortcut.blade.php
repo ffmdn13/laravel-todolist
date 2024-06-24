@@ -15,12 +15,6 @@
             Shortcut
         </h1>
 
-        <div class="border-bottom pb-2 mt-3">
-            <span class="text-black-50 d-block">
-                @php($count = $items->count())
-                {{ $count > 1 ? "$count Shortcuts" : "$count Shortcut" }}</span>
-        </div>
-
         @if ($items->isNotEmpty())
             <table class="table table-light-subtle table-hover">
                 <thead>

@@ -45,6 +45,7 @@ class DashboardCompleteController extends Controller
         return TaskNote::with(['list', 'tag'])
             ->select(['id', 'title', 'type', 'due_date', 'time', 'priority', 'list_id', 'tag_id'])
             ->whereBelongsTo($user, 'user')
+            ->notTrashed()
             ->isCompleted()
             ->mustTask()
             ->get();
@@ -124,8 +125,9 @@ class DashboardCompleteController extends Controller
         $validatedFormData['time'] = isset($validatedFormData['due_date']) ? $this->getTimestamp($validatedFormData['time']) : null;
 
         $previousUrl = $request->missing('is_complete') ? '/dashboard/complete' : $request->session()->previousUrl();
-
         $message = TaskNote::byUserAndId($validatedFormData['id'], Auth::user()->id)
+            ->notTrashed()
+            ->isCompleted()
             ->mustTask()
             ->update([
                 'due_date' => $validatedFormData['due_date'],
@@ -145,6 +147,8 @@ class DashboardCompleteController extends Controller
     private function delete(Request $request)
     {
         $message = TaskNote::byUserAndId($request->input('id', null), Auth::user()->id)
+            ->notTrashed()
+            ->isCompleted()
             ->mustTask()
             ->delete() === 1 ? 'Successfully deleted task "' . $request->input('title', null) . '".' : "Task not found!";
 
