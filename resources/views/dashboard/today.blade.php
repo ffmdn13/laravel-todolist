@@ -5,7 +5,6 @@
 @endsection
 
 @section('additional-dashboard-head')
-    <link rel="stylesheet" href="/css/dashboard/today.css">
     <link rel="stylesheet" href="/css/dashboard/view.css">
 
     {{-- trix editor cdn link --}}

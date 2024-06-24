@@ -16,6 +16,7 @@ use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -135,9 +136,13 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::get('/complete/reopen/{id}', [DashboardCompleteController::class, 'reopen'])
         ->middleware('ensure:task_notes;4,false')
         ->whereNumber('id');
-    Route::get('/complete/delete/{id}', [DashboardCompleteController::class, 'delete'])
-        ->middleware('ensure:task_notes;4')
+    Route::get('/complete/delete/{id}', [DashboardCompleteController::class, 'deleteTask'])
+        ->middleware('ensure:task_notes;4,false')
         ->whereNumber('id');
+    Route::get('/complete/view/{id}/{title}', [DashboardCompleteController::class, 'view'])
+        ->middleware('ensure:task_notes;4,false')
+        ->whereNumber('id');
+    Route::post('/complete/view/action', [DashboardCompleteController::class, 'action']);
 
     /**
      * Controller for trash dashboard page

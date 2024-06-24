@@ -53,7 +53,7 @@ class DashboardShortcutController extends Controller
      */
     private function getViewItem($id, $user)
     {
-        return TaskNote::select(['id', 'title', 'description', 'priority', 'due_date', 'time', 'type', 'is_complete', 'is_shortcut'])
+        return TaskNote::select(['id', 'title', 'description', 'is_shortcut'])
             ->byUserAndId($id, $user->id)
             ->notTrashed()
             ->isShortcuted()

@@ -21,9 +21,7 @@
                 {{ $count > 1 ? "$count Shortcuts" : "$count Shortcut" }}</span>
         </div>
 
-        @if (isset($items))
-            @php($priority = ['0' => '-', '1' => 'Low', '2' => 'Medium', '3' => 'High'])
-
+        @if ($items->isNotEmpty())
             <table class="table table-light-subtle table-hover">
                 <thead>
                     <tr>`
@@ -45,7 +43,7 @@
                                     <i data-feather="eye" class="icon-w-15 table-view-td-icon aspect-ratio"></i>
                                 </div>
                             </td>
-                            <td>
+                            <td class="table-view-first-column">
                                 <div class="table-view-td-description text-nowrap overflow-hidden">
                                     {{ is_string($item->description) ? strip_tags($item->description) : '-' }}
                                 </div>
