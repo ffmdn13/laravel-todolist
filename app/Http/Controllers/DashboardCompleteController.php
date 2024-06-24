@@ -29,10 +29,12 @@ class DashboardCompleteController extends Controller
      */
     public function view($id, $title)
     {
+        $user = Auth::user();
+
         return response()->view('dashboard.completed-view', [
             'title' => $title,
-            'item' => $this->getViewItem($id, Auth::user()),
-            'timeFormat' => $this->getTimeFormat(json_decode(Auth::user()->personalization, true)['time-format'])
+            'item' => $this->getViewItem($id, $user->id),
+            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format'])
         ]);
     }
 
@@ -53,10 +55,10 @@ class DashboardCompleteController extends Controller
     /**
      * Return a view shortcut item that belongs to user
      */
-    private function getViewItem($id, $user)
+    private function getViewItem($id, $userId)
     {
         return TaskNote::select(['id', 'title', 'description', 'priority', 'due_date', 'time', 'type', 'is_complete'])
-            ->byUserAndId($id, $user->id)
+            ->byUserAndId($id, $userId)
             ->notTrashed()
             ->isCompleted()
             ->mustTask()
@@ -96,8 +98,9 @@ class DashboardCompleteController extends Controller
     public function deleteTask($id)
     {
         TaskNote::byUserAndId($id, Auth::user()->id)
-            ->mustTask()
+            ->isCompleted()
             ->notTrashed()
+            ->mustTask()
             ->delete();
 
         return back(302)
@@ -127,8 +130,8 @@ class DashboardCompleteController extends Controller
 
         $previousUrl = $request->missing('is_complete') ? '/dashboard/complete' : $request->session()->previousUrl();
         $message = TaskNote::byUserAndId($validatedFormData['id'], Auth::user()->id)
-            ->notTrashed()
             ->isCompleted()
+            ->notTrashed()
             ->mustTask()
             ->update([
                 'due_date' => $validatedFormData['due_date'],
@@ -148,8 +151,8 @@ class DashboardCompleteController extends Controller
     private function delete(Request $request)
     {
         $message = TaskNote::byUserAndId($request->input('id', null), Auth::user()->id)
-            ->notTrashed()
             ->isCompleted()
+            ->notTrashed()
             ->mustTask()
             ->delete() === 1 ? 'Successfully deleted task "' . $request->input('title', null) . '".' : "Task not found!";
 

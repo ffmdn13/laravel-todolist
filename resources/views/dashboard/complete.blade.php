@@ -12,16 +12,15 @@
     <div class="p-4">
         <h1 class="table-view-title d-flex align-items-center gap-1">
             <i data-feather="check-circle" class="icon-w-21 aspect-ratio"></i>
-            Complete
+            Completed Task
         </h1>
 
         @if ($items->isNotEmpty())
-            <table class="table table-light-subtle table-hover">
+            <table class="table table-hover mt-4">
                 <thead>
                     <tr>
                         <th>Action</th>
                         <th scope="col">Title</th>
-                        <th scope="col">Type</th>
                         <th scope="col">Due date</th>
                         <th scope="col">Time</th>
                         <th scope="col">Priority</th>
@@ -47,12 +46,6 @@
                                         {{ $item->title }}
                                     </div>
                                     <i data-feather="eye" class="icon-w-15 table-view-td-icon aspect-ratio"></i>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <i data-feather="file" class="aspect-ratio icon-w-15"></i>
-                                    {{ $item->type }}
                                 </div>
                             </td>
                             <td>{{ formatDateOrTime('l, M j Y', $item->due_date, '-') }}</td>

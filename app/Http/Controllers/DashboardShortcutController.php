@@ -13,7 +13,7 @@ class DashboardShortcutController extends Controller
     /** 
      * Render dashboard shortcut page
      */
-    public function index($id = null)
+    public function index()
     {
         return response()->view('dashboard.shortcut', [
             'title' => 'Shortcut',
@@ -29,7 +29,7 @@ class DashboardShortcutController extends Controller
     {
         return response()->view('dashboard.table-view', [
             'title' => $title,
-            'item' => $this->getViewItem($id, Auth::user()),
+            'item' => $this->getViewItem($id, Auth::user()->id),
             'timeFormat' => $this->getTimeFormat(json_decode(Auth::user()->personalization, true)['time-format'])
         ]);
     }
@@ -51,10 +51,10 @@ class DashboardShortcutController extends Controller
     /**
      * Return a view shortcut item that belongs to user
      */
-    private function getViewItem($id, $user)
+    private function getViewItem($id, $userId)
     {
         return TaskNote::select(['id', 'title', 'description', 'is_shortcut'])
-            ->byUserAndId($id, $user->id)
+            ->byUserAndId($id, $userId)
             ->isShortcuted()
             ->notTrashed()
             ->mustNote()
@@ -126,6 +126,7 @@ class DashboardShortcutController extends Controller
     {
         $note = TaskNote::select(['id', 'is_shortcut', 'title'])
             ->byUserAndId($request->input('id'), Auth::user()->id)
+            ->isShortcuted()
             ->notTrashed()
             ->mustNote()
             ->firstOrFail();

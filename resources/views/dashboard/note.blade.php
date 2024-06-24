@@ -35,7 +35,7 @@
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-body">
-                                        <h1 class="overview-add-task-title mb-3">📝 Add new note</h1>
+                                        <h1 class="overview-add-task-title border-0 mb-3">📝 Add new note</h1>
 
                                         <form action="/dashboard/note/add" method="POST">
                                             <input type="text" name="title"
@@ -74,7 +74,7 @@
                 </span>
             </div>
 
-            @if ($notes->has(0))
+            @if ($notes->isNotEmpty())
                 <ul class="overview-items m-0 p-0 mt-4">
                     @foreach ($notes as $note)
                         <li class="border rounded py-2 px-3 mb-2 cursor-pointer"

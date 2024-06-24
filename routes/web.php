@@ -81,7 +81,6 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
      */
     Route::get('/shortcut', [DashboardShortcutController::class, 'index']);
     Route::get('/shortcut/view/{id}/{title}', [DashboardShortcutController::class, 'view'])
-        ->middleware('ensure:task_notes;4,false')
         ->whereNumber('id');
     Route::post('/shortcut/view/action', [DashboardShortcutController::class, 'action']);
 
@@ -134,13 +133,10 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
      */
     Route::get('/complete', [DashboardCompleteController::class, 'index']);
     Route::get('/complete/reopen/{id}', [DashboardCompleteController::class, 'reopen'])
-        ->middleware('ensure:task_notes;4,false')
         ->whereNumber('id');
     Route::get('/complete/delete/{id}', [DashboardCompleteController::class, 'deleteTask'])
-        ->middleware('ensure:task_notes;4,false')
         ->whereNumber('id');
     Route::get('/complete/view/{id}/{title}', [DashboardCompleteController::class, 'view'])
-        ->middleware('ensure:task_notes;4,false')
         ->whereNumber('id');
     Route::post('/complete/view/action', [DashboardCompleteController::class, 'action']);
 
@@ -149,11 +145,12 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
      */
     Route::get('/trash', [DashboardTrashController::class, 'index']);
     Route::get('/trash/reopen/{id}', [DashboardTrashController::class, 'reopen'])
-        ->middleware('ensure:task_notes;4,true')
         ->whereNumber('id');
-    Route::get('/trash/delete/{id}', [DashboardTrashController::class, 'delete'])
-        ->middleware('ensure:task_notes;4,true')
+    Route::get('/trash/delete/{id}', [DashboardTrashController::class, 'deleteNote'])
         ->whereNumber('id');
+    Route::get('/trash/view/{id}/{title}', [DashboardTrashController::class, 'view'])
+        ->whereNumber('id');
+    Route::post('/trash/view/action', [DashboardTrashController::class, 'action']);
 });
 
 /**

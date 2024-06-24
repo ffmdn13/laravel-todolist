@@ -40,7 +40,7 @@ class TaskNote extends Model
      */
     public function scopeNotTrashed(Builder $query)
     {
-        $query->where('is_trash', 0);
+        $query->where('deleted_at', null);
     }
 
     /**

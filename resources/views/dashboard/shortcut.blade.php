@@ -16,7 +16,7 @@
         </h1>
 
         @if ($items->isNotEmpty())
-            <table class="table table-light-subtle table-hover">
+            <table class="table table-hover">
                 <thead>
                     <tr>`
                         <th scope="col">Title</th>
