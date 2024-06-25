@@ -64,7 +64,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'ensure' => \App\Http\Middleware\EnsureDataBelongsToUser::class,
-        'is.task' => \App\Http\Middleware\IsItemTask::class,
-        'is.note' => \App\Http\Middleware\IsItemNote::class
+        'verify.list' => \App\Http\Middleware\IsListExist::class,
+        'verify.tag' => \App\Http\Middleware\IsTagExists::class
     ];
 }

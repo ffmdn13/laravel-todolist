@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\TaskNote;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -14,51 +13,51 @@ class DashboardTodayController extends Controller
     /**
      * Render dashboard noe page
      */
-    public function index(Request $request)
+    public function index($id = null)
     {
         $user = Auth::user();
 
         return response()->view('dashboard.today', [
             'title' => 'Today',
-            'tasks' => $this->getTasks(Auth::user()),
-            'preview' => $this->preview($request->query('preview', null), $user->id),
-            'timeFormat' => json_decode($user->personalization, true)['time-format']
+            'tasks' => $this->getItems($user),
+            'view' => $this->view($id, $user->id),
+            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format'])
         ]);
     }
 
     /**
      * Get user related list task
      */
-    private function getTasks($user)
+    private function getItems($user)
     {
         return TaskNote::select(['id', 'title', 'priority', 'due_date', 'reminder'])
             ->whereBelongsTo($user, 'user')
             ->notCompleted()
-            ->notTrashed()
             ->mustTask()
             ->byToday()
             ->get();
     }
 
-    private function preview($preview, $userId)
+    private function view($id, $userId)
     {
-        $validator = Validator::make(['preview' => $preview], [
-            'preview' => ['numeric', 'exists:task_notes,id']
-        ]);
-
-        if ($validator->fails()) {
+        if (is_null($id)) {
             return null;
         }
 
-        $previews = TaskNote::select(['id', 'title', 'description', 'priority', 'due_date', 'time', 'reminder', 'is_complete', 'is_shortcut'])
-            ->byUserAndId($validator->getData()['preview'], $userId)
-            ->notTrashed()
+        return TaskNote::select(['id', 'title', 'description', 'priority', 'due_date', 'time', 'reminder', 'is_complete'])
+            ->byUserAndId($id, $userId)
             ->notCompleted()
             ->mustTask()
             ->byToday()
-            ->first();
+            ->firstOrFail();
+    }
 
-        return $previews;
+    /**
+     * Get user tiem format based user personalization
+     */
+    private function getTimeFormat($format = '12hr')
+    {
+        return ['24hr' => 'H:i', '12hr' => ' h:i A'][$format];
     }
 
     /**
@@ -84,9 +83,7 @@ class DashboardTodayController extends Controller
      */
     public function action(Request $request)
     {
-        $action = $request->validate([
-            'action' => ['required', 'present', Rule::in(['save', 'delete'])]
-        ]);
+        $action = $request->validate(['action' => ['required', 'present', Rule::in(['save', 'delete'])]]);
         $message = call_user_func([__CLASS__, $action['action']], $request);
 
         return redirect($message['previous-url'], 302)
@@ -98,8 +95,47 @@ class DashboardTodayController extends Controller
      */
     private function save(Request $request)
     {
+        $validatedFormData = $this->validateData($request);
+        $validatedFormData['due_date'] = $this->getTimestamp($validatedFormData['due_date']);
+        $validatedFormData['time'] = isset($validatedFormData['due_date']) ? $this->getTimestamp($validatedFormData['time']) : null;
+
+        $message = TaskNote::byUserAndId($validatedFormData['id'], Auth::user()->id)
+            ->notCompleted()
+            ->mustTask()
+            ->byToday()
+            ->update([
+                'due_date' => $validatedFormData['due_date'],
+                'time' => $validatedFormData['time'],
+                'reminder' => $validatedFormData['reminder'],
+                'title' => $validatedFormData['title'],
+                'description' => $validatedFormData['description'],
+                'is_complete' => $validatedFormData['is_complete'] ?? 0
+            ]) === 1 ? 'Successfully updated task "' . $validatedFormData['title'] . '"' : 'Task not found!';
+
+        return ['message' => $message, 'previous-url' => $this->getPreviousUrl($request, $validatedFormData['due_date'])];
+    }
+
+    /**
+     * Delete the task record
+     */
+    private function delete(Request $request)
+    {
+        $message = TaskNote::byUserAndId($request->input('id', null), Auth::user()->id)
+            ->notCompleted()
+            ->mustTask()
+            ->byToday()
+            ->forceDelete() === 1 ? "Successfully deleted task \"" . $request->input('title', null) . "\"." : "Task not found!";
+
+        return ['message' => $message, 'previous-url' => '/dashboard/today'];
+    }
+
+    /**
+     * Return validated data
+     */
+    private function validateData(Request $request)
+    {
         $rules = [
-            'id' => ['required', 'present', 'numeric'],
+            'id' => ['required', 'present', 'numeric', 'exists:task_notes,id'],
             'due_date' => ['nullable', 'present', 'date', 'date_format:Y-m-d'],
             'time' => ['nullable', 'present', 'date_format:H:i'],
             'reminder' => ['nullable', 'present', 'date_format:H:i'],
@@ -111,39 +147,22 @@ class DashboardTodayController extends Controller
             $rules['is_complete'] = ['required', 'present', 'boolean'];
         }
 
-        $validatedFormData = $request->validate($rules);
-
-        if (is_null($validatedFormData['due_date'])) {
-            $validatedFormData['time'] = null;
-        } else {
-            $validatedFormData['due_date'] = strtotime($validatedFormData['due_date']);
-            $validatedFormData['time'] = $validatedFormData['time'] == true ? strtotime($validatedFormData['time']) : null;
-        }
-
-        $message = TaskNote::byUserAndId($validatedFormData['id'], Auth::user()->id)
-            ->update([
-                'due_date' => $validatedFormData['due_date'],
-                'time' => $validatedFormData['time'],
-                'reminder' => $validatedFormData['reminder'],
-                'title' => $validatedFormData['title'],
-                'description' => $validatedFormData['description'],
-                'is_complete' => $validatedFormData['is_complete'] ?? 0
-            ]) === 1 ? 'Successfully updated task "' . $validatedFormData['title'] . '"' : 'Task not found!';
-
-        return ['message' => $message, 'previous-url' => $request->session()->previousUrl()];
+        return $request->validate($rules);
     }
 
     /**
-     * Delete the task record
+     * Get timestamp for given date or time
      */
-    private function delete(Request $reqeust)
+    private function getTimestamp($timestamp = null)
     {
-        $id = $reqeust->input('id', null);
-        $message = TaskNote::byUserAndId($id, Auth::user()->id)
-            ->delete() === 1 ? "Successfully deleted task \"" . $reqeust->input('title', null) . "\"." : "Task not found!";
+        return is_string($timestamp) ? strtotime($timestamp) : null;
+    }
 
-        $previousUrl = explode("/$id", $reqeust->session()->previousUrl())[0];
+    private function getPreviousUrl(Request $request, $date)
+    {
+        $date = date('Y-m-d', is_null($date) ? time() + 86400 : $date);
+        $currentDate = date('Y-m-d', time());
 
-        return ['message' => $message, 'previous-url' => $previousUrl];
+        return $date === $currentDate ? $request->session()->previousUrl() : '/dashboard/today';
     }
 }

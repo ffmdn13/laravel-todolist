@@ -87,18 +87,19 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     /**
      * Controller for list dashboard page
      */
-    Route::get('/lists/{id}/{title}', [DashboardListController::class, 'index'])
+    Route::get('/list/{id}/{title}', [DashboardListController::class, 'index'])
+        ->middleware('verify.list')
         ->whereNumber('id');
-    Route::post('/lists/add', [DashboardListController::class, 'add']);
-    Route::post('/lists/add/task', [DashboardListController::class, 'addTask']);
-    Route::post('/lists/delete', [DashboardListController::class, 'delete']);
-    Route::post('/lists/action', [DashboardListController::class, 'action']);
+    Route::post('/list/add', [DashboardListController::class, 'add']);
+    Route::post('/list/add/task', [DashboardListController::class, 'addTask']);
+    Route::post('/list/delete', [DashboardListController::class, 'delete']);
+    Route::post('/list/action', [DashboardListController::class, 'action']);
 
     /**
      * Controller for tag dashboard page
      */
     Route::get('/tag/{id}/{title}', [DashboardTagsController::class, 'index'])
-        ->middleware('ensure:tags;3,false')
+        ->middleware('verify.tag')
         ->whereNumber('id');
     Route::post('/tag/add', [DashboardTagsController::class, 'add']);
     Route::post('/tag/add/task', [DashboardTagsController::class, 'addTask']);
@@ -119,7 +120,8 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     /**
      * Controller fot today dashboard page
      */
-    Route::get('/today', [DashboardTodayController::class, 'index']);
+    Route::get('/today/{id?}', [DashboardTodayController::class, 'index'])
+        ->whereNumber('id');
     Route::post('/today/add', [DashboardTodayController::class, 'add']);
     Route::post('/today/action', [DashboardTodayController::class, 'action']);
 

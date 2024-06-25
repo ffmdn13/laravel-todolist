@@ -33,7 +33,7 @@
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-body">
-                                        <h1 class="add-new-today-heading mb-3">📜 Add new task</h1>
+                                        <h1 class="overview-add-task-title mb-3">📜 Add new task</h1>
                                         <form action="/dashboard/today/add" method="POST">
                                             <input type="text" name="title"
                                                 class="input-outline-off form-control mb-2 border-0 border-bottom"
@@ -46,7 +46,7 @@
                                                 <option value="3">🔴 High</option>
                                             </select>
                                             @csrf
-                                            <button class="overview-add-task-btn mt-2" type="submit">Add</button>
+                                            <button class="overview-add-task-btn border-0 mt-2" type="submit">Add</button>
                                         </form>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@
                 <ul class="overview-items m-0 p-0 mt-4">
                     @foreach ($tasks as $task)
                         <li class="border rounded py-2 px-3 mb-2 cursor-pointer"
-                            onclick="window.location.href='/dashboard/today?preview={{ $task->id }}'">
+                            onclick="window.location.href='/dashboard/today/{{ $task->id }}'">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="overview-item-title my-1 max-width-470">{{ $task->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
@@ -114,20 +114,18 @@
 
         {{-- Today preview start --}}
         <section>
-            @if (isset($preview))
+            @if (isset($view))
                 <form action="/dashboard/today/action" method="POST" class="p-4 h-100">
                     @csrf
-                    <input type="hidden" name="id" value="{{ $preview->id }}">
+                    <input type="hidden" name="id" value="{{ $view->id }}">
 
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <div>
                             <label class="preview-due-date d-flex align-items-center gap-1" for="date"
                                 data-bs-toggle="modal" data-bs-target="#dueDateModal">
-                                @if ($preview->due_date)
-                                    @php($dueDate = getDueDate($preview->due_date, $preview->time, $timeFormat))
-
+                                @if ($view->due_date)
                                     <i data-feather="calendar" class="icon-w-15 aspect-ratio"></i>
-                                    {{ $dueDate['date'] }}
+                                    {{ formatDateOrTime('l, M j Y', $view->due_date) . formatDateOrTime($timeFormat, $view->time) }}
                                 @else
                                     <span class="empty-due-date d-block rounded">Set due date</span>
                                 @endif
@@ -143,12 +141,13 @@
                                                     <label for="date" class="form-label">Date</label>
                                                     <input type="date" name="due_date" id="date"
                                                         class="form-control" aria-label="Date"
-                                                        value="{{ $dueDate['dateValue'] ?? null }}">
+                                                        value="{{ formatDateOrTime('Y-m-d', $view->due_date) }}">
                                                 </div>
                                                 <div class="col">
                                                     <label for="time" class="form-label">Time</label>
                                                     <input type="time" name="time" class="form-control"
-                                                        aria-label="Time" value="{{ $dueDate['timeValue'] ?? null }}">
+                                                        aria-label="Time"
+                                                        value="{{ formatDateOrTime('h:i', $view->time) }}">
                                                 </div>
                                                 <div class="col">
                                                     <label for="reminder" class="form-label">Reminder</label>
@@ -162,19 +161,19 @@
                             </div>
 
                         </div>
-                        <i data-feather="flag" class="aspect-ratio icon-w-15 color-{{ $preview->priority }}"></i>
+                        <i data-feather="flag" class="aspect-ratio icon-w-15 color-{{ $view->priority }}"></i>
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between">
                         <input type="text" name="title" class="preview-title mb-2 border-0 bg-transparent w-100 p-0"
-                            value="{{ $preview->title }}">
+                            value="{{ $view->title }}">
                         <input class="preview-complete-btn aspect-ratio" type="checkbox" name="is_complete"
-                            value="1" @if ($preview->is_complete == 1) checked @endif>
+                            value="1" @if ($view->is_complete == 1) checked @endif>
                     </div>
 
                     <div>
                         <input type="hidden" id="x" placeholder="Description" name="description"
-                            value="{{ $preview->description }}">
+                            value="{{ $view->description }}">
 
                         <div class="d-flex flex-column-reverse">
                             <div class="d-flex align-items-center justify-content-between">

@@ -116,18 +116,18 @@
 
         {{-- Task preview start --}}
         <section>
-            @if (isset($preview))
+            @if (isset($view))
                 <form action="/dashboard/task/action" method="POST" class="p-4 h-100">
                     @csrf
-                    <input type="hidden" name="id" value="{{ $preview['preview']->id }}">
+                    <input type="hidden" name="id" value="{{ $view->id }}">
 
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <div>
                             <label class="preview-due-date d-flex align-items-center gap-1" for="date"
                                 data-bs-toggle="modal" data-bs-target="#dueDateModal">
-                                @if ($preview['preview']->due_date)
-                                    <i data-feather="calendar" class="icon-w-19 aspect-ratio"></i>
-                                    {{ $preview['preview']->due_date }}
+                                @if ($view->due_date)
+                                    <i data-feather="calendar" class="icon-w-15 aspect-ratio"></i>
+                                    {{ formatDateOrTime('l, M j Y', $view->due_date) . formatDateOrTime($timeFormat, $view->time) }}
                                 @else
                                     <span class="empty-due-date d-block rounded">Set due date</span>
                                 @endif
@@ -143,12 +143,13 @@
                                                     <label for="date" class="form-label">Date</label>
                                                     <input type="date" name="due_date" id="date"
                                                         class="form-control" aria-label="Date"
-                                                        value="{{ $preview['inputDateValue'] }}">
+                                                        value="{{ formatDateOrTime('Y-m-d', $view->due_date) }}">
                                                 </div>
                                                 <div class="col">
                                                     <label for="time" class="form-label">Time</label>
                                                     <input type="time" name="time" class="form-control"
-                                                        aria-label="Time" value="{{ $preview['inputTimeValue'] }}">
+                                                        aria-label="Time"
+                                                        value="{{ formatDateOrTime('h:i', $view->time) }}">
                                                 </div>
                                                 <div class="col">
                                                     <label for="reminder" class="form-label">Reminder</label>
@@ -162,20 +163,19 @@
                             </div>
 
                         </div>
-                        <i data-feather="flag"
-                            class="aspect-ratio icon-w-15 color-{{ $preview['preview']->priority }}"></i>
+                        <i data-feather="flag" class="aspect-ratio icon-w-15 color-{{ $view->priority }}"></i>
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between">
                         <input type="text" name="title" class="preview-title mb-2 border-0 bg-transparent w-100 p-0"
-                            value="{{ $preview['preview']->title }}">
+                            value="{{ $view->title }}">
                         <input class="preview-complete-btn aspect-ratio" type="checkbox" name="is_complete"
-                            value="1" @if ($preview['preview']->is_complete == 1) checked @endif>
+                            value="1" @if ($view->is_complete == 1) checked @endif>
                     </div>
 
                     <div>
                         <input type="hidden" id="x" placeholder="Description" name="description"
-                            value="{{ $preview['preview']->description }}">
+                            value="{{ $view->description }}">
 
                         <div class="d-flex flex-column-reverse">
                             <div class="d-flex align-items-center justify-content-between">

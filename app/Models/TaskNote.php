@@ -52,6 +52,14 @@ class TaskNote extends Model
     }
 
     /**
+     * Filter query by list_id column with 0 value
+     */
+    public function scopeNotInTheList(Builder $query)
+    {
+        $query->where('list_id', null);
+    }
+
+    /**
      * Filter query by is_complete with 1 value 
      */
     public function scopeIsCompleted(Builder $query)

@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lists;
 use App\Models\TaskNote;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -16,23 +14,25 @@ class DashboardTaskController extends Controller
      */
     public function index($id = null)
     {
+        $user = Auth::user();
+
         return response()->view('dashboard.task', [
-            'title' => $this->getPageTitle(2),
-            'tasks' => $this->getTaskNotes(Auth::user()),
-            'preview' => $this->getTaskPreview($id),
-            'makanbang' => 'MAKANBANG'
+            'title' => 'Task',
+            'tasks' => $this->getItems($user),
+            'view' => $this->view($id, $user->id),
+            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
         ]);
     }
 
     /**
      * Get user related list task
      */
-    private function getTaskNotes($user)
+    private function getItems($user)
     {
         return TaskNote::select(['id', 'title', 'priority', 'due_date', 'reminder'])
             ->whereBelongsTo($user, 'user')
+            ->notInTheList()
             ->notCompleted()
-            ->notTrashed()
             ->mustTask()
             ->get();
     }
@@ -40,41 +40,26 @@ class DashboardTaskController extends Controller
     /**
      * Return required parametes for index method
      */
-    private function getTaskPreview($id)
+    private function view($id, $userId)
     {
         if (is_null($id)) {
             return null;
         }
 
-        $preview['preview'] = TaskNote::select(['id', 'title', 'priority', 'due_date', 'description', 'is_complete', 'is_shortcut'])
-            ->byUserAndId($id, Auth::user()->id)
-            ->notTrashed()
+        return TaskNote::select(['id', 'title', 'priority', 'due_date', 'time', 'description', 'is_complete'])
+            ->byUserAndId($id, $userId)
             ->notCompleted()
+            ->notInTheList()
             ->mustTask()
             ->firstOrFail();
-
-        if (is_null($preview['preview'])) {
-            return null;
-        }
-
-        $preview['inputDateValue'] = '';
-        $preview['inputTimeValue'] = '';
-
-        if (isset($preview['preview']['due_date'])) {
-            $timestamp = strtotime($preview['preview']['due_date']);
-            $preview['inputDateValue'] = date('Y-m-d', $timestamp);
-            $preview['inputTimeValue'] = preg_match('/:/', $preview['preview']['due_date']) ? date('h:i', $timestamp) : '';
-        }
-
-        return $preview;
     }
 
     /**
-     * Get page title from route request uri
+     * Get user tiem format based user personalization
      */
-    private function getPageTitle($index = 0)
+    private function getTimeFormat($format = '12hr')
     {
-        return ucfirst(explode('/', request()->getRequestUri())[$index]);
+        return ['24hr' => 'H:i', '12hr' => ' h:i A'][$format];
     }
 
     /**
@@ -86,11 +71,7 @@ class DashboardTaskController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'priority' => ['required', Rule::in(['0', '1', '2', '3'])],
         ]);
-
         $validatedData['user_id'] = Auth::user()->id;
-        $validatedData['list_id'] = null;
-        $validatedData['tag_id'] = null;
-        $validatedData['notebook_id'] = null;
 
         TaskNote::create($validatedData);
 
@@ -115,38 +96,17 @@ class DashboardTaskController extends Controller
      */
     private function save(Request $request)
     {
-        $rules = [
-            'id' => ['required', 'present', 'numeric'],
-            'due_date' => ['nullable', 'present', 'date', 'date_format:Y-m-d'],
-            'time' => ['nullable', 'present', 'date_format:H:i'],
-            'reminder' => ['nullable', 'present', 'date_format:H:i'],
-            'title' => ['required', 'present', 'max:255', 'string'],
-            'description' => ['nullable', 'present', 'string'],
-        ];
+        $validatedFormData = $this->validateData($request);
+        $validatedFormData['due_date'] = $this->getTimestamp($validatedFormData['due_date']);
+        $validatedFormData['time'] = isset($validatedFormData['due_date']) ? $this->getTimestamp($validatedFormData['time']) : null;
 
-        if ($request->has('is_complete') === true) {
-            $rules['is_complete'] = ['required', 'present', 'boolean'];
-        }
-
-        $validatedFormData = $request->validate($rules);
-        $id = $validatedFormData['id'];
-        $userId = Auth::user()->id;
-
-        /**
-         * Time format to use :
-         * 1. 24hr : l, M j Y H:i
-         * 2. 12hr : l, M j Y h:i A
-         */
-        if ($validatedFormData['due_date'] == true || $validatedFormData['time'] == true) {
-            $validatedFormData['due_date'] = $this->getDueDate(
-                $validatedFormData['due_date'],
-                $validatedFormData['time']
-            );
-        }
-
-        $message = TaskNote::byUserAndId($id, $userId)
+        $message = TaskNote::byUserAndId($validatedFormData['id'], Auth::user()->id)
+            ->notCompleted()
+            ->notInTheList()
+            ->mustTask()
             ->update([
                 'due_date' => $validatedFormData['due_date'],
+                'time' => $validatedFormData['time'],
                 'reminder' => $validatedFormData['reminder'],
                 'title' => $validatedFormData['title'],
                 'description' => $validatedFormData['description'],
@@ -161,35 +121,13 @@ class DashboardTaskController extends Controller
      */
     private function delete(Request $reqeust)
     {
-        $id = $reqeust->input('id', null);
-        $userId = Auth::user()->id;
-        $currentDeletedTask = $reqeust->input('title', null);
+        $message = TaskNote::byUserAndId($reqeust->input('id', null), Auth::user()->id)
+            ->notCompleted()
+            ->notInTheList()
+            ->mustTask()
+            ->forceDelete() === 1 ? 'Successfully delete task "' . $reqeust->input('title', null) . '".' : "Task not found!";
 
-        // delete task using soft delete method
-        $message = TaskNote::byUserAndId($id, $userId)
-            ->delete() === 1 ? "Successfully deleted task \"$currentDeletedTask\"." : "Task not found!";
-        $previousUrl = explode("/$id", $reqeust->session()->previousUrl())[0];
-
-        return ['message' => $message, 'previous-url' => $previousUrl];
-    }
-
-    /**
-     * Set and return task due date
-     */
-    private function getDueDate(?string $dueDate, ?string $time)
-    {
-        $userTimeFormat = null;
-
-        if ($time == true) {
-            $timeFormat = ['24hr' => ' H:i', '12hr' => ' h:i A'];
-            $userTimeFormat = $timeFormat[json_decode(Auth::user()->personalization, true)['time-format']];
-        }
-
-        $timestamp = is_null($dueDate) ?
-            strtotime(date('M j Y') . "$time") :
-            strtotime("$dueDate $time");
-
-        return Carbon::now()->setTimestamp($timestamp)->format('l, M j Y' . $userTimeFormat);
+        return ['message' => $message, 'previous-url' => '/dashboard/task'];
     }
 
     /**
@@ -197,5 +135,34 @@ class DashboardTaskController extends Controller
      */
     private function setReminder(string $reminder)
     {
+    }
+
+    /**
+     * Return validated data
+     */
+    private function validateData(Request $request)
+    {
+        $rules = [
+            'id' => ['required', 'present', 'numeric', 'exists:task_notes,id'],
+            'due_date' => ['nullable', 'present', 'date', 'date_format:Y-m-d'],
+            'time' => ['nullable', 'present', 'date_format:H:i'],
+            'reminder' => ['nullable', 'present', 'date_format:H:i'],
+            'title' => ['required', 'present', 'max:255', 'string'],
+            'description' => ['nullable', 'present', 'string'],
+        ];
+
+        if ($request->has('is_complete') === true) {
+            $rules['is_complete'] = ['required', 'present', 'boolean'];
+        }
+
+        return $request->validate($rules);
+    }
+
+    /**
+     * Get timestamp for given date or time
+     */
+    private function getTimestamp($timestamp = null)
+    {
+        return is_string($timestamp) ? strtotime($timestamp) : null;
     }
 }

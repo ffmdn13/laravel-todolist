@@ -30,8 +30,10 @@ class Lists extends Model
      */
     public function scopeByListAndUser(Builder $query, $id, $userId)
     {
-        $query->where('list_id', $id)->where('user_id', $userId);
+        $query->where('id', $id)->where('user_id', $userId);
     }
+
+
 
     public function user()
     {

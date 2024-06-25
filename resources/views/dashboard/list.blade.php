@@ -22,7 +22,7 @@
             <header class="d-flex align-items-center justify-content-between">
                 <h1 class="overview-title">{{ $listTitle }}</h1>
                 <div class="d-flex align-items-center gap-2">
-                    <form action="/dashboard/lists/delete" method="POST">
+                    <form action="/dashboard/list/delete" method="POST">
                         @csrf
                         <input type="hidden" name="id" value="{{ $listId }}">
                         <button class="border-0 bg-transparent p-0" type="submit">
@@ -41,7 +41,7 @@
                                 <div class="modal-content">
                                     <div class="modal-body">
                                         <h1 class="overview-add-task-title mb-3">📜 Add new task</h1>
-                                        <form action="/dashboard/lists/add/task" method="POST">
+                                        <form action="/dashboard/list/add/task" method="POST">
                                             <input type="hidden" name="id" value="{{ $listId }}">
                                             <input type="text" name="title"
                                                 class="input-outline-off form-control mb-2 border-0 border-bottom"
@@ -91,7 +91,7 @@
                 <ul class="overview-items m-0 p-0 mt-4">
                     @foreach ($tasks as $task)
                         <li class="border rounded py-2 px-3 mb-2 cursor-pointer"
-                            onclick="window.location.href='/dashboard/lists/{{ $listId }}/{{ $listTitle }}?preview={{ $task->id }}'">
+                            onclick="window.location.href='/dashboard/list/{{ $listId }}/{{ $listTitle }}?preview={{ $task->id }}'">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="overview-item-title my-1 max-width-470">{{ $task->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
@@ -124,18 +124,20 @@
 
         {{-- list items preview start --}}
         <section>
-            @if (isset($preview))
-                <form action="/dashboard/lists/action" method="POST" class="p-4 h-100">
+            @if (isset($view))
+                <form action="/dashboard/list/action" method="POST" class="p-4 h-100">
                     @csrf
-                    <input type="hidden" name="id" value="{{ $preview['preview']->id }}">
+                    <input type="hidden" name="id" value="{{ $view->id }}">
+                    <input type="hidden" name="list_id" value="{{ $listId }}">
+                    <input type="hidden" name="list_title" value="{{ $listTitle }}">
 
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <div>
                             <label class="preview-due-date d-flex align-items-center gap-1" for="date"
                                 data-bs-toggle="modal" data-bs-target="#dueDateModal">
-                                @if ($preview['preview']->due_date)
+                                @if ($view->due_date)
                                     <i data-feather="calendar" class="icon-w-15 aspect-ratio"></i>
-                                    {{ $preview['preview']->due_date }}
+                                    {{ formatDateOrTime('l, M j Y', $view->due_date) . formatDateOrTime($timeFormat, $view->time) }}
                                 @else
                                     <span class="empty-due-date d-block rounded">Set due date</span>
                                 @endif
@@ -151,12 +153,13 @@
                                                     <label for="date" class="form-label">Date</label>
                                                     <input type="date" name="due_date" id="date"
                                                         class="form-control" aria-label="Date"
-                                                        value="{{ $preview['inputDateValue'] }}">
+                                                        value="{{ formatDateOrTime('Y-m-d', $view->due_date) }}">
                                                 </div>
                                                 <div class="col">
                                                     <label for="time" class="form-label">Time</label>
                                                     <input type="time" name="time" class="form-control"
-                                                        aria-label="Time" value="{{ $preview['inputTimeValue'] }}">
+                                                        aria-label="Time"
+                                                        value="{{ formatDateOrTime('h:i', $view->due_date) }}">
                                                 </div>
                                                 <div class="col">
                                                     <label for="reminder" class="form-label">Reminder</label>
@@ -170,20 +173,19 @@
                             </div>
                         </div>
 
-                        <i data-feather="flag"
-                            class="aspect-ratio icon-w-15 color-{{ $preview['preview']->priority }}"></i>
+                        <i data-feather="flag" class="aspect-ratio icon-w-15 color-{{ $view->priority }}"></i>
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between">
                         <input type="text" name="title" class="preview-title mb-2 border-0 bg-transparent w-100 p-0"
-                            value="{{ $preview['preview']->title }}">
+                            value="{{ $view->title }}">
                         <input class="preview-complete-btn aspect-ratio" type="checkbox" name="is_complete"
-                            value="1" @if ($preview['preview']->is_complete == 1) checked @endif>
+                            value="1" @if ($view->is_complete == 1) checked @endif>
                     </div>
 
                     <div>
-                        <input type="hidden" id="x" value="{{ $preview['preview']->description }}"
-                            placeholder="Description" name="description">
+                        <input type="hidden" id="x" value="{{ $view->description }}" placeholder="Description"
+                            name="description">
                         <div class="d-flex flex-column-reverse">
                             <div class="d-flex align-items-center justify-content-between">
                                 <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>

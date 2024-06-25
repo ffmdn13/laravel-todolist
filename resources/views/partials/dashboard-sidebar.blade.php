@@ -87,7 +87,7 @@
                     <div class="modal-content">
                         <div class="modal-body">
                             <h1 class="add-new-list-heading mb-3">📋 Add new list</h1>
-                            <form action="/dashboard/lists/add" method="POST">
+                            <form action="/dashboard/list/add" method="POST">
                                 @csrf
                                 <div class="mb-3">
                                     <input type="text" class="form-control border-0 border-bottom"
@@ -102,7 +102,7 @@
         </li>
         <div class="collapse" id="listCollapse">
             @foreach ($lists as $list)
-                <div onclick="window.location.href='/dashboard/lists/{{ $list->id }}/{{ $list->title }}'"
+                <div onclick="window.location.href='/dashboard/list/{{ $list->id }}/{{ $list->title }}'"
                     class="list-card p-2 d-flex align-items-center justify-content-between">
                     {{ $list->title }}
                 </div>
