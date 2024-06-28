@@ -30,6 +30,7 @@ class DashboardTrashController extends Controller
     public function view($id, $title)
     {
         $user = Auth::user();
+
         return response()->view('dashboard.trashed-view', [
             'title' => $title,
             'item' => $this->getViewItem($id, $user->id),
@@ -171,7 +172,7 @@ class DashboardTrashController extends Controller
     private function validateData(Request $request)
     {
         return $request->validate([
-            'id' => ['required', 'present', 'numeric', 'exists:task_notes,id'],
+            'id' => ['required', 'present', 'numeric'],
             'title' => ['required', 'present', 'max:255', 'string'],
             'description' => ['nullable', 'present', 'string'],
         ]);

@@ -42,7 +42,7 @@
                                                 class="input-outline-off form-control mb-2 border-0 border-bottom"
                                                 placeholder="Title" aria-label="Title" value="Untitled">
                                             @csrf
-                                            <button class="overview-add-task-btn mt-2" type="submit">Add</button>
+                                            <button class="overview-add-task-btn border-0 mt-2" type="submit">Add</button>
                                         </form>
                                     </div>
                                 </div>
@@ -78,7 +78,7 @@
                 <ul class="overview-items m-0 p-0 mt-4">
                     @foreach ($notes as $note)
                         <li class="border rounded py-2 px-3 mb-2 cursor-pointer"
-                            onclick="window.location.href='/dashboard/note/{{ $note->id }}'">
+                            onclick="window.location.href='/dashboard/note/{{ $note->id }}/{{ $note->title }}'">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="overview-item-title my-1 max-width-470">{{ $note->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
@@ -105,19 +105,19 @@
 
         {{-- Note preview start --}}
         <section class="p-4">
-            @if (isset($preview))
+            @if (isset($view))
                 <form action="/dashboard/note/action" method="POST">
                     @csrf
 
-                    <input type="hidden" name="id" value="{{ $preview->id }}">
+                    <input type="hidden" name="id" value="{{ $view->id }}">
 
                     <div class="d-flex align-items-center justify-content-between">
                         <input type="text" name="title" class="preview-title mb-2 border-0 bg-transparent w-100 p-0"
-                            value="{{ $preview->title }}">
+                            value="{{ $view->title }}">
                     </div>
 
                     <input type="hidden" id="x" placeholder="Description" name="description"
-                        value="{{ $preview->description }}">
+                        value="{{ $view->description }}">
 
                     <div class="d-flex flex-column-reverse">
                         <div class="d-flex align-items-center justify-content-between">
@@ -140,7 +140,7 @@
                                     </li>
                                     <li class="dropdown-item">
                                         <button class="border-0 bg-transparent" name="action" value="shortcut">
-                                            {{ $preview->is_shortcut == 0 ? 'Add to shortcut' : 'Remove from shortcut' }}
+                                            {{ $view->is_shortcut == 0 ? 'Add to shortcut' : 'Remove from shortcut' }}
                                         </button>
                                     </li>
                                 </ul>
@@ -156,7 +156,7 @@
                 <div class="empty-preview p-4 d-flex flex-column align-items-center justify-content-center h-100">
                     <div class="mb-1">
                         <i data-feather="book-open" class="empty-preview-icon aspect-ratio mx-auto mb-2 d-block"></i>
-                        <h6 class="empty-preview-title">There's no task to view here</h6>
+                        <h6 class="empty-preview-title">There's no note to view here</h6>
                     </div>
                     <span class="empty-preview-desc">
                         Click one to view here.

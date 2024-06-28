@@ -86,7 +86,7 @@
                 <ul class="overview-items m-0 p-0 mt-4">
                     @foreach ($notes as $note)
                         <li class="border rounded py-2 px-3 mb-2 cursor-pointer"
-                            onclick="window.location.href='/dashboard/notebook/{{ $notebookId }}/{{ $notebookTitle }}?preview={{ $note->id }}'">
+                            onclick="window.location.href='/dashboard/notebook/{{ $notebookId }}/{{ $notebookTitle }}?view={{ $note->id }}'">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="overview-item-title my-1">{{ $note->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
@@ -115,18 +115,20 @@
 
         {{-- notebooks items preview start --}}
         <section class="p-4">
-            @if (isset($preview))
+            @if (isset($view))
                 <form action="/dashboard/notebook/action" method="POST">
                     @csrf
-                    <input type="hidden" name="id" value="{{ $preview->id }}">
+                    <input type="hidden" name="id" value="{{ $view->id }}">
+                    <input type="hidden" name="notebook_id" value="{{ $notebookId }}">
+                    <input type="hidden" name="notebook_title" value="{{ $notebookTitle }}">
 
                     <div class="d-flex align-items-center justify-content-between">
                         <input type="text" name="title" class="preview-title mb-2 border-0 bg-transparent w-100 p-0"
-                            value="{{ $preview->title }}">
+                            value="{{ $view->title }}">
                     </div>
 
                     <input type="hidden" id="x" placeholder="Description" name="description"
-                        value="{{ $preview->description }}">
+                        value="{{ $view->description }}">
                     <div class="d-flex flex-column-reverse">
                         <div class="d-flex align-items-center justify-content-between">
                             <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>
@@ -148,7 +150,7 @@
                                     </li>
                                     <li class="dropdown-item">
                                         <button class="border-0 bg-transparent" name="action" value="shortcut">
-                                            {{ $preview->is_shortcut == 0 ? 'Add to shortcut' : 'Remove from shortcut' }}
+                                            {{ $view->is_shortcut == 0 ? 'Add to shortcut' : 'Remove from shortcut' }}
                                         </button>
                                     </li>
                                 </ul>

@@ -52,11 +52,19 @@ class TaskNote extends Model
     }
 
     /**
-     * Filter query by list_id column with 0 value
+     * Filter query by list_id column with null value
      */
     public function scopeNotInTheList(Builder $query)
     {
         $query->where('list_id', null);
+    }
+
+    /**
+     * Filter query by noebook_id volumn with null value
+     */
+    public function scopeNotInTheNotebook(Builder $query)
+    {
+        $query->where('notebook_id', null);
     }
 
     /**

@@ -13,12 +13,12 @@ class DashboardTodayController extends Controller
     /**
      * Render dashboard noe page
      */
-    public function index($id = null)
+    public function index($id = null, $title = 'Today Task')
     {
         $user = Auth::user();
 
         return response()->view('dashboard.today', [
-            'title' => 'Today',
+            'title' => $title,
             'tasks' => $this->getItems($user),
             'view' => $this->view($id, $user->id),
             'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format'])

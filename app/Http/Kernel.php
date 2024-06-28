@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'ensure' => \App\Http\Middleware\EnsureDataBelongsToUser::class,
         'verify.list' => \App\Http\Middleware\IsListExist::class,
-        'verify.tag' => \App\Http\Middleware\IsTagExists::class
+        'verify.tag' => \App\Http\Middleware\IsTagExists::class,
+        'verify.notebook' => \App\Http\Middleware\IsNotebookExists::class
     ];
 }

@@ -63,7 +63,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     /**
      * Controller for task dashboard page
      */
-    Route::get('/task/{id?}', [DashboardTaskController::class, 'index'])
+    Route::get('/task/{id?}/{title?}', [DashboardTaskController::class, 'index'])
         ->whereNumber('id');
     Route::post('/task/add', [DashboardTaskController::class, 'add']);
     Route::post('/task/action', [DashboardTaskController::class, 'action']);
@@ -71,7 +71,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     /**
      * Controller for note dashboard page
      */
-    Route::get('/note/{id?}', [DashboardNoteController::class, 'index'])
+    Route::get('/note/{id?}/{title?}', [DashboardNoteController::class, 'index'])
         ->whereNumber('id');
     Route::post('note/add', [DashboardNoteController::class, 'add']);
     Route::post('/note/action', [DashboardNoteController::class, 'action']);
@@ -110,7 +110,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
      * Controller for notebook dashboard page
      */
     Route::get('/notebook/{id}/{title}', [DashboardNotebookController::class, 'index'])
-        ->middleware('ensure:notebooks;3,false')
+        ->middleware('verify.notebook')
         ->whereNumber('id');
     Route::post('/notebook/add', [DashboardNotebookController::class, 'add']);
     Route::post('/notebook/add/note', [DashboardNotebookController::class, 'addNote']);
@@ -120,15 +120,10 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     /**
      * Controller fot today dashboard page
      */
-    Route::get('/today/{id?}', [DashboardTodayController::class, 'index'])
+    Route::get('/today/{id?}/{title?}', [DashboardTodayController::class, 'index'])
         ->whereNumber('id');
     Route::post('/today/add', [DashboardTodayController::class, 'add']);
     Route::post('/today/action', [DashboardTodayController::class, 'action']);
-
-    /**
-     * Controller next7days dashboard page
-     */
-    Route::get('/next7days', [DashboardNext7DaysController::class, 'index']);
 
     /**
      * Controller for complete dsahboard page

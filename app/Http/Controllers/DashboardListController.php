@@ -23,7 +23,7 @@ class DashboardListController extends Controller
             'listId' => $id,
             'listTitle' => $title,
             'tasks' => $this->getItems($id, $user->id),
-            'view' => $this->view($request->query('preview', null), $id),
+            'view' => $this->view($request->query('view', null), $id, $user->id),
             'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
         ]);
     }
@@ -40,9 +40,9 @@ class DashboardListController extends Controller
             ->get();
     }
 
-    private function view($preview, $listId)
+    private function view($id, $listId, $userId)
     {
-        $validator = Validator::make(['view' => $preview], [
+        $validator = Validator::make(['view' => $id], [
             'view' => ['numeric', 'exists:task_notes,id']
         ]);
 
@@ -52,7 +52,7 @@ class DashboardListController extends Controller
 
         return TaskNote::select(['id', 'title', 'description', 'priority', 'due_date', 'time', 'reminder', 'is_complete'])
             ->where('id', $validator->getData()['view'])
-            ->byListAndUser($listId, Auth::user()->id)
+            ->byListAndUser($listId, $userId)
             ->notCompleted()
             ->mustTask()
             ->firstOrFail();

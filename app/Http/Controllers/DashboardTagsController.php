@@ -15,7 +15,7 @@ class DashboardTagsController extends Controller
     /**
      * Render dashboard task page
      */
-    public function index(Request $request, $id, $title)
+    public function index(Request $request, $id, $title = 'Tag')
     {
         $user = Auth::user();
 
@@ -24,7 +24,7 @@ class DashboardTagsController extends Controller
             'tagId' => $id,
             'tagTitle' => $title,
             'tasks' => $this->getItems($id, $user->id),
-            'view' => $this->view($request->query('view', null), $id),
+            'view' => $this->view($request->query('view', null), $id, $user->id),
             'color' => $request->query('clr', null),
             'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format'])
         ]);
@@ -42,7 +42,7 @@ class DashboardTagsController extends Controller
             ->get();
     }
 
-    private function view($view, $tagId)
+    private function view($view, $tagId, $userId)
     {
         $validator = Validator::make(['view' => $view], [
             'view' => ['numeric', 'exists:task_notes,id']
@@ -54,7 +54,7 @@ class DashboardTagsController extends Controller
 
         return TaskNote::select(['id', 'title', 'description', 'priority', 'due_date', 'reminder', 'is_complete'])
             ->where('id', $validator->getData()['view'])
-            ->byTagAndUser($tagId, Auth::user()->id)
+            ->byTagAndUser($tagId, $userId)
             ->notCompleted()
             ->mustTask()
             ->firstOrFail();

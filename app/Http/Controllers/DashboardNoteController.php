@@ -12,47 +12,45 @@ class DashboardNoteController extends Controller
     /**
      * Render dashboard note page
      */
-    public function index($id = null)
+    public function index($id = null, $title = 'Note')
     {
+        $user = Auth::user();
+
         return response()->view('dashboard.note', [
-            'title' => $this->getPageTitle(2),
-            'notes' => TaskNote::whereBelongsTo(Auth::user(), 'user')
-                ->notTrashed()
-                ->mustNote()
-                ->get(['id', 'title', 'due_date', 'notebook_id']),
-            'preview' => $this->getNotePreview($id)
+            'title' => $title,
+            'notes' => $this->getItems($user),
+            'view' => $this->view($id, $user->id)
         ]);
     }
 
     /**
-     * Get page title from route request uri
+     * Return all note data that related to user
      */
-    private function getPageTitle($index = 0)
+    private function getItems($user)
     {
-        return ucfirst(explode('/', request()->getRequestUri())[$index]);
+        return TaskNote::select(['id', 'title', 'due_date'])
+            ->whereBelongsTo($user, 'user')
+            ->notInTheNotebook()
+            ->notTrashed()
+            ->mustNote()
+            ->get();
     }
 
     /**
      * Return preview of note data
      */
-    private function getNotePreview($id)
+    private function view($id, $userId)
     {
         if (is_null($id)) {
             return null;
         }
 
-        $preview = TaskNote::select(['id', 'title', 'description', 'is_shortcut'])
-            ->byUserAndId($id, Auth::user()->id)
+        return TaskNote::select(['id', 'title', 'description', 'is_shortcut'])
+            ->byUserAndId($id, $userId)
             ->notTrashed()
-            ->notCompleted()
+            ->notInTheNotebook()
             ->mustNote()
-            ->first();
-
-        if (is_null($preview)) {
-            return null;
-        }
-
-        return $preview;
+            ->firstOrFail();
     }
 
     /**
@@ -61,22 +59,12 @@ class DashboardNoteController extends Controller
     public function add(Request $request)
     {
         $validatedData = $request->validate(['title' => ['required', 'string', 'max:255']]);
+        $validatedData['user_id'] = Auth::user()->id;
+        $validatedData['due_date'] = time();
 
-        TaskNote::create([
-            'title' => $validatedData['title'],
-            'description' => null,
-            'due_date' => (string) time(),
-            'reminder' => null,
-            'priority' => 0,
-            'type' => 'note',
-            'is_complete' => 0,
-            'is_trash' => 0,
-            'is_shortcut' => 0,
-            'list_id' => null,
-            'notebook_id' => null,
-            'tag_id' => null,
-            'user_id' => Auth::user()->id
-        ]);
+        $validatedData['type'] = 'note';
+
+        TaskNote::create($validatedData);
 
         return redirect('/dashboard/note/', 302)
             ->with('message', 'Successfully added note "' . $validatedData['title'] . '"');
@@ -90,8 +78,8 @@ class DashboardNoteController extends Controller
         $action = $request->validate(['action' => ['required', 'present', Rule::in(['save', 'delete', 'shortcut'])]]);
         $message = call_user_func([__CLASS__, $action['action']], $request);
 
-        return redirect($request->session()->previousUrl(), 302)
-            ->with('message', $message);
+        return redirect($message['previous-url'], 302)
+            ->with('message', $message['message']);
     }
 
     /**
@@ -99,21 +87,20 @@ class DashboardNoteController extends Controller
      */
     private function save(Request $request)
     {
-        $rules = [
-            'id' => ['required', 'present', 'numeric'],
-            'title' => ['required', 'present', 'max:255', 'string'],
-            'description' => ['nullable', 'present', 'string'],
-        ];
-
-        $validatedFormData = $request->validate($rules);
+        $validatedFormData = $this->validateData($request);
         $userId = Auth::user()->id;
 
-        return TaskNote::byUserAndId($validatedFormData['id'], $userId)
+        $message = TaskNote::byUserAndId($validatedFormData['id'], $userId)
+            ->notTrashed()
+            ->notInTheList()
             ->mustNote()
             ->update([
                 'title' => $validatedFormData['title'],
                 'description' => $validatedFormData['description'],
-            ]) === 1 ? 'Successfully updated task "' . $validatedFormData['title'] . '"' : 'Task not found!';
+                'due_date' => time()
+            ]) === 1 ? 'Successfully updated note "' . $validatedFormData['title'] . '"' : 'Note not found!';
+
+        return ['message' => $message, 'previous-url' => $request->session()->previousUrl()];
     }
 
     /**
@@ -121,14 +108,13 @@ class DashboardNoteController extends Controller
      */
     private function delete(Request $reqeust)
     {
-        $id = $reqeust->input('id', null);
-        $userId = Auth::user()->id;
-        $currentDeletedNote = $reqeust->input('title', null);
-
-        // delete task using soft delete method
-        return TaskNote::byUserAndId($id, $userId)
+        $message = TaskNote::byUserAndId($reqeust->input('id', null), Auth::user()->id)
+            ->notTrashed()
+            ->notInTheNotebook()
             ->mustNote()
-            ->delete() === 1 ? "Successfully deleted note \"$currentDeletedNote\"." : "Note not found!";
+            ->delete() === 1 ? 'Successfully deleted note "' . $reqeust->input('title', null) . '".'  : "Note not found!";
+
+        return ['message' => $message, 'previous-url' => '/dashboard/note'];
     }
 
     /**
@@ -138,8 +124,10 @@ class DashboardNoteController extends Controller
     {
         $note = TaskNote::select(['id', 'is_shortcut', 'title'])
             ->byUserAndId($request->input('id'), Auth::user()->id)
+            ->notTrashed()
+            ->notInTheNotebook()
             ->mustNote()
-            ->first();
+            ->firstOrFail();
 
         if ($note->is_shortcut === 0) {
             $note->is_shortcut = 1;
@@ -151,6 +139,18 @@ class DashboardNoteController extends Controller
 
         $note->save();
 
-        return $message;
+        return ['message' => $message, 'previous-url' => $request->session()->previousUrl()];
+    }
+
+    /**
+     * Return validated data
+     */
+    private function validateData(Request $request)
+    {
+        return $request->validate([
+            'id' => ['required', 'present', 'numeric'],
+            'title' => ['required', 'present', 'max:255', 'string'],
+            'description' => ['nullable', 'present', 'string']
+        ]);
     }
 }
