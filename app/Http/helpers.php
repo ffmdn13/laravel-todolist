@@ -43,7 +43,9 @@ function formatDateOrTime(?string $format = null, ?int $timestamp = null, string
 
 function getSortByDelimiter($url)
 {
-    return $url .= preg_match('/\?/', request()->fullUrl()) === 1 ? '&' : '?';
+    $url = request()->fullUrlWithoutQuery(['order', 'direction']);
+
+    return $url .= preg_match('/\?/', $url) === 1 ? '&' : '?';
 }
 
 /**

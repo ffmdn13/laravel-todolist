@@ -149,7 +149,7 @@ class TaskNote extends Model
     public function scopeOrderedBy(Builder $query, $order = null)
     {
         $query->when(isset($order), function ($query) use ($order) {
-            return $query->orderBy($order);
+            return $query->orderBy($order['order'], $order['direction']);
         });
     }
 

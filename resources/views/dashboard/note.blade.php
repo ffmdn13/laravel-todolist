@@ -57,9 +57,9 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li class="overview-dropdown-sliders px-3">Sort by</li>
-                            <li class="dropdown-item"><a href=""
+                            <li class="dropdown-item"><a href="{{ $url . 'order=title' }}"
                                     class="text-decoration-none overview-dropdown-clr-black">Title</a></li>
-                            <li class="dropdown-item"><a href=""
+                            <li class="dropdown-item"><a href="{{ $url . 'order=due_date&direction=desc' }}"
                                     class="text-decoration-none overview-dropdown-clr-black">Date created</a></li>
                         </ul>
                     </div>
@@ -106,51 +106,51 @@
         {{-- Note preview start --}}
         <section class="p-4">
             @if (isset($view))
-                <form action="/dashboard/note/action" method="POST">
+                <form action="/dashboard/note/action" method="POST" class="d-flex flex-column gap-1 h-100">
                     @csrf
-
                     <input type="hidden" name="id" value="{{ $view->id }}">
 
                     <div class="d-flex align-items-center justify-content-between">
-                        <input type="text" name="title" class="preview-title mb-2 border-0 bg-transparent w-100 p-0"
+                        <input type="text" name="title" class="preview-title border-0 bg-transparent w-100 p-0"
                             value="{{ $view->title }}">
                     </div>
 
-                    <input type="hidden" id="x" placeholder="Description" name="description"
-                        value="{{ $view->description }}">
+                    <div class="flex-fill">
+                        <input type="hidden" id="x" placeholder="Description" name="description"
+                            value="{{ $view->description }}">
 
-                    <div class="d-flex flex-column-reverse">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>
-                            <div>
-                                <a href=""
-                                    class="preview-save-btn text-decoration-none border-0 d-flex align-items-center gap-1"
-                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i data-feather="chevron-up" class="aspect-ratio icon-w-19 order-1"></i>
-                                    Action
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="dropdown-item">
-                                        <button class="border-0 bg-transparent" name="action"
-                                            value="save">Save</button>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <button class="border-0 bg-transparent" name="action"
-                                            value="delete">Delete</button>
-                                    </li>
-                                    <li class="dropdown-item">
-                                        <button class="border-0 bg-transparent" name="action" value="shortcut">
-                                            {{ $view->is_shortcut == 0 ? 'Add to shortcut' : 'Remove from shortcut' }}
-                                        </button>
-                                    </li>
-                                </ul>
+                        <div class="d-flex flex-column-reverse h-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>
+                                <div>
+                                    <a href=""
+                                        class="preview-save-btn text-decoration-none border-0 d-flex align-items-center gap-1"
+                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i data-feather="chevron-up" class="aspect-ratio icon-w-19 order-1"></i>
+                                        Action
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-item">
+                                            <button class="border-0 bg-transparent" name="action"
+                                                value="save">Save</button>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <button class="border-0 bg-transparent" name="action"
+                                                value="delete">Delete</button>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <button class="border-0 bg-transparent" name="action" value="shortcut">
+                                                {{ $view->is_shortcut == 0 ? 'Add to shortcut' : 'Remove from shortcut' }}
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
 
-                        <trix-editor toolbar="trix-toolbar-1" input="x"
-                            class="custom-trix trix-height-475 border-0 overflow-auto"
-                            placeholder="Description"></trix-editor>
-                    </div>
+                            <trix-editor toolbar="trix-toolbar-1" input="x"
+                                class="custom-trix border-0 p-0 overflow-auto h-100"
+                                placeholder="Description"></trix-editor>
+                        </div>
                 </form>
             @else
                 <div class="empty-preview p-4 d-flex flex-column align-items-center justify-content-center h-100">

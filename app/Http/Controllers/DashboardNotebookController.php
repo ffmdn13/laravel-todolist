@@ -22,16 +22,18 @@ class DashboardNotebookController extends Controller
             'title' => $title,
             'notebookId' => $id,
             'notebookTitle' => $title,
-            'notes' => $this->getItems($id, $user->id),
-            'view' => $this->view($request->query('view', null), $id, $user->id)
+            'notes' => $this->getItems($id, $user->id, $request->query('order', null)),
+            'view' => $this->view($request->query('view', null), $id, $user->id),
+            'url' => getSortByDelimiter($request->fullUrl())
         ]);
     }
 
-    private function getItems($id, $userId)
+    private function getItems($id, $userId, $order)
     {
         return TaskNote::select(['id', 'title', 'due_date'])
             ->byNotebookAndUser($id, $userId)
             ->notTrashed()
+            ->orderedBy($this->valiatedOrderByParam($order))
             ->get();
     }
 
@@ -179,5 +181,19 @@ class DashboardNotebookController extends Controller
             'title' => ['required', 'present', 'max:255', 'string'],
             'description' => ['nullable', 'present', 'string']
         ]);
+    }
+
+    /**
+     * Validate given order by query parameters
+     */
+    private function valiatedOrderByParam($order)
+    {
+        $direction = 'asc';
+
+        if (request()->has('direction')) {
+            $direction = in_array(request()->query('direction'), ['asc', 'desc']) ? request()->query('direction') : null;
+        }
+
+        return in_array($order, ['title', 'due_date', 'priority'], true) ? ['order' => $order, 'direction' => $direction] : null;
     }
 }

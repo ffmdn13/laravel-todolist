@@ -21,6 +21,7 @@ class DashboardTaskController extends Controller
             'tasks' => $this->getItems($user, $request->query('order', null)),
             'view' => $this->view($id, $user->id),
             'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
+            'url' => getSortByDelimiter($request->fullUrl())
         ]);
     }
 
@@ -172,6 +173,12 @@ class DashboardTaskController extends Controller
      */
     private function valiatedOrderByParam($order)
     {
-        return in_array($order, ['title', 'due_date', 'priority'], true) ? $order : null;
+        $direction = 'asc';
+
+        if (request()->has('direction')) {
+            $direction = in_array(request()->query('direction'), ['asc', 'desc']) ? request()->query('direction') : null;
+        }
+
+        return in_array($order, ['title', 'due_date', 'priority'], true) ? ['order' => $order, 'direction' => $direction] : null;
     }
 }

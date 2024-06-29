@@ -61,8 +61,6 @@
                             <i data-feather="sliders" class="aspect-ratio icon-w-19"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            @php($url = getSortByDelimiter(request()->fullUrl()))
-
                             <li class="overview-dropdown-sliders px-3">Sort by</li>
                             <li class="dropdown-item"><a href="{{ $url . 'order=title' }}"
                                     class="text-decoration-none overview-dropdown-clr-black">Title</a></li>

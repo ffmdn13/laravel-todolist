@@ -23,22 +23,24 @@ class DashboardTagsController extends Controller
             'title' => $title,
             'tagId' => $id,
             'tagTitle' => $title,
-            'tasks' => $this->getItems($id, $user->id),
+            'tasks' => $this->getItems($id, $user->id, $request->query('order', null)),
             'view' => $this->view($request->query('view', null), $id, $user->id),
             'color' => $request->query('clr', null),
-            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format'])
+            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
+            'url' => getSortByDelimiter($request->fullUrl())
         ]);
     }
 
     /**
      * Return tasks related to current tag
      */
-    private function getItems($tagId, $userId)
+    private function getItems($tagId, $userId, $order)
     {
         return TaskNote::select(['id', 'title', 'priority', 'reminder', 'due_date'])
             ->byTagAndUser($tagId, $userId)
             ->notCompleted()
             ->mustTask()
+            ->orderedBy($this->valiatedOrderByParam($order))
             ->get();
     }
 
@@ -201,5 +203,19 @@ class DashboardTagsController extends Controller
     private function getTimestamp($timestamp = null)
     {
         return is_string($timestamp) ? strtotime($timestamp) : null;
+    }
+
+    /**
+     * Validate given order by query parameters
+     */
+    private function valiatedOrderByParam($order)
+    {
+        $direction = 'asc';
+
+        if (request()->has('direction')) {
+            $direction = in_array(request()->query('direction'), ['asc', 'desc']) ? request()->query('direction') : null;
+        }
+
+        return in_array($order, ['title', 'due_date', 'priority'], true) ? ['order' => $order, 'direction' => $direction] : null;
     }
 }

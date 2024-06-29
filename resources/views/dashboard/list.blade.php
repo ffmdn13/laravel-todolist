@@ -68,12 +68,11 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li class="overview-dropdown-sliders px-3">Sort by</li>
-                            <li class="dropdown-item"><a href=""
+                            <li class="dropdown-item"><a href="{{ $url . 'order=title' }}"
                                     class="text-decoration-none overview-dropdown-clr-black">Title</a></li>
-                            <li class="dropdown-item">
-                                <a href="" class="text-decoration-none overview-dropdown-clr-black">Due date</a>
-                            </li>
-                            <li class="dropdown-item"><a href=""
+                            <li class="dropdown-item"><a href="{{ $url . 'order=due_date' }}"
+                                    class="text-decoration-none overview-dropdown-clr-black">Due date</a></li>
+                            <li class="dropdown-item"><a href="{{ $url . 'order=priority' }}"
                                     class="text-decoration-none overview-dropdown-clr-black">Priority</a></li>
                         </ul>
                     </div>
@@ -123,15 +122,15 @@
         {{-- list items section end --}}
 
         {{-- list items preview start --}}
-        <section>
+        <section class="p-4">
             @if (isset($view))
-                <form action="/dashboard/list/action" method="POST" class="p-4 h-100">
+                <form action="/dashboard/list/action" method="POST" class="d-flex flex-column gap-1 h-100">
                     @csrf
                     <input type="hidden" name="id" value="{{ $view->id }}">
                     <input type="hidden" name="list_id" value="{{ $listId }}">
                     <input type="hidden" name="list_title" value="{{ $listTitle }}">
 
-                    <div class="d-flex align-items-center justify-content-between mb-2">
+                    <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <label class="preview-due-date d-flex align-items-center gap-1" for="date"
                                 data-bs-toggle="modal" data-bs-target="#dueDateModal">
@@ -183,10 +182,11 @@
                             value="1" @if ($view->is_complete == 1) checked @endif>
                     </div>
 
-                    <div>
+                    <div class="flex-fill">
                         <input type="hidden" id="x" value="{{ $view->description }}" placeholder="Description"
                             name="description">
-                        <div class="d-flex flex-column-reverse">
+
+                        <div class="d-flex flex-column-reverse h-100">
                             <div class="d-flex align-items-center justify-content-between">
                                 <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>
                                 <div>
@@ -209,7 +209,8 @@
                                 </div>
                             </div>
                             <trix-editor toolbar="trix-toolbar-1" input="x"
-                                class="custom-trix p-0 border-0 overflow-auto" placeholder="Description"></trix-editor>
+                                class="custom-trix p-0 border-0 overflow-auto h-100"
+                                placeholder="Description"></trix-editor>
                         </div>
                     </div>
                 </form>
