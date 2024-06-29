@@ -16,7 +16,7 @@
     <div class="grid-for-task-note-layout">
 
         {{-- Task items list start --}}
-        <section class="p-4 border-end min-vh-100">
+        <section class="p-4 border-end">
 
             <header class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-1">
@@ -61,19 +61,21 @@
                             <i data-feather="sliders" class="aspect-ratio icon-w-19"></i>
                         </a>
                         <ul class="dropdown-menu">
+                            @php($url = getSortByDelimiter(request()->fullUrl()))
+
                             <li class="overview-dropdown-sliders px-3">Sort by</li>
-                            <li class="dropdown-item"><a href=""
+                            <li class="dropdown-item"><a href="{{ $url . 'order=title' }}"
                                     class="text-decoration-none overview-dropdown-clr-black">Title</a></li>
-                            <li class="dropdown-item"><a href=""
+                            <li class="dropdown-item"><a href="{{ $url . 'order=due_date' }}"
                                     class="text-decoration-none overview-dropdown-clr-black">Due date</a></li>
-                            <li class="dropdown-item"><a href=""
+                            <li class="dropdown-item"><a href="{{ $url . 'order=priority' }}"
                                     class="text-decoration-none overview-dropdown-clr-black">Priority</a></li>
                         </ul>
                     </div>
                 </div>
             </header>
 
-            <div class="border-bottom pb-2">
+            <div class="border-bottom pb-2 mb-4">
                 <span class="text-black-50 d-block mt-2">
                     @php($count = $tasks->count())
                     {{ $count > 1 ? "$count Tasks" : "$count Task" }}
@@ -81,7 +83,7 @@
             </div>
 
             @if ($tasks->isNotEmpty())
-                <ul class="overview-items m-0 p-0 mt-4">
+                <ul class="overview-items m-0 p-0">
                     @foreach ($tasks as $task)
                         <li class="border rounded py-2 px-3 mb-2 cursor-pointer"
                             onclick="window.location.href='/dashboard/task/{{ $task->id }}'">
@@ -115,13 +117,13 @@
         {{-- Task items list end --}}
 
         {{-- Task preview start --}}
-        <section>
+        <section class="p-4">
             @if (isset($view))
-                <form action="/dashboard/task/action" method="POST" class="p-4 h-100">
+                <form action="/dashboard/task/action" method="POST" class="d-flex flex-column gap-1 h-100">
                     @csrf
                     <input type="hidden" name="id" value="{{ $view->id }}">
 
-                    <div class="d-flex align-items-center justify-content-between mb-2">
+                    <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <label class="preview-due-date d-flex align-items-center gap-1" for="date"
                                 data-bs-toggle="modal" data-bs-target="#dueDateModal">
@@ -167,17 +169,17 @@
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between">
-                        <input type="text" name="title" class="preview-title mb-2 border-0 bg-transparent w-100 p-0"
+                        <input type="text" name="title" class="preview-title border-0 bg-transparent w-100 p-0"
                             value="{{ $view->title }}">
                         <input class="preview-complete-btn aspect-ratio" type="checkbox" name="is_complete"
                             value="1" @if ($view->is_complete == 1) checked @endif>
                     </div>
 
-                    <div>
+                    <div class="flex-fill">
                         <input type="hidden" id="x" placeholder="Description" name="description"
                             value="{{ $view->description }}">
 
-                        <div class="d-flex flex-column-reverse">
+                        <div class="d-flex flex-column-reverse h-100">
                             <div class="d-flex align-items-center justify-content-between">
                                 <trix-toolbar class="mt-2" id="trix-toolbar-1"></trix-toolbar>
                                 <div>
@@ -201,7 +203,8 @@
                             </div>
 
                             <trix-editor toolbar="trix-toolbar-1" input="x"
-                                class="custom-trix p-0 border-0 overflow-auto" placeholder="Description"></trix-editor>
+                                class="custom-trix p-0 border-0 p-0 overflow-auto h-100"
+                                placeholder="Description"></trix-editor>
                         </div>
                     </div>
                 </form>

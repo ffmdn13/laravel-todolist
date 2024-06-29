@@ -41,6 +41,11 @@ function formatDateOrTime(?string $format = null, ?int $timestamp = null, string
     return date($format, $timestamp);
 }
 
+function getSortByDelimiter($url)
+{
+    return $url .= preg_match('/\?/', request()->fullUrl()) === 1 ? '&' : '?';
+}
+
 /**
  * Return Lists model for blade template that rendered by @include directive
  */

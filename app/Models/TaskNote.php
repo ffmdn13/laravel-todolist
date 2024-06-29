@@ -144,6 +144,16 @@ class TaskNote extends Model
     }
 
     /**
+     * Order query by given data
+     */
+    public function scopeOrderedBy(Builder $query, $order = null)
+    {
+        $query->when(isset($order), function ($query) use ($order) {
+            return $query->orderBy($order);
+        });
+    }
+
+    /**
      * Return a specific User record that relaed to specific TaskNote record
      */
     public function user()

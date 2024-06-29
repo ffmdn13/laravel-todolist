@@ -12,13 +12,13 @@ class DashboardTaskController extends Controller
     /**
      * Render dashboard task page
      */
-    public function index($id = null, $title = 'Task')
+    public function index(Request $request, $id = null, $title = 'Task')
     {
         $user = Auth::user();
 
         return response()->view('dashboard.task', [
             'title' => $title,
-            'tasks' => $this->getItems($user),
+            'tasks' => $this->getItems($user, $request->query('order', null)),
             'view' => $this->view($id, $user->id),
             'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
         ]);
@@ -27,13 +27,14 @@ class DashboardTaskController extends Controller
     /**
      * Get user related list task
      */
-    private function getItems($user)
+    private function getItems($user, $order)
     {
         return TaskNote::select(['id', 'title', 'priority', 'due_date', 'reminder'])
             ->whereBelongsTo($user, 'user')
             ->notInTheList()
             ->notCompleted()
             ->mustTask()
+            ->orderedBy($this->valiatedOrderByParam($order))
             ->get();
     }
 
@@ -164,5 +165,13 @@ class DashboardTaskController extends Controller
     private function getTimestamp($timestamp = null)
     {
         return is_string($timestamp) ? strtotime($timestamp) : null;
+    }
+
+    /**
+     * Validate given order by query parameters
+     */
+    private function valiatedOrderByParam($order)
+    {
+        return in_array($order, ['title', 'due_date', 'priority'], true) ? $order : null;
     }
 }

@@ -76,6 +76,7 @@ option {
 .grid-for-task-note-layout {
     display: grid;
     grid-template-columns: 1fr 450px;
+    grid-auto-rows: 100vh;
 }
 
 .empty-due-date {
