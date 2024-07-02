@@ -18,4 +18,11 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function testDate()
+    {
+        echo getLastEdited(20970715);
+
+        $this->assertTrue(true);
+    }
 }

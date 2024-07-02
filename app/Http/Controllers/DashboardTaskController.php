@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TaskNote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\Rule;
 
 class DashboardTaskController extends Controller
@@ -21,7 +22,8 @@ class DashboardTaskController extends Controller
             'tasks' => $this->getItems($user, $request->query('order', null)),
             'view' => $this->view($id, $user->id),
             'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
-            'url' => getSortByDelimiter($request->fullUrl())
+            'url' => getSortByDelimiter($request->fullUrl()),
+            'queryParams' => '?' . $request->getQueryString()
         ]);
     }
 
@@ -36,7 +38,8 @@ class DashboardTaskController extends Controller
             ->notCompleted()
             ->mustTask()
             ->orderedBy($this->valiatedOrderByParam($order))
-            ->get();
+            ->simplePaginate(10)
+            ->withQueryString();
     }
 
     /**

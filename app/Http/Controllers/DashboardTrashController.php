@@ -12,7 +12,7 @@ class DashboardTrashController extends Controller
     /**
      * Render dashboard noe page
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
 
@@ -20,21 +20,23 @@ class DashboardTrashController extends Controller
             'title' => 'Trash',
             'items' => $this->getItems($user),
             'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
-            'priority' => ['0' => '-', '1' => 'Low', '2' => 'Medium', '3' => 'High']
+            'priority' => ['0' => '-', '1' => 'Low', '2' => 'Medium', '3' => 'High'],
+            'queryParams' => '?' . $request->getQueryString()
         ]);
     }
 
     /**
      * Render given completed task
      */
-    public function view($id, $title)
+    public function view(Request $request, $id, $title)
     {
         $user = Auth::user();
 
         return response()->view('dashboard.trashed-view', [
             'title' => $title,
             'item' => $this->getViewItem($id, $user->id),
-            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format'])
+            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
+            'queryParams' => '?' . $request->getQueryString()
         ]);
     }
 
@@ -48,7 +50,8 @@ class DashboardTrashController extends Controller
             ->whereBelongsTo($user, 'user')
             ->onlyTrashed()
             ->mustNote()
-            ->get();
+            ->simplePaginate(10)
+            ->withQueryString();
     }
 
     /**

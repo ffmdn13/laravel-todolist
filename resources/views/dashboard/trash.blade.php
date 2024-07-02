@@ -15,6 +15,13 @@
             Trashed Note
         </h1>
 
+        <div class="border-bottom pb-2 mb-3">
+            <span class="text-black-50 d-block mt-2">
+                @php($count = $items->count())
+                {{ $count > 1 ? "$count Notes" : "$count Note" }}
+            </span>
+        </div>
+
         @if ($items->isNotEmpty())
             <table class="table table-hover mt-3">
                 <thead>
@@ -27,7 +34,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($items as $item)
+                    @foreach ($items->items() as $item)
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
@@ -39,7 +46,7 @@
                                 </div>
                             </td>
                             <td
-                                onclick="window.location.href='/dashboard/trash/view/{{ $item->id }}/{{ $item->title }}'">
+                                onclick="window.location.href='/dashboard/trash/view/{{ $item->id }}/{{ $item->title . $queryParams }}'">
                                 <div class="d-flex align-items-center gap-2 cursor-pointer">
                                     <div class="table-view-td-title text-nowrap overflow-hidden">
                                         {{ $item->title }}
@@ -62,6 +69,8 @@
                     @endforeach
                 </tbody>
             </table>
+
+            {{ $items->links() }}
         @else
             <div class="empty-table-view-container d-flex flex-column align-items-center justify-content-center">
                 <i data-feather="trash" class="aspect-ratio empty-table-view-icon mb-4"></i>

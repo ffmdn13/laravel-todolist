@@ -17,7 +17,7 @@
     <div class="grid-for-task-note-layout">
 
         {{-- Note items list start --}}
-        <section class="border-end p-4 min-vh-100">
+        <section class="border-end p-4 overflow-auto">
             <header class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-1">
                     <i data-feather="file-text" class="aspect-ratio icon-w-21"></i>
@@ -67,7 +67,7 @@
                 </div>
             </header>
 
-            <div class="border-bottom pb-2">
+            <div class="border-bottom pb-2 mb-3">
                 <span class="text-black-50 d-block mt-2">
                     @php($count = $notes->count())
                     {{ $count > 1 ? "$count Notes" : "$count Note" }}
@@ -75,20 +75,24 @@
             </div>
 
             @if ($notes->isNotEmpty())
-                <ul class="overview-items m-0 p-0 mt-4">
-                    @foreach ($notes as $note)
+                <ul class="overview-items m-0 p-0">
+                    @foreach ($notes->items() as $note)
                         <li class="border rounded py-2 px-3 mb-2 cursor-pointer"
-                            onclick="window.location.href='/dashboard/note/{{ $note->id }}/{{ $note->title }}'">
+                            onclick="window.location.href='/dashboard/note/{{ $note->id }}/{{ $note->title . $queryParams }}'">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="overview-item-title my-1 max-width-470">{{ $note->title }}</h1>
-                                <div class="d-flex align-items-center gap-1">
-                                    <i data-feather="clock" class="aspect-ratio icon-w-15"></i>
-                                    <span class="overview-due-date">{{ getLastEdited($note->due_date) }}</span>
-                                </div>
+                                @if (isset($note->due_date))
+                                    <div class="d-flex align-items-center gap-1">
+                                        <i data-feather="clock" class="aspect-ratio icon-w-15"></i>
+                                        <span class="overview-due-date">{{ getLastEdited($note->due_date) }}</span>
+                                    </div>
+                                @endif
                             </div>
                         </li>
                     @endforeach
                 </ul>
+
+                <div class="mt-3">{{ $notes->links() }}</div>
             @else
                 <div class="overview-empty mt-4 d-flex flex-column justify-content-center align-items-center">
                     <i data-feather="file-text" class="overview-empty-icon mb-4"></i>

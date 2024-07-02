@@ -22,7 +22,8 @@ class DashboardTodayController extends Controller
             'tasks' => $this->getItems($user, $request->query('order', null)),
             'view' => $this->view($id, $user->id),
             'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
-            'url' => getSortByDelimiter($request->fullUrl())
+            'url' => getSortByDelimiter($request->fullUrl()),
+            'queryParams' => '?' . $request->getQueryString()
         ]);
     }
 
@@ -37,7 +38,8 @@ class DashboardTodayController extends Controller
             ->mustTask()
             ->byToday()
             ->orderedBy($this->valiatedOrderByParam($order))
-            ->get();
+            ->simplePaginate(10)
+            ->withQueryString();
     }
 
     private function view($id, $userId)

@@ -15,7 +15,7 @@
 @section('container')
     <main class="d-flex align-items-center justify-content-center min-vh-100 bg-light-subtle">
         <div class="d-flex gap-3">
-            <a href="/dashboard/trash" class="pt-2 text-decoration-none align-self-start">
+            <a href="/dashboard/trash{{ $queryParams }}" class="pt-2 text-decoration-none align-self-start">
                 <i data-feather="arrow-left" class="aspect-ratio icon-w-15"></i>
                 Back
             </a>

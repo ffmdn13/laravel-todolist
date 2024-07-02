@@ -16,7 +16,7 @@
     <div class="grid-for-task-note-layout">
 
         {{-- notebooks items section start --}}
-        <section class="p-4 border-end min-vh-100">
+        <section class="p-4 border-end overflow-auto">
             <header class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-1">
                     <h1 class="overview-title">{{ $notebookTitle }}</h1>
@@ -83,9 +83,9 @@
 
             @if ($notes->isNotEmpty())
                 <ul class="overview-items m-0 p-0 mt-4">
-                    @foreach ($notes as $note)
+                    @foreach ($notes->items() as $note)
                         <li class="border rounded py-2 px-3 mb-2 cursor-pointer"
-                            onclick="window.location.href='/dashboard/notebook/{{ $notebookId }}/{{ $notebookTitle }}?view={{ $note->id }}'">
+                            onclick="window.location.href='/dashboard/notebook/{{ $notebookId }}/{{ $notebookTitle }}?view={{ $note->id }}{{ $queryParams }}'">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="overview-item-title my-1">{{ $note->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
@@ -98,6 +98,8 @@
                         </li>
                     @endforeach
                 </ul>
+
+                <div class="mt-3">{{ $notes->links() }}</div>
             @else
                 <div class="overview-empty mt-4 d-flex flex-column justify-content-center align-items-center">
                     <i data-feather="file-text" class="overview-empty-icon mb-4"></i>

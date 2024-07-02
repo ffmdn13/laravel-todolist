@@ -10,26 +10,30 @@ use App\Models\Tag;
 function getLastEdited(int $timestamp = null)
 {
     if (is_null($timestamp)) {
-        return '-';
+        return $timestamp;
     }
 
     $time = time() - $timestamp;
     $times = [
-        [60, ' second ago'],
-        [60, ' minutes ago'],
-        [24, ' hours ago'],
-        [7, ' days ago'],
-        [30, ' months ago'],
-        [12, ' years ago']
+        [60, 60, ' seconds ago'],
+        [60, 60, ' minutes ago'],
+        [24, 3600, ' hours ago'],
+        [7, 86400, ' days ago'],
+        [30, 604800, ' weeks ago'],
+        [12, 31104000, ' months ago']
     ];
 
-    for ($i = 0; $i < 6; $i++) {
+    for ($i = 0; $i < 4; $i++) {
         if ($time < $times[$i][0]) {
-            return $time . $times[$i][1];
+            return $time . $times[$i][2];
         }
 
-        $time = floor($time / $times[$i][0]);
+        if ($lastEdited = floor($time / $times[$i][1]) < $times[$i][0]) {
+            return $lastEdited . $times[$i][2];
+        }
     }
+
+    return floor($time / $times[5][1]) . ' years ago';
 }
 
 function formatDateOrTime(?string $format = null, ?int $timestamp = null, string $default = null)

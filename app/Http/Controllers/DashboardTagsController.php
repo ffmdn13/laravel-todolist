@@ -27,7 +27,8 @@ class DashboardTagsController extends Controller
             'view' => $this->view($request->query('view', null), $id, $user->id),
             'color' => $request->query('clr', null),
             'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
-            'url' => getSortByDelimiter($request->fullUrl())
+            'url' => getSortByDelimiter($request->fullUrl()),
+            'queryParams' => $this->getQueryParameters($request, '&')
         ]);
     }
 
@@ -41,7 +42,8 @@ class DashboardTagsController extends Controller
             ->notCompleted()
             ->mustTask()
             ->orderedBy($this->valiatedOrderByParam($order))
-            ->get();
+            ->simplePaginate(10)
+            ->withQueryString();
     }
 
     private function view($view, $tagId, $userId)
@@ -217,5 +219,13 @@ class DashboardTagsController extends Controller
         }
 
         return in_array($order, ['title', 'due_date', 'priority'], true) ? ['order' => $order, 'direction' => $direction] : null;
+    }
+
+    /**
+     * Get url query paramters
+     */
+    private function getQueryParameters(Request $request, $delimiter = '?')
+    {
+        return $delimiter . $request->getQueryString();
     }
 }

@@ -20,7 +20,8 @@ class DashboardNoteController extends Controller
             'title' => $title,
             'notes' => $this->getItems($user, $request->query('order', null)),
             'view' => $this->view($id, $user->id),
-            'url' => getSortByDelimiter($request->fullUrl())
+            'url' => getSortByDelimiter($request->fullUrl()),
+            'queryParams' => '?' . $request->getQueryString()
         ]);
     }
 
@@ -35,7 +36,8 @@ class DashboardNoteController extends Controller
             ->notTrashed()
             ->mustNote()
             ->orderedBy($this->valiatedOrderByParam($order))
-            ->get();
+            ->simplePaginate(10)
+            ->withQueryString();
     }
 
     /**

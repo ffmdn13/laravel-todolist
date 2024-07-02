@@ -16,7 +16,7 @@
     <div class="grid-for-task-note-layout">
 
         {{-- Task items list start --}}
-        <section class="p-4 border-end">
+        <section class="p-4 border-end overflow-auto">
 
             <header class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-1">
@@ -73,7 +73,7 @@
                 </div>
             </header>
 
-            <div class="border-bottom pb-2 mb-4">
+            <div class="border-bottom pb-2 mb-3">
                 <span class="text-black-50 d-block mt-2">
                     @php($count = $tasks->count())
                     {{ $count > 1 ? "$count Tasks" : "$count Task" }}
@@ -82,9 +82,9 @@
 
             @if ($tasks->isNotEmpty())
                 <ul class="overview-items m-0 p-0">
-                    @foreach ($tasks as $task)
+                    @foreach ($tasks->items() as $task)
                         <li class="border rounded py-2 px-3 mb-2 cursor-pointer"
-                            onclick="window.location.href='/dashboard/task/{{ $task->id }}'">
+                            onclick="window.location.href='/dashboard/task/{{ $task->id }}/{{ $task->title . $queryParams }}'">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="overview-item-title my-1 max-width-470">{{ $task->title }}</h1>
                                 <div class="d-flex align-items-center gap-1">
@@ -100,6 +100,8 @@
                         </li>
                     @endforeach
                 </ul>
+
+                <div class="mt-3">{{ $tasks->links() }}</div>
             @else
                 <div class="overview-empty mt-4 d-flex flex-column justify-content-center align-items-center">
                     <i data-feather="file" class="overview-empty-icon mb-4"></i>

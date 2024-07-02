@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Lists;
+use App\Models\Notebook;
 use App\Models\Tag;
 use App\Models\TaskNote;
 use App\Models\User;
@@ -45,6 +46,31 @@ class DatabaseSeeder extends Seeder
 
         // List::factory()->count(10)->create();
         // Tag::factory()->count(5)->create();
-        // TaskNote::factory()->count(50)->nullParagraph()->create();
+        TaskNote::factory()->count(80)
+            ->dateTimestampToNull()
+            ->makeRandomShortcutedForNote()
+            ->generateTodayDateTask()
+            ->insertTaskIntoList()
+            ->insertTaskIntoTag()
+            ->insertNoteIntoNotebook()
+            ->markTaskAsComplete()
+            ->markNoteAsSoftDeleted()
+            ->create();
+
+        Lists::create([
+            'title' => 'Coding',
+            'user_id' => 1
+        ]);
+
+        Tag::create([
+            'title' => 'Vlog',
+            'color' => 'purple',
+            'user_id' => 1
+        ]);
+
+        Notebook::create([
+            'title' => 'Daily Notebook',
+            'user_id' => 1
+        ]);
     }
 }

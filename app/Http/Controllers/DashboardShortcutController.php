@@ -13,24 +13,26 @@ class DashboardShortcutController extends Controller
     /** 
      * Render dashboard shortcut page
      */
-    public function index()
+    public function index(Request $request)
     {
         return response()->view('dashboard.shortcut', [
             'title' => 'Shortcut',
             'items' => $this->getItems(Auth::user()),
             'timeFormat' => $this->getTimeFormat(json_decode(Auth::user()->personalization, true)['time-format']),
+            'queryParams' => '?' . $request->getQueryString()
         ]);
     }
 
     /**
      * Render given shortcut task or not
      */
-    public function view($id, $title)
+    public function view(Request $request, $id, $title)
     {
         return response()->view('dashboard.table-view', [
             'title' => $title,
             'item' => $this->getViewItem($id, Auth::user()->id),
-            'timeFormat' => $this->getTimeFormat(json_decode(Auth::user()->personalization, true)['time-format'])
+            'timeFormat' => $this->getTimeFormat(json_decode(Auth::user()->personalization, true)['time-format']),
+            'queryParams' => '?' . $request->getQueryString()
         ]);
     }
 
@@ -45,7 +47,8 @@ class DashboardShortcutController extends Controller
             ->isShortcuted()
             ->notTrashed()
             ->mustNote()
-            ->get();
+            ->simplePaginate(10)
+            ->withQueryString();
     }
 
     /**

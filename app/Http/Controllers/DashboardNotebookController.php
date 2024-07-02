@@ -24,7 +24,8 @@ class DashboardNotebookController extends Controller
             'notebookTitle' => $title,
             'notes' => $this->getItems($id, $user->id, $request->query('order', null)),
             'view' => $this->view($request->query('view', null), $id, $user->id),
-            'url' => getSortByDelimiter($request->fullUrl())
+            'url' => getSortByDelimiter($request->fullUrl()),
+            'queryParams' => $this->getQueryParameters($request, '&')
         ]);
     }
 
@@ -34,7 +35,8 @@ class DashboardNotebookController extends Controller
             ->byNotebookAndUser($id, $userId)
             ->notTrashed()
             ->orderedBy($this->valiatedOrderByParam($order))
-            ->get();
+            ->simplePaginate(10)
+            ->withQueryString();
     }
 
     private function view($id, $notebookId, $userId)
@@ -195,5 +197,13 @@ class DashboardNotebookController extends Controller
         }
 
         return in_array($order, ['title', 'due_date', 'priority'], true) ? ['order' => $order, 'direction' => $direction] : null;
+    }
+
+    /**
+     * Get url query paramsters
+     */
+    private function getQueryParameters(Request $request, $delimiter = '?')
+    {
+        return $delimiter . $request->getQueryString();
     }
 }
