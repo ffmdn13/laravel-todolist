@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string("email", 255);
             $table->string("nickname", 255)->nullable(true);
             $table->string("password", 255);
-            $table->string('profile', 64);
+            $table->string('profile', 255);
             $table->json("personalization");
             $table->datetime("date_created");
             $table->timestamps();

@@ -12,6 +12,34 @@ aside {
     aspect-ratio: 1/1;
 }
 
+.icon-w-16 {
+    width: 16px;
+}
+
+/* aside user profile style section start */
+
+.user-profile {
+    width: 40px;
+    object-fit: cover;
+}
+
+.email-block {
+    text-overflow: ellipsis;
+    font-size: .9rem;
+}
+
+.nickname-block {
+    font-size: .7rem;
+    color: var(--lightColorText);
+    opacity: .7;
+}
+
+.custom-dropdown-font-size {
+    font-size: .9rem;
+}
+
+/* aside user profile style section end */
+
 /* aside quick search and new task start */
 .new-task-btn {
     background-color: var(--lightColorPrimary);

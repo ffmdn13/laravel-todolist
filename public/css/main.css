@@ -52,13 +52,6 @@ option {
     color: var(--lightColorText) !important;
 }
 
-.not-read {
-    aspect-ratio: 1/1;
-    width: 15px;
-    background-color: var(--lightColorPrimary);
-    border-radius: 50%;
-}
-
 .grid-layout {
     display: grid;
     grid-template-columns: 200px 1fr;

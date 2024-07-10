@@ -1,0 +1,117 @@
+/* customization style section start */
+
+.aspect-ratio {
+    aspect-ratio: 1/1;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* customization style scetion end */
+
+/* icon width style section start */
+
+.icon-absolute {
+    bottom: 8px;
+    right: 5px;
+    opacity: .3;
+}
+
+.icon-w-26 {
+    scale: 2.5;
+}
+
+.icon-w-20 {
+    width: 20px;
+}
+
+.icon-w-17 {
+    width: 17px;
+}
+
+/* icon width style section end */
+
+/* user setting container style section start */
+
+.custom-width {
+    width: 600px;
+}
+
+/* user setting container style section end */
+
+
+/* user profile style section start */
+
+.user-profile {
+    width: 90px;
+    object-fit: cover;
+}
+
+.fit-content {
+    width: fit-content;
+}
+
+/* user profile style section end */
+
+/* user setting style section start */
+
+.card-body {
+    font-size: 1.1rem;
+}
+
+.icon-translate-x-anim {
+    transition: transform 200ms ease;
+}
+
+.icon-opacity-anim {
+    opacity: .1;
+    transition: opacity 200ms ease;
+}
+
+.card-body span {
+    transition: color 200ms ease;
+}
+
+.card-body:hover>div .icon-translate-x-anim {
+    transform: translateX(20%);
+}
+
+.card:nth-child(1):hover>div span,
+.card:nth-child(1):hover .icon-opacity-anim,
+.card:nth-child(1):hover>div .icon-translate-x-anim {
+    color: #2681D2 !important;
+}
+
+.card:nth-child(2):hover>div span,
+.card:nth-child(2):hover .icon-opacity-anim,
+.card:nth-child(2):hover>div .icon-translate-x-anim {
+    color: #02E02C !important;
+}
+
+.card:nth-child(3):hover>div span,
+.card:nth-child(3):hover .icon-opacity-anim,
+.card:nth-child(3):hover>div .icon-translate-x-anim {
+    color: #EF0606 !important;
+}
+
+.card:nth-child(4):hover>div span,
+.card:nth-child(4):hover .icon-opacity-anim,
+.card:nth-child(4):hover .icon-translate-x-anim {
+    color: #EF0606 !important;
+}
+
+.card-body:hover .icon-opacity-anim {
+    opacity: .6;
+}
+
+/* user accoutn setting style section end */
+
+/* user delete account style esection start */
+
+.small-information-text {
+    opacity: .8;
+    font-size: .9rem;
+}
+
+/* user delete account style section end */

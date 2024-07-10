@@ -35,6 +35,23 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
 
+
+    {{-- Flash a session message named flashMessage start --}}
+
+    @if (session()->has('flashMessage'))
+        <div class="position-fixed top-0 end-0 p-3">
+            <div class="alert alert-info alert-dismissible fade show m-0 z-3" role="alert">
+                <span class="d-flex gap-1">
+                    <i data-feather="info" class="aspect-ratio icon-w-19"></i>{{ session()->get('flashMessage') }}
+                </span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
+
+    {{-- Flash a session message named flashMessage end --}}
+
+
     {{-- feather icon link --}}
     <script>
         feather.replace();

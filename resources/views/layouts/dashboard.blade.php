@@ -30,6 +30,10 @@
 
 <body>
 
+    <?php
+    
+    ?>
+
     <main class="grid-layout min-vh-100">
         @include('partials.dashboard-sidebar')
 

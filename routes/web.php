@@ -1,9 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardCompleteController;
-use App\Http\Controllers\DashboardHomeController;
 use App\Http\Controllers\DashboardListController;
-use App\Http\Controllers\DashboardNext7DaysController;
 use App\Http\Controllers\DashboardNotebookController;
 use App\Http\Controllers\DashboardNoteController;
 use App\Http\Controllers\DashboardShortcutController;
@@ -11,12 +9,15 @@ use App\Http\Controllers\DashboardTagsController;
 use App\Http\Controllers\DashboardTaskController;
 use App\Http\Controllers\DashboardTrashController;
 use App\Http\Controllers\DashboardTodayController;
+use App\Http\Controllers\DashboardUserController;
+use App\Http\Controllers\DeleteUserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\UpdatePasswordController;
+use App\Http\Controllers\UserAccountInfoController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 /**
- * If use try navigate to / route, it will redirect to /dashboard route
+ * redirect /dashboard route to / route
  */
 Route::redirect('/', '/dashboard', 302);
 
@@ -57,8 +58,11 @@ Route::get('/logout', [LogoutController::class, 'logout'])->middleware('auth');
 /**
  * Todolist dashboard route
  */
-Route::get('/dashboard', [DashboardHomeController::class, 'index'])->middleware('auth');
+Route::get('/dashboard', [DashboardTaskController::class, 'index'])->middleware('auth');
 Route::prefix('/dashboard')->middleware('auth')->group(function () {
+
+    Route::get('/user/setting', [DashboardUserController::class, 'setting'])
+        ->middleware('auth');
 
     /**
      * Controller for task dashboard page
@@ -148,6 +152,18 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
     Route::get('/trash/view/{id}/{title}', [DashboardTrashController::class, 'view'])
         ->whereNumber('id');
     Route::post('/trash/view/action', [DashboardTrashController::class, 'action']);
+});
+
+/**
+ * Controller for user setting page
+ */
+Route::redirect('/dashboard/user/profile', '/user/profile');
+Route::prefix('/user')->middleware('auth')->group(function () {
+    Route::get('/profile', [DashboardUserController::class, 'profile']);
+    Route::post('/profile/update/account/info', [UserAccountInfoController::class, 'updateAccountInfo']);
+    Route::get('/profile/change/password', [DashboardUserController::class, 'updatePassword']);
+    Route::post('/profile/change/password', [UpdatePasswordController::class, 'update']);
+    Route::post('/profile/delete/account', [DeleteUserController::class, 'delete']);
 });
 
 /**

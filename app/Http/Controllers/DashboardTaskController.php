@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\TaskNote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\Rule;
 
 class DashboardTaskController extends Controller
