@@ -26,8 +26,18 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password123'),
             'profile' => 'default.jpg',
             'personalization' => json_encode([
-                'theme' => 'light',
-                'time-format' => '12hr'
+                'apperance' => [
+                    'theme' => ['light', 'dark'][rand(0, 1)]
+                ],
+                'datetime' => [
+                    'time_format' => ['24hr', '12hr'][rand(0, 1)],
+                    'default_date' => ['today', 'tomorrow', 'day_after_tomorrow'][rand(0, 1)],
+                    'timezone' => 'UTC'
+                ],
+                'notification' => [
+                    'alert_time' => '09:00',
+                    'notify_missed_task' => 0,
+                ],
             ]),
             'date_created' => now()
         ]);
@@ -39,7 +49,7 @@ class DatabaseSeeder extends Seeder
             'profile' => 'default.jpg',
             'personalization' => json_encode([
                 'theme' => 'light',
-                'time-format' => '24hr'
+                'time_format' => '24hr'
             ]),
             'date_created' => now()
         ]);

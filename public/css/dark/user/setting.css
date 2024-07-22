@@ -1,0 +1,63 @@
+/* Navbar navigation style section start */
+
+nav.navbar-nav {
+    background-color: var(--darkColorBackground1) !important;
+    border-right-color: var(--darkColorBorder) !important;
+}
+
+nav.navbar-nav a,
+nav.navbar-nav h4 {
+    color: var(--darkColorText);
+}
+
+nav.navbar-nav div.nav-item:hover {
+    background-color: var(--darkColorSecondary);
+}
+
+/* Navbar navigation style section end */
+
+/* Icon style section start */
+
+.icon-w-22,
+.icon-w-16 {
+    color: var(--darkColorText);
+}
+
+/* icon style section end */
+
+/* Setting section style section start */
+
+div.bg-body-tertiary {
+    background-color: var(--darkColorBackground2) !important;
+}
+
+div.bg-body-tertiary h4,
+div.bg-body-tertiary form label,
+div.bg-body-tertiary form select {
+    color: var(--darkColorText);
+}
+
+div.bg-body-tertiary form select,
+div.bg-body-tertiary form input {
+    border-color: var(--darkColorBorder);
+}
+
+div.bg-body-tertiary form button {
+    background-color: var(--darkColorPrimary);
+    position: relative;
+    isolation: isolate;
+}
+
+div.bg-body-tertiary form button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: black;
+    opacity: 0;
+}
+
+div.bg-body-tertiary form button:hover::before {
+    opacity: .1;
+}
+
+/* Setting section style section end */

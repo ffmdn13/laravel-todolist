@@ -1,0 +1,58 @@
+/* Custom style section start */
+
+.aspect-ratio {
+    aspect-ratio: 1/1;
+}
+
+.icon-w-22 {
+    width: 22px;
+}
+
+.icon-w-16 {
+    width: 16px;
+}
+
+/* Custom style section end */
+
+/* Setting grid layout style section start */
+
+.user-setting-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+}
+
+/* Setting grid layout style section end */
+
+/* Navbar navigation style section start */
+nav a {
+    font-size: .95rem;
+    color: var(--lightColorText);
+}
+
+nav h4 {
+    font-weight: var(--fw-700);
+}
+
+nav div.nav-item:hover {
+    background-color: rgba(232, 138, 152, 0.15);
+}
+
+/* Navbar navigation style section end */
+
+/* Setting content style section start */
+
+div.bg-body-tertiary>h4 {
+    font-weight: var(--fw-700);
+}
+
+.save-setting-btn {
+    background-color: var(--lightColorPrimary);
+    font-size: .9rem;
+}
+
+input,
+select {
+    cursor: pointer;
+}
+
+/* Setting content style section end */

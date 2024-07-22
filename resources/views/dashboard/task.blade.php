@@ -5,7 +5,10 @@
 @endsection
 
 @section('additional-dashboard-head')
-    <link rel="stylesheet" href="/css/dashboard/view.css">
+    <link rel="stylesheet" href="/css/light/dashboard/view.css">
+    @if ($personalization->apperance->theme === 'dark')
+        <link rel="stylesheet" href="/css/dark/dashboard/view.css">
+    @endif
 
     {{-- trix editor cdn link --}}
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
@@ -33,14 +36,19 @@
                         <div class="modal fade" id="createTask" tabindex="-1" aria-labelledby="exampleModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
+                                <div class="modal-content overview-dropdown-dark-theme rounded-0">
                                     <div class="modal-body">
-                                        <h1 class="overview-add-task-title mb-3">📜 Add new task</h1>
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <h1 class="overview-add-task-title fs-5">📜 Add new task</h1>
+                                            <i data-feather="x" class="aspect-ratio icon-w-20" style="cursor: pointer;"
+                                                data-bs-dismiss="modal" aria-label="Close"></i>
+                                        </div>
                                         <form action="/dashboard/task/add" method="POST">
                                             <input type="text" name="title"
-                                                class="input-outline-off form-control mb-2 border-0 border-bottom"
+                                                class="input-outline-off form-control mb-3 px-0 border-0 rounded-0 border-bottom bg-transparent"
                                                 placeholder="Title" aria-label="Title">
-                                            <select class="input-outline-off border-0 border-bottom form-select mb-2"
+                                            <select
+                                                class="input-outline-off border-0 border-bottom px-0 rounded-0 form-select mb-3 bg-transparent"
                                                 aria-label="Default select example" name="priority">
                                                 <option value="0" selected>⚪ None</option>
                                                 <option value="1">🟢 Low</option>
@@ -60,7 +68,7 @@
                             aria-expanded="false">
                             <i data-feather="sliders" class="aspect-ratio icon-w-19"></i>
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu overview-dropdown-dark-theme border">
                             <li class="overview-dropdown-sliders px-3">Sort by</li>
                             <li class="dropdown-item"><a href="{{ $url . 'order=title' }}"
                                     class="text-decoration-none overview-dropdown-clr-black">Title</a></li>
@@ -117,7 +125,7 @@
         {{-- Task items list end --}}
 
         {{-- Task preview start --}}
-        <section class="p-4">
+        <section class="p-4 preview-dark-theme">
             @if (isset($view))
                 <form action="/dashboard/task/action" method="POST" class="d-flex flex-column gap-1 h-100">
                     @csrf
@@ -138,24 +146,30 @@
                             <div class="modal fade" id="dueDateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                 aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
+                                    <div class="modal-content rounded-0 preview-date-dark-theme p-2">
                                         <div class="modal-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h1 class="modal-title  fs-5">📋 Task Schedule</h1>
+                                                <i data-feather="x" class="aspect-ratio icon-w-21 ms-auto"
+                                                    style="cursor: pointer;"></i>
+                                            </div>
                                             <div class="row g-2">
                                                 <div class="col">
                                                     <label for="date" class="form-label">Date</label>
                                                     <input type="date" name="due_date" id="date"
-                                                        class="form-control" aria-label="Date"
+                                                        class="form-control rounded-0 bg-transparent" aria-label="Date"
                                                         value="{{ formatDateOrTime('Y-m-d', $view->due_date) }}">
                                                 </div>
                                                 <div class="col">
                                                     <label for="time" class="form-label">Time</label>
-                                                    <input type="time" name="time" class="form-control"
-                                                        aria-label="Time"
+                                                    <input type="time" name="time"
+                                                        class="form-control rounded-0 bg-transparent" aria-label="Time"
                                                         value="{{ formatDateOrTime('h:i', $view->time) }}">
                                                 </div>
                                                 <div class="col">
                                                     <label for="reminder" class="form-label">Reminder</label>
-                                                    <input type="time" name="reminder" class="form-control"
+                                                    <input type="time" name="reminder"
+                                                        class="form-control rounded-0 bg-transparent"
                                                         aria-label="Reminder">
                                                 </div>
                                             </div>
@@ -190,13 +204,15 @@
                                         Action
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li class="dropdown-item">
+                                        <li class="dropdown-item d-flex align-items-center justify-content-between">
                                             <button class="border-0 bg-transparent" name="action"
                                                 value="save">Save</button>
+                                            <i data-feather="save" class="aspect-ratio icon-w-17"></i>
                                         </li>
-                                        <li class="dropdown-item">
+                                        <li class="dropdown-item d-flex align-items-center justify-content-between">
                                             <button class="border-0 bg-transparent" name="action"
                                                 value="delete">Delete</button>
+                                            <i data-feather="trash" class="aspect-ratio icon-w-17"></i>
                                         </li>
                                     </ul>
                                 </div>

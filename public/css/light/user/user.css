@@ -8,6 +8,10 @@
     cursor: pointer;
 }
 
+input:focus {
+    outline: none !important;
+}
+
 /* customization style scetion end */
 
 /* icon width style section start */
@@ -103,6 +107,31 @@
 
 .card-body:hover .icon-opacity-anim {
     opacity: .6;
+}
+
+.back-link {
+    color: var(--lightColorPrimary);
+}
+
+.update-nickname-btn {
+    background: var(--lightColorPrimary);
+    color: var(--whiteColor);
+    border: 1px solid var(--lightColorPrimary);
+    cursor: pointer;
+    position: relative;
+    isolation: isolate;
+}
+
+.update-nickname-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: black;
+    opacity: 0;
+}
+
+.update-nickname-btn:hover::before {
+    opacity: .1;
 }
 
 /* user accoutn setting style section end */

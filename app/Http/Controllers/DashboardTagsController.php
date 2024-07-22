@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use App\Models\TaskNote;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -18,6 +17,7 @@ class DashboardTagsController extends Controller
     public function index(Request $request, $id, $title = 'Tag')
     {
         $user = Auth::user();
+        $personalization = $this->getPersonalization($user);
 
         return response()->view('dashboard.tag', [
             'title' => $title,
@@ -26,9 +26,10 @@ class DashboardTagsController extends Controller
             'tasks' => $this->getItems($id, $user->id, $request->query('order', null)),
             'view' => $this->view($request->query('view', null), $id, $user->id),
             'color' => $request->query('clr', null),
-            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
+            'timeFormat' => $this->getTimeFormat($personalization->datetime->time_format),
             'url' => getSortByDelimiter($request->fullUrl()),
-            'queryParams' => $this->getQueryParameters($request, '&')
+            'queryParams' => $this->getQueryParameters($request, '&'),
+            'theme' => $personalization->apperance->theme
         ]);
     }
 
@@ -56,7 +57,7 @@ class DashboardTagsController extends Controller
             return null;
         }
 
-        return TaskNote::select(['id', 'title', 'description', 'priority', 'due_date', 'reminder', 'is_complete'])
+        return TaskNote::select(['id', 'title', 'description', 'priority', 'due_date', 'time', 'reminder', 'is_complete'])
             ->where('id', $validator->getData()['view'])
             ->byTagAndUser($tagId, $userId)
             ->notCompleted()
@@ -69,7 +70,7 @@ class DashboardTagsController extends Controller
      */
     private function getTimeFormat($format = '12hr')
     {
-        return ['24hr' => 'H:i', '12hr' => ' h:i A'][$format];
+        return ['24hr' => ' H:i', '12hr' => ' h:i A'][$format];
     }
 
     /**
@@ -115,9 +116,7 @@ class DashboardTagsController extends Controller
         $validatedData = $request->validate(['id' => ['required', 'present', 'numeric', 'exists:tags,id']]);
         $userId = Auth::user()->id;
 
-        Tag::byUserAndId($validatedData['id'], $userId)
-            ->delete();
-
+        Tag::byUserAndId($validatedData['id'], $userId)->delete();
         TaskNote::byTagAndUser($validatedData['id'], $userId)
             ->notCompleted()
             ->forceDelete();
@@ -144,7 +143,13 @@ class DashboardTagsController extends Controller
     private function saveTask(Request $request)
     {
         $validatedFormData = $this->validateData($request);
-        $validatedFormData['due_date'] = $this->getTimestamp($validatedFormData['due_date']);
+
+        if ($validatedFormData['due_date'] === null && isset($validatedFormData['time'])) {
+            $validatedFormData['due_date'] = $this->setDefaultDate();
+        } else {
+            $validatedFormData['due_date'] = $this->getTimestamp($validatedFormData['due_date']);
+        }
+
         $validatedFormData['time'] = isset($validatedFormData['due_date']) ? $this->getTimestamp($validatedFormData['time']) : null;
 
         $message = TaskNote::byTagAndUser($validatedFormData['tag_id'], Auth::user()->id)
@@ -174,7 +179,14 @@ class DashboardTagsController extends Controller
             ->mustTask()
             ->forceDelete() === 1 ? 'Successfully deleted task "' . $request->input('title', null) . '".' : "Task not found!";
 
-        return ['message' => $message, 'previous-url' => '/dashboard/tag/' . $request->input('tag_id', null) . '/' . $request->input('tag_title', null)];
+        preg_match_all('/(?<=\?|\&)(?!view=\d+\b)[^&]+/', $request->session()->previousUrl(), $match);
+        $queryString = implode('&', $match[0]);
+
+        $tagId = $request->input('tag_id', null);
+        $tagTitle = $request->input('tag_title', null);
+        $previousUrl = "/dashboard/tag/$tagId/$tagTitle?$queryString";
+
+        return ['message' => $message, 'previous-url' => $previousUrl];
     }
 
     /**
@@ -226,6 +238,32 @@ class DashboardTagsController extends Controller
      */
     private function getQueryParameters(Request $request, $delimiter = '?')
     {
-        return $delimiter . $request->getQueryString();
+        preg_match('/\?([a-zA-Z0-9=\&_]+)/', $request->fullUrlWithoutQuery(['view', 'clr']), $match);
+
+        $queryParams = $match[1] ?? null;
+        return $delimiter . $queryParams;
+    }
+
+    /**
+     * Return user personalization setting
+     */
+    private function getPersonalization($user)
+    {
+        return json_decode($user->personalization);
+    }
+
+    /**
+     * Set task defualt schedule based on user default date
+     */
+    private function setDefaultDate()
+    {
+        $personalization = $this->getPersonalization(Auth::user());
+        $defaultDates = [
+            'today' => 0,
+            'tomorrow' => 86400,
+            'day_after_tomorrow' =>  172800
+        ];
+
+        return time() + $defaultDates[$personalization->datetime->default_date];
     }
 }

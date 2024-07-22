@@ -25,7 +25,8 @@ class DashboardNotebookController extends Controller
             'notes' => $this->getItems($id, $user->id, $request->query('order', null)),
             'view' => $this->view($request->query('view', null), $id, $user->id),
             'url' => getSortByDelimiter($request->fullUrl()),
-            'queryParams' => $this->getQueryParameters($request, '&')
+            'queryParams' => $this->getQueryParameters($request, '&'),
+            'theme' => json_decode($user->personalization)->apperance->theme
         ]);
     }
 
@@ -77,15 +78,12 @@ class DashboardNotebookController extends Controller
         $validatedData = $request->validate(['id' => ['required', 'present', 'numeric', 'exists:notebooks,id']]);
         $userId = Auth::user()->id;
 
-        Notebook::byUserAndId($validatedData['id'], $userId)
-            ->delete();
-
+        Notebook::byUserAndId($validatedData['id'], $userId)->delete();
         TaskNote::byNotebookAndUser($validatedData['id'], $userId)
             ->mustNote()
             ->forceDelete();
 
-        return redirect('/dashboard', 302)
-            ->with('message', 'Successfully delete notebook');
+        return redirect('/dashboard', 302)->with('message', 'Successfully delete notebook');
     }
 
     /**
@@ -147,7 +145,14 @@ class DashboardNotebookController extends Controller
             ->where('id', $request->input('id', null))
             ->delete() === 1 ? 'Succesfully deleted note ' . $request->input('title', null) : "Note not found!";
 
-        return ['message' => $message, 'previous-url' => '/dashboard/notebook/' . $request->input('id', null) . '/' . $request->input('title', null)];
+        preg_match_all('/(?<=\?|\&)(?!view=\d+\b)[^&]+/', $request->session()->previousUrl(), $match);
+        $queryString = implode('&', $match[0]);
+
+        $notebookId = $request->input('notebook_id', null);
+        $notebookTitle = $request->input('notebook_title', null);
+        $previousUrl = "/dashboard/notebook/$notebookId/$notebookTitle?$queryString";
+
+        return ['message' => $message, 'previous-url' => $previousUrl];
     }
 
     /**
@@ -204,6 +209,9 @@ class DashboardNotebookController extends Controller
      */
     private function getQueryParameters(Request $request, $delimiter = '?')
     {
-        return $delimiter . $request->getQueryString();
+        preg_match('/\?([a-zA-Z0-9=\&_]+)/', $request->fullUrlWithoutQuery(['view']), $match);
+
+        $queryParams = $match[1] ?? null;
+        return $delimiter . $queryParams;
     }
 }

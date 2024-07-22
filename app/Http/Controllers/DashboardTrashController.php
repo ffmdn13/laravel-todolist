@@ -15,13 +15,15 @@ class DashboardTrashController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        $personalization = $this->getPersonalization($user);
 
         return response()->view('dashboard.trash', [
             'title' => 'Trash',
             'items' => $this->getItems($user),
-            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
+            // 'timeFormat' => $this->getTimeFormat($personalization->datetime->time_format),
             'priority' => ['0' => '-', '1' => 'Low', '2' => 'Medium', '3' => 'High'],
-            'queryParams' => '?' . $request->getQueryString()
+            'queryParams' => '?' . $request->getQueryString(),
+            'theme' => $personalization->apperance->theme
         ]);
     }
 
@@ -31,12 +33,14 @@ class DashboardTrashController extends Controller
     public function view(Request $request, $id, $title)
     {
         $user = Auth::user();
+        $personalization = $this->getPersonalization($user);
 
         return response()->view('dashboard.trashed-view', [
             'title' => $title,
             'item' => $this->getViewItem($id, $user->id),
-            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
-            'queryParams' => '?' . $request->getQueryString()
+            // 'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
+            'queryParams' => '?' . $request->getQueryString(),
+            'theme' => $personalization->apperance->theme
         ]);
     }
 
@@ -179,5 +183,13 @@ class DashboardTrashController extends Controller
             'title' => ['required', 'present', 'max:255', 'string'],
             'description' => ['nullable', 'present', 'string'],
         ]);
+    }
+
+    /**
+     * Return user personalization setting
+     */
+    private function getPersonalization($user)
+    {
+        return json_decode($user->personalization);
     }
 }

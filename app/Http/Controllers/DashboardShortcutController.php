@@ -15,11 +15,14 @@ class DashboardShortcutController extends Controller
      */
     public function index(Request $request)
     {
+        $personalization = $this->getPersonalization();
+
         return response()->view('dashboard.shortcut', [
             'title' => 'Shortcut',
             'items' => $this->getItems(Auth::user()),
-            'timeFormat' => $this->getTimeFormat(json_decode(Auth::user()->personalization, true)['time-format']),
-            'queryParams' => '?' . $request->getQueryString()
+            'timeFormat' => $this->getTimeFormat($personalization->datetime->time_format),
+            'queryParams' => '?' . $request->getQueryString(),
+            'theme' => $personalization->apperance->theme
         ]);
     }
 
@@ -28,11 +31,14 @@ class DashboardShortcutController extends Controller
      */
     public function view(Request $request, $id, $title)
     {
+        $personalization = $this->getPersonalization();
+
         return response()->view('dashboard.table-view', [
             'title' => $title,
             'item' => $this->getViewItem($id, Auth::user()->id),
-            'timeFormat' => $this->getTimeFormat(json_decode(Auth::user()->personalization, true)['time-format']),
-            'queryParams' => '?' . $request->getQueryString()
+            'timeFormat' => $this->getTimeFormat($personalization->datetime->time_format),
+            'queryParams' => '?' . $request->getQueryString(),
+            'theme' => $personalization->apperance->theme
         ]);
     }
 
@@ -157,5 +163,13 @@ class DashboardShortcutController extends Controller
             'title' => ['required', 'present', 'max:255', 'string'],
             'description' => ['nullable', 'present', 'string'],
         ]);
+    }
+
+    /**
+     * Return user personalization
+     */
+    private function getPersonalization()
+    {
+        return json_decode(Auth::user()->personalization);
     }
 }

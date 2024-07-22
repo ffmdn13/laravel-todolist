@@ -5,7 +5,10 @@
 @endsection
 
 @section('additional-dashboard-head')
-    <link rel="stylesheet" href="/css/dashboard/view.css">
+    <link rel="stylesheet" href="/css/light/dashboard/view.css">
+    @if ($theme === 'dark')
+        <link rel="stylesheet" href="/css/dark/dashboard/view.css">
+    @endif
 
     {{-- trix editor cdn link --}}
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
@@ -39,13 +42,16 @@
                         <div class="modal fade" id="createNote" tabindex="-1" aria-labelledby="exampleModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
+                                <div class="modal-content rounded-0 overview-dropdown-dark-theme">
                                     <div class="modal-body">
-                                        <h1 class="overview-add-task-title mb-3">📝 Add new note</h1>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h1 class="overview-add-task-title mb-3 fs-5">📝 Add new note</h1>
+                                            <i data-feather="x" class="aspect-ratio icon-w-17"></i>
+                                        </div>
                                         <form action="/dashboard/notebook/add/note" method="POST">
                                             <input type="hidden" name="id" value="{{ $notebookId }}">
                                             <input type="text" name="title"
-                                                class="input-outline-off form-control mb-2 border-0 border-bottom"placeholder="Title"
+                                                class="input-outline-off form-control mb-2 px-0 bg-transparent border-0 border-bottom"placeholder="Title"
                                                 aria-label="Title" name="title" value="Untitled">
                                             @csrf
                                             <button class="overview-add-task-btn border-0 mt-2" type="submit">Add</button>
@@ -61,12 +67,18 @@
                             aria-expanded="false">
                             <i data-feather="sliders" class="aspect-ratio icon-w-19"></i>
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu overview-dropdown-dark-theme">
                             <li class="overview-dropdown-sliders px-3">Sort by</li>
-                            <li class="dropdown-item"><a href="{{ $url . 'order=title' }}"
-                                    class="text-decoration-none overview-dropdown-clr-black">Title</a></li>
-                            <li class="dropdown-item"><a href="{{ $url . 'order=due_date&direction=desc' }}"
-                                    class="text-decoration-none overview-dropdown-clr-black">Date created</a></li>
+                            <li class="dropdown-item d-flex align-items-center justify-content-between">
+                                <a href="{{ $url . 'order=title' }}"
+                                    class="text-decoration-none overview-dropdown-clr-black">Title</a>
+                                <i data-feather="underline" class="aspect-ratio icon-w-17"></i>
+                            </li>
+                            <li class="dropdown-item d-flex align-items-center justify-content-between">
+                                <a href="{{ $url . 'order=due_date&direction=desc' }}"
+                                    class="text-decoration-none overview-dropdown-clr-black">Last edited</a>
+                                <i data-feather="clock" class="aspect-ratio icon-w-17"></i>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -115,7 +127,7 @@
         {{-- notebooks items section end --}}
 
         {{-- notebooks items preview start --}}
-        <section class="p-4">
+        <section class="p-4 preview-dark-theme">
             @if (isset($view))
                 <form action="/dashboard/notebook/action" method="POST" class="d-flex flex-column gap-1 h-100">
                     @csrf
@@ -143,18 +155,21 @@
                                         Action
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li class="dropdown-item">
+                                        <li class="dropdown-item d-flex align-items-center justify-content-between">
                                             <button class="border-0 bg-transparent" name="action"
                                                 value="saveNote">Save</button>
+                                            <i data-feather="save" class="aspect-ratio icon-w-17"></i>
                                         </li>
-                                        <li class="dropdown-item">
+                                        <li class="dropdown-item d-flex align-items-center justify-content-between">
                                             <button class="border-0 bg-transparent" name="action"
                                                 value="deleteNote">Delete</button>
+                                            <i data-feather="trash" class="aspect-ratio icon-w-17"></i>
                                         </li>
-                                        <li class="dropdown-item">
+                                        <li class="dropdown-item d-flex align-items-center justify-content-between">
                                             <button class="border-0 bg-transparent" name="action" value="shortcut">
                                                 {{ $view->is_shortcut == 0 ? 'Add to shortcut' : 'Remove from shortcut' }}
                                             </button>
+                                            <i data-feather="star" class="aspect-ratio icon-w-17"></i>
                                         </li>
                                     </ul>
                                 </div>

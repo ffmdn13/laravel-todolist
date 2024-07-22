@@ -11,7 +11,7 @@
 
         {{-- profile setting section start --}}
 
-        <li class="mb-2">
+        <li class="mb-3">
             <a href="/user/profile" class="text-decoration-none d-flex align-items-center gap-2" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <img src="{{ asset('storage/' . auth()->user()->profile) }}" alt="User profile"
@@ -73,17 +73,14 @@
     {{-- aside search modal start --}}
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
+            <div class="modal-content quick-search-dark-modal-theme rounded-0">
+                <div class="modal-header border-0 d-flex align-items-center justify-content-between">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <i data-feather="x" class="aspect-ratio icon-w-20" style="cursor: pointer;" data-bs-dismiss="modal"
+                        aria-label="Close"></i>
                 </div>
                 <div class="modal-body">
                     ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>

@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\Auth;
 class UserAccountInfoController extends Controller
 {
     /**
+     * Render user profile page
+     */
+    public function index()
+    {
+        return response()->view('user.profile', [
+            'title' => 'User Profile',
+            'user' => Auth::user(),
+            'theme' => json_decode(Auth::user()->personalization)->apperance->theme
+        ]);
+    }
+
+    /**
      * Update user account info
      */
     public function updateAccountInfo(Request $request)

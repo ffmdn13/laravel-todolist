@@ -16,14 +16,16 @@ class DashboardTodayController extends Controller
     public function index(Request $request, $id = null, $title = 'Today Task')
     {
         $user = Auth::user();
+        $personalization = $this->getPersonalization($user);
 
         return response()->view('dashboard.today', [
             'title' => $title,
             'tasks' => $this->getItems($user, $request->query('order', null)),
             'view' => $this->view($id, $user->id),
-            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
+            'timeFormat' => $this->getTimeFormat($personalization->datetime->time_format),
             'url' => getSortByDelimiter($request->fullUrl()),
-            'queryParams' => '?' . $request->getQueryString()
+            'queryParams' => '?' . $request->getQueryString(),
+            'theme' => $personalization->apperance->theme
         ]);
     }
 
@@ -182,5 +184,13 @@ class DashboardTodayController extends Controller
         }
 
         return in_array($order, ['title', 'due_date', 'priority'], true) ? ['order' => $order, 'direction' => $direction] : null;
+    }
+
+    /**
+     * Return user personalization
+     */
+    private function getPersonalization($user)
+    {
+        return json_decode($user->personalization);
     }
 }

@@ -23,12 +23,13 @@ function getLastEdited(int $timestamp = null)
         [12, 31104000, ' months ago']
     ];
 
-    for ($i = 0; $i < 4; $i++) {
-        if ($time < $times[$i][0]) {
-            return $time . $times[$i][2];
-        }
+    if ($time < $times[0][0]) {
+        return $time . $times[0][2];
+    }
 
-        if ($lastEdited = floor($time / $times[$i][1]) < $times[$i][0]) {
+    for ($i = 1; $i < 4; $i++) {
+        $lastEdited = floor($time / $times[$i][1]);
+        if ($lastEdited < $times[$i][0]) {
             return $lastEdited . $times[$i][2];
         }
     }
@@ -48,7 +49,6 @@ function formatDateOrTime(?string $format = null, ?int $timestamp = null, string
 function getSortByDelimiter($url)
 {
     $url = request()->fullUrlWithoutQuery(['order', 'direction']);
-
     return $url .= preg_match('/\?/', $url) === 1 ? '&' : '?';
 }
 

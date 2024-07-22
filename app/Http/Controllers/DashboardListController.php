@@ -17,6 +17,7 @@ class DashboardListController extends Controller
     public function index(Request $request, $id, $title)
     {
         $user = Auth::user();
+        $personalization = $this->getPersonalization($user);
 
         return response()->view('dashboard.list', [
             'title' => $title,
@@ -24,9 +25,10 @@ class DashboardListController extends Controller
             'listTitle' => $title,
             'tasks' => $this->getItems($id, $user->id, $request->query('order', null)),
             'view' => $this->view($request->query('view', null), $id, $user->id),
-            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
+            'timeFormat' => $this->getTimeFormat($personalization->datetime->time_format),
             'url' => getSortByDelimiter($request->fullUrl()),
-            'queryParams' => $this->getQueryParameters($request, '&')
+            'queryParams' => $this->getQueryParameters($request, '&'),
+            'theme' => $personalization->apperance->theme
         ]);
     }
 
@@ -67,7 +69,7 @@ class DashboardListController extends Controller
      */
     private function getTimeFormat($format = '12hr')
     {
-        return ['24hr' => 'H:i', '12hr' => ' h:i A'][$format];
+        return ['24hr' => ' H:i', '12hr' => ' h:i A'][$format];
     }
 
     /**
@@ -110,15 +112,12 @@ class DashboardListController extends Controller
         $validatedData = $request->validate(['id' => ['required', 'present', 'numeric', 'exists:lists,id']]);
         $userId = Auth::user()->id;
 
-        Lists::byUserAndId($validatedData['id'], $userId)
-            ->delete();
-
+        Lists::byUserAndId($validatedData['id'], $userId)->delete();
         TaskNote::byListAndUser($validatedData['id'], $userId)
             ->notCompleted()
             ->forceDelete();
 
-        return redirect('/dashboard', 302)
-            ->with('message', 'Successfully delete list');
+        return redirect('/dashboard', 302)->with('message', 'Successfully delete list');
     }
 
     /**
@@ -139,7 +138,13 @@ class DashboardListController extends Controller
     private function saveTask(Request $request)
     {
         $validatedFormData = $this->validateData($request);
-        $validatedFormData['due_date'] = $this->getTimestamp($validatedFormData['due_date']);
+
+        if ($validatedFormData['due_date'] === null && isset($validatedFormData['time'])) {
+            $validatedFormData['due_date'] = $this->setDefaultDate();
+        } else {
+            $validatedFormData['due_date'] = $this->getTimestamp($validatedFormData['due_date']);
+        }
+
         $validatedFormData['time'] = isset($validatedFormData['due_date']) ? $this->getTimestamp($validatedFormData['time']) : null;
 
         $message = TaskNote::byListAndUser($validatedFormData['list_id'], Auth::user()->id)
@@ -169,9 +174,16 @@ class DashboardListController extends Controller
             ->mustTask()
             ->forceDelete() === 1 ? 'Succesfully deleted task "' . $request->input('title', null) . '".' : "Task not found!";
 
+        preg_match_all('/(?<=\?|\&)(?!view=\d+\b)[^&]+/', $request->session()->previousUrl(), $match);
+        $queryString = implode('&', $match[0]);
+
+        $listId = $request->input('list_id', null);
+        $listTitle = $request->input('list_title', null);
+        $previousUrl = "/dashboard/list/$listId/$listTitle?$queryString";
+
         return [
             'message' => $message,
-            'previous-uri' => '/dashboard/list/' . $request->input('list_id', null) . '/' . $request->input('list_title', null)
+            'previous-uri' => $previousUrl
         ];
     }
 
@@ -231,6 +243,32 @@ class DashboardListController extends Controller
      */
     private function getQueryParameters(Request $request, $delimiter = '?')
     {
-        return $delimiter . $request->getQueryString();
+        preg_match('/\?([a-zA-Z0-9=\&_]+)/', $request->fullUrlWithoutQuery('view'), $match);
+
+        $queryParams = $match[1] ?? null;
+        return $delimiter . $queryParams;
+    }
+
+    /**
+     * Return user personalization data
+     */
+    private function getPersonalization($user)
+    {
+        return json_decode($user->personalization);
+    }
+
+    /**
+     * Set task defualt schedule based on user default date
+     */
+    private function setDefaultDate()
+    {
+        $personalization = $this->getPersonalization(Auth::user());
+        $defaultDates = [
+            'today' => 0,
+            'tomorrow' => 86400,
+            'day_after_tomorrow' =>  172800
+        ];
+
+        return time() + $defaultDates[$personalization->datetime->default_date];
     }
 }

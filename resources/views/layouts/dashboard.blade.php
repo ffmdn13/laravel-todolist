@@ -23,27 +23,29 @@
     <title>Todolist - @yield('dashboard-title')</title>
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/dashboard/sidebar.css">
+    <link rel="stylesheet" href="/css/light/dashboard/sidebar.css">
+    @if (json_decode(auth()->user()->personalization)->apperance->theme === 'dark')
+        <link rel="stylesheet" href="/css/dark/dashboard/sidebar.css">
+    @endif
 
     @yield('additional-dashboard-head')
 </head>
 
 <body>
 
-    <?php
-    
-    ?>
-
     <main class="grid-layout min-vh-100">
         @include('partials.dashboard-sidebar')
 
-        @include('partials.dashboard-layout')
+        <section class="dashboard-layout bg-light">
+            @yield('dashboard-content')
+        </section>
 
         @if (session()->has('message'))
             <div class="position-fixed top-0 end-0 p-3">
                 <div class="alert alert-info alert-dismissible fade show m-0 z-3" role="alert">
                     <span class="d-flex gap-1">
-                        <i data-feather="info" class="aspect-ratio icon-w-19"></i>{{ session()->get('message') }}
+                        <i data-feather="info" class="aspect-ratio"
+                            style="width: 19px;"></i>{{ session()->get('message') }}
                     </span>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>

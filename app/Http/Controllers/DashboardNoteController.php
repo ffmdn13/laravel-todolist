@@ -21,7 +21,8 @@ class DashboardNoteController extends Controller
             'notes' => $this->getItems($user, $request->query('order', null)),
             'view' => $this->view($id, $user->id),
             'url' => getSortByDelimiter($request->fullUrl()),
-            'queryParams' => '?' . $request->getQueryString()
+            'queryParams' => '?' . $request->getQueryString(),
+            'personalization' => json_decode($user->personalization)
         ]);
     }
 
@@ -112,13 +113,14 @@ class DashboardNoteController extends Controller
      */
     private function delete(Request $reqeust)
     {
+        $queryString = explode('?', $reqeust->session()->previousUrl())[1] ?? null;
         $message = TaskNote::byUserAndId($reqeust->input('id', null), Auth::user()->id)
             ->notTrashed()
             ->notInTheNotebook()
             ->mustNote()
             ->delete() === 1 ? 'Successfully deleted note "' . $reqeust->input('title', null) . '".'  : "Note not found!";
 
-        return ['message' => $message, 'previous-url' => '/dashboard/note'];
+        return ['message' => $message, 'previous-url' => '/dashboard/note?' . $queryString];
     }
 
     /**

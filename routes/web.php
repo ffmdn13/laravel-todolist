@@ -9,13 +9,15 @@ use App\Http\Controllers\DashboardTagsController;
 use App\Http\Controllers\DashboardTaskController;
 use App\Http\Controllers\DashboardTrashController;
 use App\Http\Controllers\DashboardTodayController;
-use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\DeleteUserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UpdatePasswordController;
 use App\Http\Controllers\UserAccountInfoController;
+use App\Http\Controllers\UserApperanceSettingController;
+use App\Http\Controllers\UserDatetimeSettingController;
+use App\Http\Controllers\UserNotificationSettingController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -60,10 +62,6 @@ Route::get('/logout', [LogoutController::class, 'logout'])->middleware('auth');
  */
 Route::get('/dashboard', [DashboardTaskController::class, 'index'])->middleware('auth');
 Route::prefix('/dashboard')->middleware('auth')->group(function () {
-
-    Route::get('/user/setting', [DashboardUserController::class, 'setting'])
-        ->middleware('auth');
-
     /**
      * Controller for task dashboard page
      */
@@ -155,16 +153,31 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
 });
 
 /**
- * Controller for user setting page
+ * User route
  */
 Route::redirect('/dashboard/user/profile', '/user/profile');
+Route::redirect('/dashboard/user/setting', '/user/setting/apperance');
 Route::prefix('/user')->middleware('auth')->group(function () {
-    Route::get('/profile', [DashboardUserController::class, 'profile']);
+    /**
+     * User profile setting controller
+     */
+    Route::get('/profile', [UserAccountInfoController::class, 'index']);
     Route::post('/profile/update/account/info', [UserAccountInfoController::class, 'updateAccountInfo']);
-    Route::get('/profile/change/password', [DashboardUserController::class, 'updatePassword']);
+    Route::get('/profile/change/password', [UpdatePasswordController::class, 'updatePassword']);
     Route::post('/profile/change/password', [UpdatePasswordController::class, 'update']);
     Route::post('/profile/delete/account', [DeleteUserController::class, 'delete']);
+
+    /**
+     * User personalization setting controller
+     */
+    Route::get('/setting/apperance', [UserApperanceSettingController::class, 'index']);
+    Route::post('/setting/apperance/update', [UserApperanceSettingController::class, 'update']);
+    Route::get('/setting/datetime', [UserDatetimeSettingController::class, 'index']);
+    Route::post('/setting/datetime/update', [UserDatetimeSettingController::class, 'update']);
+    Route::get('/setting/notification', [UserNotificationSettingController::class, 'index']);
+    Route::post('/setting/notification/update', [UserNotificationSettingController::class, 'update']);
 });
+
 
 /**
  * Session route for debugging and flush session data

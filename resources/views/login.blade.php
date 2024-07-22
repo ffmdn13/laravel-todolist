@@ -5,6 +5,7 @@
 @endsection
 
 @section('additional-main-head')
+    <meta name="color-scheme" content="dark">
     <link rel="stylesheet" href="/css/form-account.css">
 @endsection
 

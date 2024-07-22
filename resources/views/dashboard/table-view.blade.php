@@ -5,7 +5,10 @@
 @endsection
 
 @section('additional-main-head')
-    <link rel="stylesheet" href="/css/dashboard/table-view.css">
+    <link rel="stylesheet" href="/css/light/dashboard/table-view.css">
+    @if ($theme === 'dark')
+        <link rel="stylesheet" href="/css/dark/dashboard/table-view.css">
+    @endif
 
     {{-- trix editor cdn link --}}
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
@@ -15,7 +18,8 @@
 @section('container')
     <main class="d-flex align-items-center justify-content-center min-vh-100 bg-light-subtle">
         <div class="d-flex gap-3">
-            <a href="/dashboard/shortcut{{ $queryParams }}" class="pt-2 text-decoration-none align-self-start">
+            <a href="/dashboard/shortcut{{ $queryParams }}"
+                class="pt-2 text-decoration-none d-flex align-items-center align-self-start">
                 <i data-feather="arrow-left" class="aspect-ratio icon-w-15"></i>
                 Back
             </a>
@@ -43,18 +47,21 @@
                                     <i data-feather="chevron-up" class="aspect-ratio icon-w-19 order-1"></i>
                                     Action
                                 </a>
-                                <ul class="dropdown-menu">
-                                    <li class="dropdown-item">
+                                <ul class="dropdown-menu rounded-0">
+                                    <li class="dropdown-item d-flex align-items-center justify-content-between">
                                         <button class="border-0 bg-transparent" name="action" value="save">Save</button>
+                                        <i data-feather="save" class="aspect-ratio icon-w-17"></i>
                                     </li>
-                                    <li class="dropdown-item">
+                                    <li class="dropdown-item d-flex align-items-center justify-content-between">
                                         <button class="border-0 bg-transparent" name="action"
                                             value="delete">Delete</button>
+                                        <i data-feather="trash" class="aspect-ratio icon-w-17"></i>
                                     </li>
-                                    <li class="dropdown-item">
+                                    <li class="dropdown-item d-flex align-items-center justify-content-between">
                                         <button class="border-0 bg-transparent" name="action" value="shortcut">
                                             {{ $item->is_shortcut == 0 ? 'Add to shortcut' : 'Remove from shortcut' }}
                                         </button>
+                                        <i data-feather="star" class="aspect-ratio icon-w-17"></i>
                                     </li>
                                 </ul>
                             </div>

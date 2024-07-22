@@ -60,29 +60,18 @@ class RegisterController extends Controller
      */
     protected function userPersonalization()
     {
-        $apperance = ['theme' => ['light', 'dark']];
-
-        $datetime = [
-            'time-format' => ['24-hr', '12-hour'],
-            'time-zone' => 1
-        ];
-        $notification = [
-            'daily' => 1,
-            'alert-time' => '09:00',
-            'email-notification' => 0
-        ];
-
-        $more = [
-            'default-date' => ['today', 'tomorrow', 'day-after-tomorrow'],
-            'default-reminder' => ['on-time', '5-minutes-ahead', '30-minutes-head'],
-            'default-list' => 'inbox'
-        ];
-
         return json_encode([
-            'apperance' => ['theme' => ['light', 'dark']],
-            'datetime' => $datetime,
-            'notification' => $notification,
-            'more' => $more
+            'apperance' => [
+                'theme' => ['light', 'dark']
+            ],
+            'datetime' => [
+                'time_format' => ['24hr', '12hr'],
+                'default_date' => ['today', 'tomorrow', 'day_after_tomorrow'],
+                'timezone' => 'UTC'
+            ],
+            'notification' => [
+                'notify_missed_task' => 0,
+            ],
         ]);
     }
 }

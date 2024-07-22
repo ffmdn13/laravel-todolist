@@ -15,13 +15,15 @@ class DashboardCompleteController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        $personalization = $this->getPersonalization($user);
 
         return response()->view('dashboard.complete', [
             'title' => 'Complete',
             'items' => $this->getItems($user),
-            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
+            'timeFormat' => $this->getTimeFormat($personalization->datetime->time_format),
             'priority' => ['0' => '-', '1' => 'Low', '2' => 'Medium', '3' => 'High'],
-            'queryParams' => '?' . $request->getQueryString()
+            'queryParams' => '?' . $request->getQueryString(),
+            'theme' => $personalization->apperance->theme
         ]);
     }
 
@@ -31,12 +33,14 @@ class DashboardCompleteController extends Controller
     public function view(Request $request, $id, $title)
     {
         $user = Auth::user();
+        $personalization = $this->getPersonalization($user);
 
         return response()->view('dashboard.completed-view', [
             'title' => $title,
             'item' => $this->getViewItem($id, $user->id),
-            'timeFormat' => $this->getTimeFormat(json_decode($user->personalization, true)['time-format']),
-            'queryParams' => '?' . $request->getQueryString()
+            'timeFormat' => $this->getTimeFormat($personalization->datetime->time_format),
+            'queryParams' => '?' . $request->getQueryString(),
+            'theme' => $personalization->apperance->theme
         ]);
     }
 
@@ -125,7 +129,13 @@ class DashboardCompleteController extends Controller
     private function save(Request $request)
     {
         $validatedFormData = $this->validateData($request);
-        $validatedFormData['due_date'] = $this->getTimestamp($validatedFormData['due_date']);
+
+        if ($validatedFormData['due_date'] === null && isset($validatedFormData['time'])) {
+            $validatedFormData['due_date'] = $this->setDefaultDate();
+        } else {
+            $validatedFormData['due_date'] = $this->getTimestamp($validatedFormData['due_date']);
+        }
+
         $validatedFormData['time'] = isset($validatedFormData['due_date']) ? $this->getTimestamp($validatedFormData['time']) : null;
 
         $previousUrl = $request->missing('is_complete') ? '/dashboard/complete' : $request->session()->previousUrl();
@@ -182,5 +192,27 @@ class DashboardCompleteController extends Controller
     private function getTimestamp($timestamp = null)
     {
         return is_string($timestamp) ? strtotime($timestamp) : null;
+    }
+
+    /**
+     * Return user personalization data
+     */
+    private function getPersonalization($user)
+    {
+        return json_decode($user->personalization);
+    }
+
+    /**
+     * Set task defualt schedule based on user default date
+     */
+    private function setDefaultDate()
+    {
+        $personalization = $this->getPersonalization(Auth::user());
+        $defaultDates = [
+            'today' => 0,
+            'tomorrow' => 86400,
+            'day_after_tomorrow' =>  172800
+        ];
+        return time() + $defaultDates[$personalization->datetime->default_date];
     }
 }

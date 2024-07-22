@@ -1,0 +1,105 @@
+/* Aside user profile style section start */
+
+aside.bg-light-subtle {
+    background-color: var(--darkColorBackground1) !important;
+    border-right-color: var(--darkColorBorder) !important;
+    color: var(--darkColorText) !important;
+}
+
+.email-block,
+.nickname-block,
+ul.custom-dropdown-font-size>li a,
+ul.custom-dropdown-font-size>li:hover a {
+    color: var(--darkColorText);
+}
+
+ul.custom-dropdown-font-size {
+    background-color: var(--darkColorBackground2) !important;
+}
+
+ul.custom-dropdown-font-size>li:hover {
+    background-color: var(--darkColorSecondary);
+}
+
+/* Aside user profile style section end */
+
+/* Icon style section start */
+
+.icon-w-20 {
+    width: 20px;
+}
+
+/* Icon style section ned */
+
+/* Aside quick search and new task button start */
+
+.new-task-btn {
+    background-color: var(--darkColorPrimary);
+    color: var(--darkColorText);
+    border: 1px solid transparent;
+    position: relative;
+    isolation: isolate;
+}
+
+.new-task-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: black;
+    opacity: 0;
+}
+
+.new-task-btn:hover {
+    color: var(--darkColorText);
+    background-color: var(--darkColorPrimary);
+    border: 1px solid transparent;
+}
+
+.new-task-btn:hover::before {
+    opacity: .15;
+}
+
+.search-bar {
+    background-color: #272E27;
+    border: 1px solid #424C42;
+    color: var(--darkColorText) !important;
+}
+
+.search-bar>span {
+    color: var(--darkColorText);
+}
+
+.quick-search-dark-modal-theme {
+    background-color: var(--darkColorBackground1);
+    color: var(--darkColorText) !important;
+}
+
+.quick-search-dark-modal-theme h1 {
+    color: var(--darkColorText) !important;
+}
+
+/* Aside quick search and new task button end */
+
+/* Aside common menu items start */
+
+.nav-item:hover {
+    background-color: var(--darkColorSecondary);
+}
+
+/* Aside common menu items end */
+
+/* Aside list, tag and notebook style section start */
+
+.list-card {
+    color: var(--darkColorText);
+}
+
+.list-card:hover {
+    background-color: var(--darkColorSecondary);
+}
+
+.nav-item-icon {
+    color: var(--darkColorText);
+}
+
+/* Aside list, tag and notebook style section end */

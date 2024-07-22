@@ -54,6 +54,10 @@ tbody>tr>td:nth-child(1) {
     width: 19px;
 }
 
+.icon-w-17 {
+    width: 17px;
+}
+
 .icon-w-16 {
     width: 15px;
 }
@@ -141,7 +145,7 @@ td:hover:hover .table-view-td-icon {
 /* view item style section start */
 
 .view-item-container {
-    width: 600px;
+    width: 500px;
 }
 
 .view-item-due-date {
@@ -150,15 +154,15 @@ td:hover:hover .table-view-td-icon {
     cursor: pointer;
 }
 
+.view-item-complete-btn {
+    width: 15px;
+    cursor: pointer;
+}
+
 .view-item-title {
     outline: none;
     font-weight: var(--fw-700);
     font-size: 1.1rem;
-}
-
-.view-item-complete-btn {
-    width: 15px;
-    cursor: pointer;
 }
 
 .view-item-save-btn {

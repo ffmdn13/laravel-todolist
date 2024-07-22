@@ -5,17 +5,20 @@
 @endsection
 
 @section('additional-dashboard-head')
-    <link rel="stylesheet" href="/css/dashboard/table-view.css">
+    <link rel="stylesheet" href="/css/light/dashboard/table-view.css">
+    @if ($theme === 'dark')
+        <link rel="stylesheet" href="/css/dark/dashboard/table-view.css">
+    @endif
 @endsection
 
 @section('dashboard-content')
-    <div class="p-4">
+    <div class="p-4 h-100 dark-bg-theme">
         <h1 class="table-view-title d-flex align-items-center gap-1">
             <i data-feather="star" class="icon-w-21 aspect-ratio"></i>
             Shortcut
         </h1>
 
-        <div class="border-bottom pb-2 mb-3">
+        <div class="border-bottom pb-2 mb-2">
             <span class="text-black-50 d-block mt-2">
                 @php($count = $items->count())
                 {{ $count > 1 ? "$count Notes" : "$count Note" }}
@@ -23,7 +26,7 @@
         </div>
 
         @if ($items->isNotEmpty())
-            <table class="table table-hover mt-3">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th scope="col">Title</th>

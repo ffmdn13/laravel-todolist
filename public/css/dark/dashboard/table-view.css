@@ -1,0 +1,85 @@
+/* Main div style section start  */
+
+.dark-bg-theme {
+    background-color: var(--darkColorBackground2) !important;
+}
+
+.dark-bg-theme>h1,
+div.border-bottom .text-black-50 {
+    color: var(--darkColorText) !important;
+}
+
+div.border-bottom {
+    border-color: var(--darkColorBorder) !important;
+}
+
+/* Main div style section end */
+
+/* Icon style section start */
+
+.icon-w-21,
+.icon-w-19,
+.icon-w-17,
+.icon-w-16,
+.icon-w-15 {
+    color: var(--darkColorText) !important;
+}
+
+/* Icon style section end */
+
+/* Table style section start */
+
+table.table th,
+table.table td {
+    background-color: var(--darkColorBackground1);
+    border-color: var(--darkColorBorder);
+    color: var(--darkColorText);
+}
+
+.pagination .page-link {
+    color: var(--darkColorText);
+    background-color: var(--darkColorBackground1);
+    border: 1px solid var(--darkColorBorder);
+}
+
+/* Table style section end */
+
+/* table view style section start  */
+
+main.bg-light-subtle {
+    background-color: var(--darkColorBackground2) !important;
+}
+
+.view-item-container {
+    background-color: var(--darkColorBackground1) !important;
+}
+
+div.d-flex.gap-3>a,
+.view-item-title,
+.custom-trix,
+.custom-trix::placeholder,
+.view-item-container .dropdown-menu button,
+.view-item-due-date {
+    color: var(--darkColorText) !important;
+}
+
+.view-item-save-btn {
+    background-color: var(--darkColorPrimary) !important;
+    color: var(--darkColorText);
+}
+
+.view-item-container .dropdown-menu {
+    background-color: var(--darkColorBackground1);
+    border: 1px solid var(--darkColorBorder);
+}
+
+.view-item-container .dropdown-item:hover {
+    background-color: var(--darkColorSecondary);
+}
+
+.empty-due-date {
+    background-color: var(--darkColorSecondary);
+    color: var(--darkColorText);
+}
+
+/* table view style section end */

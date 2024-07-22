@@ -12,6 +12,10 @@ aside {
     aspect-ratio: 1/1;
 }
 
+.icon-w-20 {
+    width: 20px;
+}
+
 .icon-w-16 {
     width: 16px;
 }
@@ -69,7 +73,6 @@ aside {
     cursor: text;
     border-radius: 4px;
     font-size: .9rem;
-    color: #AAAAAA;
 }
 
 /* aside quick search and add new task end */
@@ -123,6 +126,7 @@ aside {
 
 /* aside common menu items end */
 
+/* Aside list, tag and notebook style section start */
 .list-card {
     color: var(--lightColorText);
     font-size: .9rem;
@@ -185,3 +189,5 @@ aside {
 .tag-orange {
     color: #F36706 !important;
 }
+
+/* Aside list, tag and notebook style section end */

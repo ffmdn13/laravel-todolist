@@ -5,7 +5,10 @@
 @endsection
 
 @section('additional-main-head')
-    <link rel="stylesheet" href="/css/dashboard/table-view.css">
+    <link rel="stylesheet" href="/css/light/dashboard/table-view.css">
+    @if ($theme === 'dark')
+        <link rel="stylesheet" href="/css/dark/dashboard/table-view.css">
+    @endif
 
     {{-- trix editor cdn link --}}
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
@@ -13,7 +16,7 @@
 @endsection
 
 @section('container')
-    <main class="d-flex align-items-center justify-content-center min-vh-100 bg-light-subtle">
+    <main class="d-flex align-items-center justify-content-center min-vh-100 bg-light-subtle makanbang">
         <div class="d-flex gap-3">
             <a href="/dashboard/complete{{ $queryParams }}" class="pt-2 text-decoration-none align-self-start">
                 <i data-feather="arrow-left" class="aspect-ratio icon-w-15"></i>
@@ -90,19 +93,21 @@
                                     Action
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="dropdown-item">
+                                    <li class="dropdown-item d-flex align-items-center justify-content-between">
                                         <button class="border-0 bg-transparent" name="action" value="save">Save</button>
+                                        <i data-feather="save" class="aspect-ratio icon-w-17"></i>
                                     </li>
-                                    <li class="dropdown-item">
+                                    <li class="dropdown-item d-flex align-items-center justify-content-between">
                                         <button class="border-0 bg-transparent" name="action"
                                             value="delete">Delete</button>
+                                        <i data-feather="trash" class="aspect-ratio icon-w-17"></i>
                                     </li>
                                 </ul>
                             </div>
                         </div>
 
-                        <trix-editor toolbar="trix-toolbar-1" input="x" class="custom-trix p-0 border-0 overflow-auto"
-                            placeholder="Description"></trix-editor>
+                        <trix-editor toolbar="trix-toolbar-1" input="x"
+                            class="custom-trix p-0 border-0 overflow-auto" placeholder="Description"></trix-editor>
                     </div>
                 </div>
             </form>

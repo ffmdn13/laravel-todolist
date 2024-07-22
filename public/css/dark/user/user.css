@@ -1,0 +1,66 @@
+main.bg-light-subtle {
+    background-color: var(--darkColorBackground2) !important;
+}
+
+.profile-dark-theme h3,
+.profile-dark-theme span,
+div.setting-dark-theme>div span,
+.icon-w-20,
+.icon-w-26 {
+    color: var(--darkColorText) !important;
+}
+
+div.setting-dark-theme>div {
+    background-color: var(--darkColorBackground1);
+}
+
+.back-link {
+    color: var(--darkColorPrimary);
+}
+
+/* Change username modal style section start */
+
+.change-username-dark-theme {
+    background-color: var(--darkColorBackground1);
+}
+
+.change-username-dark-theme label,
+.change-username-dark-theme input::placeholder {
+    color: var(--darkColorText);
+}
+
+.change-username-dark-theme input {
+    background: var(--darkColorBackground2);
+    color: var(--darkColorText) !important;
+    border-color: var(--darkColorBorder);
+}
+
+.update-nickname-btn {
+    background-color: var(--darkColorPrimary);
+    color: var(--darkColorText);
+    border: 1px solid var(--darkColorPrimary);
+}
+
+/* Change username modal style section end */
+
+/* Delete account modal style section start */
+
+.delete-account-dark-theme {
+    background-color: var(--darkColorBackground1);
+}
+
+.delete-account-dark-theme .small-information-text,
+.delete-account-dark-theme label,
+.delete-account-dark-theme input::placeholder,
+.delete-account-dark-theme textarea::placeholder {
+    color: var(--darkColorText) !important;
+}
+
+.delete-account-dark-theme input,
+.delete-account-dark-theme textarea {
+    background-color: var(--darkColorBackground2) !important;
+    border-color: var(--darkColorBorder) !important;
+    color: var(--darkColorText) !important;
+}
+
+/* Delete account modal style section end */

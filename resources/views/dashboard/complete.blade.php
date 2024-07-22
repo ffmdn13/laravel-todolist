@@ -5,11 +5,13 @@
 @endsection
 
 @section('additional-dashboard-head')
-    <link rel="stylesheet" href="/css/dashboard/table-view.css">
-@endsection
+    <link rel="stylesheet" href="/css/light/dashboard/table-view.css">
+    @if ($theme === 'dark')
+        <link rel="stylesheet" href="/css/dark/dashboard/table-view.css">
+    @endif
 
 @section('dashboard-content')
-    <div class="p-4">
+    <div class="p-4 dark-bg-theme h-100">
         <h1 class="table-view-title d-flex align-items-center gap-1">
             <i data-feather="check-circle" class="icon-w-21 aspect-ratio"></i>
             Completed Task

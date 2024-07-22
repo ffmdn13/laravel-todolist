@@ -11,6 +11,17 @@ use Illuminate\Validation\Rules\Password;
 class UpdatePasswordController extends Controller
 {
     /**
+     * Render user update password page
+     */
+    public function updatePassword()
+    {
+        return response()->view('user.password', [
+            'title' => 'Change your password',
+            'user' => Auth::user(),
+            'theme' => json_decode(Auth::user()->personalization)->apperance->theme
+        ]);
+    }
+    /**
      * Update old password by the given password
      */
     public function update(Request $request)

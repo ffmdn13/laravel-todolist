@@ -24,7 +24,6 @@ class DeleteUserController extends Controller
 
             if ($affectedRow === 1) {
                 $request->session()->invalidate();
-                $request->session()->regenerate(true);
 
                 return redirect('/login', 302)->with('registerSuccess', 'Your account has been deleted permanently!');
             }

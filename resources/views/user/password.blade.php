@@ -5,7 +5,10 @@
 @endsection
 
 @section('additional-main-head')
-    <link rel="stylesheet" href="/css/user/password.css">
+    <link rel="stylesheet" href="/css/light/user/password.css">
+    @if ($theme === 'dark')
+        <link rel="stylesheet" href="/css/dark/user/password.css">
+    @endif
 @endsection
 
 @section('container')
@@ -20,8 +23,8 @@
             <div class="mb-2">
                 <label for="inputPassword5" class="form-label">Old password</label>
                 <input type="password" name="old_password" id="inputPassword5"
-                    class="form-control @error('old_password') is-invalid @enderror" aria-describedby="passwordHelpBlock"
-                    placeholder="Your origin password">
+                    class="form-control rounded-0 @error('old_password') is-invalid @enderror"
+                    aria-describedby="passwordHelpBlock" placeholder="Your origin password">
                 @error('old_password')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -31,8 +34,8 @@
             <div class="mb-2">
                 <label for="inputPassword5" class="form-label">New password</label>
                 <input type="password" name="new_password" id="inputPassword5"
-                    class="form-control @error('new_password') is-invalid @enderror" aria-describedby="passwordHelpBlock"
-                    placeholder="Your new password">
+                    class="form-control rounded-0 @error('new_password') is-invalid @enderror"
+                    aria-describedby="passwordHelpBlock" placeholder="Your new password">
                 @error('new_password')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -47,7 +50,7 @@
             <div class="mb-2">
                 <label for="inputPassword5" class="form-label">Password confirmation</label>
                 <input type="password" name="new_password_confirmation" id="inputPassword5"
-                    class="form-control @error('new_password_confirmation') is-invalid @enderror"
+                    class="form-control rounded-0 @error('new_password_confirmation') is-invalid @enderror"
                     aria-describedby="passwordHelpBlock" placeholder="Confirm your password">
                 @error('new_password_confirmation')
                     <div class="invalid-feedback">

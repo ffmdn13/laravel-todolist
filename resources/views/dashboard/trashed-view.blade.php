@@ -5,7 +5,10 @@
 @endsection
 
 @section('additional-main-head')
-    <link rel="stylesheet" href="/css/dashboard/table-view.css">
+    <link rel="stylesheet" href="/css/light/dashboard/table-view.css">
+    @if ($theme === 'dark')
+        <link rel="stylesheet" href="/css/dark/dashboard/table-view.css">
+    @endif
 
     {{-- trix editor cdn link --}}
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
@@ -44,17 +47,20 @@
                                     Action
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="dropdown-item">
+                                    <li class="dropdown-item d-flex align-items-center justify-content-between">
                                         <button class="border-0 bg-transparent" name="action" value="save">Save</button>
+                                        <i data-feather="save" class="aspect-ratio icon-w-17"></i>
                                     </li>
-                                    <li class="dropdown-item">
+                                    <li class="dropdown-item d-flex align-items-center justify-content-between">
                                         <button class="border-0 bg-transparent" name="action"
                                             value="delete">Delete</button>
+                                        <i data-feather="trash" class="aspect-ratio icon-w-17"></i>
                                     </li>
-                                    <li class="dropdown-item">
+                                    <li class="dropdown-item d-flex align-items-center justify-content-between">
                                         <button class="border-0 bg-transparent" name="action" value="shortcut">
                                             {{ $item->is_shortcut == 0 ? 'Add to shortcut' : 'Remove from shortcut' }}
                                         </button>
+                                        <i data-feather="star" class="aspect-ratio icon-w-17"></i>
                                     </li>
                                 </ul>
                             </div>
