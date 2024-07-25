@@ -69,9 +69,6 @@ class RegisterController extends Controller
                 'default_date' => ['today', 'tomorrow', 'day_after_tomorrow'],
                 'timezone' => 'UTC'
             ],
-            'notification' => [
-                'notify_missed_task' => 0,
-            ],
         ]);
     }
 }
