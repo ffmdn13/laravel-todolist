@@ -10,9 +10,11 @@ use App\Http\Controllers\DashboardTaskController;
 use App\Http\Controllers\DashboardTrashController;
 use App\Http\Controllers\DashboardTodayController;
 use App\Http\Controllers\DeleteUserController;
+use App\Http\Controllers\ForgetPasswordController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SidebarController;
 use App\Http\Controllers\UpdatePasswordController;
 use App\Http\Controllers\UserAccountInfoController;
 use App\Http\Controllers\UserApperanceSettingController;
@@ -53,6 +55,12 @@ Route::get('/register', [RegisterController::class, 'index'])->middleware('guest
 Route::post('/register', [RegisterController::class, 'doRegister'])->middleware('guest');
 
 /**
+ * Forget password route
+ */
+Route::get('/forget-password', [ForgetPasswordController::class, 'index']);
+Route::post('/forget-password', [ForgetPasswordController::class, 'reset']);
+
+/**
  * Logout route
  */
 Route::get('/logout', [LogoutController::class, 'logout'])->middleware('auth');
@@ -69,6 +77,11 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
         ->whereNumber('id');
     Route::post('/task/add', [DashboardTaskController::class, 'add']);
     Route::post('/task/action', [DashboardTaskController::class, 'action']);
+
+    /**
+     * Sidebar add new task controller
+     */
+    Route::post('/sidebar-new-task', [SidebarController::class, 'add']);
 
     /**
      * Controller for note dashboard page
@@ -153,7 +166,7 @@ Route::prefix('/dashboard')->middleware('auth')->group(function () {
 });
 
 /**
- * User route
+ * User profile and personalization setting route
  */
 Route::redirect('/dashboard/user/profile', '/user/profile');
 Route::redirect('/dashboard/user/setting', '/user/setting/apperance');

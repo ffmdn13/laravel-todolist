@@ -164,8 +164,9 @@ class DashboardCompleteController extends Controller
             ->notTrashed()
             ->mustTask()
             ->forceDelete() === 1 ? 'Successfully deleted task "' . $request->input('title', null) . '".' : "Task not found!";
+        $queryString = explode('?', $request->session()->previousUrl())[1] ?? null;
 
-        return ['message' => $message, 'previous-url' => '/dashboard/complete'];
+        return ['message' => $message, 'previous-url' => '/dashboard/complete?' . $queryString];
     }
 
     /**

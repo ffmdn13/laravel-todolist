@@ -145,8 +145,9 @@ class DashboardTrashController extends Controller
             ->onlyTrashed()
             ->mustNote()
             ->forceDelete() === 1 ? 'Successfully deleted note "' . $reqeust->input('title', null) . '".' : "Note not found!";
+        $queryString = explode('?', $reqeust->session()->previousUrl())[1] ?? null;
 
-        return ['message' => $message, 'previous-url' => '/dashboard/trash'];
+        return ['message' => $message, 'previous-url' => '/dashboard/trash?' . $queryString];
     }
 
     /**

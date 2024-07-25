@@ -23,7 +23,7 @@ class DashboardTodayController extends Controller
             'tasks' => $this->getItems($user, $request->query('order', null)),
             'view' => $this->view($id, $user->id),
             'timeFormat' => $this->getTimeFormat($personalization->datetime->time_format),
-            'url' => getSortByDelimiter($request->fullUrl()),
+            'url' => setDelimiterForOrderByUrl($request->fullUrl()),
             'queryParams' => '?' . $request->getQueryString(),
             'theme' => $personalization->apperance->theme
         ]);
@@ -102,7 +102,13 @@ class DashboardTodayController extends Controller
     private function save(Request $request)
     {
         $validatedFormData = $this->validateData($request);
-        $validatedFormData['due_date'] = $this->getTimestamp($validatedFormData['due_date']);
+
+        if ($validatedFormData['due_date'] === null && isset($validatedFormData['time'])) {
+            $validatedFormData['due_date'] = time();
+        } else {
+            $validatedFormData['due_date'] = $this->getTimestamp($validatedFormData['due_date']);
+        }
+
         $validatedFormData['time'] = isset($validatedFormData['due_date']) ? $this->getTimestamp($validatedFormData['time']) : null;
 
         $message = TaskNote::byUserAndId($validatedFormData['id'], Auth::user()->id)
@@ -126,13 +132,14 @@ class DashboardTodayController extends Controller
      */
     private function delete(Request $request)
     {
+        $queryString = explode('?', $request->session()->previousUrl())[1] ?? null;
         $message = TaskNote::byUserAndId($request->input('id', null), Auth::user()->id)
             ->notCompleted()
             ->mustTask()
             ->byToday()
             ->forceDelete() === 1 ? "Successfully deleted task \"" . $request->input('title', null) . "\"." : "Task not found!";
 
-        return ['message' => $message, 'previous-url' => '/dashboard/today'];
+        return ['message' => $message, 'previous-url' => '/dashboard/today?' . $queryString];
     }
 
     /**
@@ -164,6 +171,10 @@ class DashboardTodayController extends Controller
         return is_string($timestamp) ? strtotime($timestamp) : null;
     }
 
+    /**
+     * Redirect user to previous url if the task date is same as today date.
+     * if not redirect user to dashboard/today
+     */
     private function getPreviousUrl(Request $request, $date)
     {
         $date = date('Y-m-d', is_null($date) ? time() + 86400 : $date);

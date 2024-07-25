@@ -26,7 +26,7 @@ class DashboardListController extends Controller
             'tasks' => $this->getItems($id, $user->id, $request->query('order', null)),
             'view' => $this->view($request->query('view', null), $id, $user->id),
             'timeFormat' => $this->getTimeFormat($personalization->datetime->time_format),
-            'url' => getSortByDelimiter($request->fullUrl()),
+            'url' => setDelimiterForOrderByUrl($request->fullUrl()),
             'queryParams' => $this->getQueryParameters($request, '&'),
             'theme' => $personalization->apperance->theme
         ]);
@@ -179,19 +179,11 @@ class DashboardListController extends Controller
 
         $listId = $request->input('list_id', null);
         $listTitle = $request->input('list_title', null);
-        $previousUrl = "/dashboard/list/$listId/$listTitle?$queryString";
 
         return [
             'message' => $message,
-            'previous-uri' => $previousUrl
+            'previous-uri' => "/dashboard/list$listId/$listTitle?$queryString"
         ];
-    }
-
-    /**
-     * Set and return task reminder
-     */
-    private function setReminder(string $reminder)
-    {
     }
 
     /**

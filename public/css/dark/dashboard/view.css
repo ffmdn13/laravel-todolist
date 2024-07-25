@@ -41,7 +41,8 @@ div.border-bottom {
 }
 
 li.border {
-    border: 1px solid transparent !important;
+    border-color: var(--darkColorBorder) !important;
+    /* border: 1px solid transparent !important; */
     background-color: var(--darkColorBackground1);
 }
 

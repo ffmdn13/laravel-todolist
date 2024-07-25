@@ -20,7 +20,7 @@ class DashboardNoteController extends Controller
             'title' => $title,
             'notes' => $this->getItems($user, $request->query('order', null)),
             'view' => $this->view($id, $user->id),
-            'url' => getSortByDelimiter($request->fullUrl()),
+            'url' => setDelimiterForOrderByUrl($request->fullUrl()),
             'queryParams' => '?' . $request->getQueryString(),
             'personalization' => json_decode($user->personalization)
         ]);

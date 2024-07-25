@@ -22,7 +22,7 @@ div.border-bottom {
 .icon-w-17,
 .icon-w-16,
 .icon-w-15 {
-    color: var(--darkColorText) !important;
+    color: var(--darkColorText);
 }
 
 /* Icon style section end */

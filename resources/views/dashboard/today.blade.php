@@ -89,7 +89,7 @@
             @if ($tasks->isNotEmpty())
                 <ul class="overview-items m-0 p-0 mt-4">
                     @foreach ($tasks->items() as $task)
-                        <li class="border rounded py-2 px-3 mb-2 cursor-pointer"
+                        <li class="border py-2 px-3 mb-2 cursor-pointer"
                             onclick="window.location.href='/dashboard/today/{{ $task->id }}/{{ $task->title . $queryParams }}'">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="overview-item-title my-1 max-width-470">{{ $task->title }}</h1>

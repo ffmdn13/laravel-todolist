@@ -138,6 +138,14 @@ aside {
     background-color: rgba(232, 138, 152, 0.15);
 }
 
+.selected-route {
+    background-color: var(--lightColorSecondary);
+}
+
+.click-callback li:active {
+    transform: scale(.95);
+}
+
 .nav-item-icon-link {
     color: var(--lightColorText);
     opacity: 0;

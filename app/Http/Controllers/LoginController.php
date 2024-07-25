@@ -30,9 +30,8 @@ class LoginController extends Controller
 
         if (Auth::attempt($validatedData)) {
             Session::regenerate(true);
-            Session::regenerateToken(true);
 
-            return redirect()->intended('/dashboard', 302);
+            return redirect()->intended('/dashboard/task', 302);
         }
 
         return back(302)

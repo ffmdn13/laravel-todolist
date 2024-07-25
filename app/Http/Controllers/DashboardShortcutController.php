@@ -119,13 +119,14 @@ class DashboardShortcutController extends Controller
         $userId = Auth::user()->id;
         $currentDeletedNote = $reqeust->input('title', null);
 
+        $queryString = explode('?', $reqeust->session()->previousUrl())[1] ?? null;
         $message = TaskNote::byUserAndId($id, $userId)
             ->isShortcuted()
             ->notTrashed()
             ->mustNote()
             ->delete() === 1 ? "Successfully deleted note \"$currentDeletedNote\"." : "Note not found!";
 
-        return ['message' => $message, 'previous-url' => '/dashboard/shortcut'];
+        return ['message' => $message, 'previous-url' => '/dashboard/shortcut?' . $queryString];
     }
 
     /**

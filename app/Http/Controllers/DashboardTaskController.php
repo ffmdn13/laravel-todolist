@@ -17,12 +17,13 @@ class DashboardTaskController extends Controller
         $user = Auth::user();
         $personalization = $this->getPersonalization($user);
 
+
         return response()->view('dashboard.task', [
             'title' => $title,
             'tasks' => $this->getItems($user, $request->query('order', null)),
             'view' => $this->view($id, $user->id),
             'timeFormat' => $this->getTimeFormat($personalization->datetime->time_format),
-            'url' => getSortByDelimiter($request->fullUrl()),
+            'url' => setDelimiterForOrderByUrl(),
             'queryParams' => '?' . $request->getQueryString(),
             'personalization' => $personalization
         ]);
@@ -139,13 +140,6 @@ class DashboardTaskController extends Controller
             ->forceDelete() === 1 ? 'Successfully delete task "' . $reqeust->input('title', null) . '".' : "Task not found!";
 
         return ['message' => $message, 'previous-url' => '/dashboard/task?' . $queryString];
-    }
-
-    /**
-     * Set and return task reminder
-     */
-    private function setReminder(string $reminder)
-    {
     }
 
     /**

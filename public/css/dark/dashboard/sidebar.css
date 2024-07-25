@@ -83,7 +83,7 @@ ul.custom-dropdown-font-size>li:hover {
 /* Aside common menu items start */
 
 .nav-item:hover {
-    background-color: var(--darkColorSecondary);
+    background-color: rgba(119, 24, 38, .6) !important;
 }
 
 /* Aside common menu items end */
@@ -95,7 +95,11 @@ ul.custom-dropdown-font-size>li:hover {
 }
 
 .list-card:hover {
-    background-color: var(--darkColorSecondary);
+    background-color: rgba(119, 24, 38, .6) !important;
+}
+
+.selected-route {
+    background-color: var(--darkColorSecondary) !important;
 }
 
 .nav-item-icon {

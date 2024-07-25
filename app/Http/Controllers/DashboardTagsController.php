@@ -27,7 +27,7 @@ class DashboardTagsController extends Controller
             'view' => $this->view($request->query('view', null), $id, $user->id),
             'color' => $request->query('clr', null),
             'timeFormat' => $this->getTimeFormat($personalization->datetime->time_format),
-            'url' => getSortByDelimiter($request->fullUrl()),
+            'url' => setDelimiterForOrderByUrl($request->fullUrl()),
             'queryParams' => $this->getQueryParameters($request, '&'),
             'theme' => $personalization->apperance->theme
         ]);
@@ -184,9 +184,8 @@ class DashboardTagsController extends Controller
 
         $tagId = $request->input('tag_id', null);
         $tagTitle = $request->input('tag_title', null);
-        $previousUrl = "/dashboard/tag/$tagId/$tagTitle?$queryString";
 
-        return ['message' => $message, 'previous-url' => $previousUrl];
+        return ['message' => $message, 'previous-url' => "/dashboard/tag/$tagId/$tagTitle?$queryString"];
     }
 
     /**

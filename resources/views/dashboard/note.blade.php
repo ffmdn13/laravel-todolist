@@ -89,7 +89,7 @@
             @if ($notes->isNotEmpty())
                 <ul class="overview-items m-0 p-0">
                     @foreach ($notes->items() as $note)
-                        <li class="border rounded py-2 px-3 mb-2 cursor-pointer"
+                        <li class="border py-2 px-3 mb-2 cursor-pointer"
                             onclick="window.location.href='/dashboard/note/{{ $note->id }}/{{ $note->title . $queryParams }}'">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h1 class="overview-item-title my-1 max-width-470">{{ $note->title }}</h1>

@@ -46,7 +46,10 @@ function formatDateOrTime(?string $format = null, ?int $timestamp = null, string
     return date($format, $timestamp);
 }
 
-function getSortByDelimiter($url)
+/**
+ * Set apropriaate delimiter for order by query parameters
+ */
+function setDelimiterForOrderByUrl()
 {
     $url = request()->fullUrlWithoutQuery(['order', 'direction']);
     return $url .= preg_match('/\?/', $url) === 1 ? '&' : '?';

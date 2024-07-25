@@ -24,7 +24,7 @@ class DashboardNotebookController extends Controller
             'notebookTitle' => $title,
             'notes' => $this->getItems($id, $user->id, $request->query('order', null)),
             'view' => $this->view($request->query('view', null), $id, $user->id),
-            'url' => getSortByDelimiter($request->fullUrl()),
+            'url' => setDelimiterForOrderByUrl($request->fullUrl()),
             'queryParams' => $this->getQueryParameters($request, '&'),
             'theme' => json_decode($user->personalization)->apperance->theme
         ]);
@@ -150,9 +150,8 @@ class DashboardNotebookController extends Controller
 
         $notebookId = $request->input('notebook_id', null);
         $notebookTitle = $request->input('notebook_title', null);
-        $previousUrl = "/dashboard/notebook/$notebookId/$notebookTitle?$queryString";
 
-        return ['message' => $message, 'previous-url' => $previousUrl];
+        return ['message' => $message, 'previous-url' => "/dashboard/notebook/$notebookId/$notebookTitle/?$queryString"];
     }
 
     /**
