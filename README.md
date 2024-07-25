@@ -12,6 +12,7 @@ Laravel features that i implemented (and learned at the same time) into this pro
 8. Request, response, controllers, CSRF and session
 9. Routing and middleware
 
+## Basic features of the application
 And the project has basic features that ordinary web application has such as:
 1. User login and registrasion (does not implement email verification system)
 2. Forget password (does not implement email verification system)
@@ -22,4 +23,8 @@ And the project has basic features that ordinary web application has such as:
 7. Can add list, notebook and tag for manage notebook and task
 8. Task have deadline feature
 9. Support dark and light theme
-10. 
+10. Basic CRUD
+11. Can edit task and note
+12. Can view completed task and deleted note
+
+The version i use is Laravel 9.
