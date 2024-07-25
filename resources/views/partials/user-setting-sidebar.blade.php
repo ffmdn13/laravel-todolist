@@ -18,12 +18,6 @@
                     Date and time
                 </a>
             </div>
-            <div class="nav-item py-2 px-2 rounded">
-                <a href="/user/setting/notification" class="text-decoration-none d-flex align-items-center gap-1">
-                    <i data-feather="bell" class="aspect-ratio icon-w-16"></i>
-                    Notification
-                </a>
-            </div>
         </div>
 
         <div>
