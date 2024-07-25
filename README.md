@@ -13,7 +13,7 @@ Laravel features that i implemented (and learned at the same time) into this pro
 9. Routing and middleware
 
 ## Basic features of the application
-And the project has basic features that ordinary web application has such as:
+the application has basic features that ordinary web application has such as:
 1. User login and registrasion (does not implement email verification system)
 2. Forget password (does not implement email verification system)
 3. User personalization and profile setting
